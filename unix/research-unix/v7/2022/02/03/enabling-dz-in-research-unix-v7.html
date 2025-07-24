@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Enabling the DZ in v7 | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Enabling the DZ in v7" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A short note about installing and using the DZ-11 Terminal Multiplexor in v7 for access from telnet on a host." />
+<meta property="og:description" content="A short note about installing and using the DZ-11 Terminal Multiplexor in v7 for access from telnet on a host." />
+<link rel="canonical" href="http://localhost:4000/unix/research-unix/v7/2022/02/03/enabling-dz-in-research-unix-v7.html" />
+<meta property="og:url" content="http://localhost:4000/unix/research-unix/v7/2022/02/03/enabling-dz-in-research-unix-v7.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-02-03T12:56:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Enabling the DZ in v7" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2022-02-03T12:56:00-06:00","datePublished":"2022-02-03T12:56:00-06:00","description":"A short note about installing and using the DZ-11 Terminal Multiplexor in v7 for access from telnet on a host.","headline":"Enabling the DZ in v7","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/unix/research-unix/v7/2022/02/03/enabling-dz-in-research-unix-v7.html"},"url":"http://localhost:4000/unix/research-unix/v7/2022/02/03/enabling-dz-in-research-unix-v7.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Enabling the DZ in v7</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2022-02-03T12:56:00-06:00" itemprop="datePublished">
+        Feb 3, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>A short note about installing and using the DZ-11 Terminal Multiplexor in v7 for access from telnet on a host.</p>
+
+<!--more-->
+
+<h2 id="prereqs">Prereqs</h2>
+
+<p>This note assumes you have a working instance of V7 and you want to use the DZ-11 Terminal Multiplexor to serve up telnet. It further assumes that you have not previously configured UNIX for another set of additional terminal interfaces (such as the DC-11). If you have, that’s fine, you will just need to remove the existing /dev/tty?? entries. Otherwise, this note should work for you as well.</p>
+
+<p>My guide for setting up a V7 instance will work for this (follow the directions through setting up a multi-user system and don’t do the multi-session instructions). The most current post is <a href="/unix/research-unix/v7/2022/01/03/installing-and-using-research-unix-v7-in-simh-pdp-11-45-and-70-emulators-rev-2.0.html">here</a></p>
+
+<h2 id="boot-up-your-v7-instance">Boot up your v7 instance</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/workspaces/v7-work
+pdp11 nboot.ini
+</code></pre></div></div>
+
+<p>login as root</p>
+
+<h2 id="make-changes-to-the-configuration-and-build-a-new-kernel">Make changes to the configuration and build a new kernel</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /usr/sys/conf
+
+ed mkconf.c
+249a
+
+		"dz",
+		0, 300, CHAR+INTR,
+	"    dzin; br5+%d.\n    dzou; br5+%d.",
+		".globl _dzrint\ndzin:  jsr     r0,call; jmp _dzrint\n",
+	".globl    _dzxint\ndzou:    jsr    r0,call; jmp _dzxint\n",
+	"",
+		"       dzopen, dzclose, dzread, dzwrite, dzioctl, nulldev, dz_tty,",
+	"",
+		"int    dzopen(), dzclose(), dzread(), dzwrite(), dzioctl();\nstruct    tty    dz_tty[];",
+.
+45a
+	"dz",
+.
+w
+q
+
+cc mkconf.c
+mv a.out mkconf
+
+cp hptmconf myconf
+echo dz &gt;&gt; myconf
+mkconf &lt; myconf
+make unix
+sum unix
+</code></pre></div></div>
+
+<p>Should result in:</p>
+
+<p><code class="language-plaintext highlighter-rouge">43924   108</code></p>
+
+<h2 id="save-the-kernel">Save the kernel</h2>
+
+<p><code class="language-plaintext highlighter-rouge">mv unix /munix</code></p>
+
+<h2 id="edit-the-ttys-file">Edit the ttys file</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ed /etc/ttys
+266
+2,17s/./1/
+w
+q
+
+# sed -n '1,17p' /etc/ttys
+14console
+10tty00
+10tty01
+10tty02
+10tty03
+10tty04
+10tty05
+10tty06
+10tty07
+10tty08
+10tty09
+10tty10
+10tty11
+10tty12
+10tty13
+10tty14
+10tty15
+</code></pre></div></div>
+
+<h2 id="determine-the-major-device-number-from-cc">Determine the major device number from c.c</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /usr/sys/conf/c.c |grep dz
+int    dzopen(), dzclose(), dzread(), dzwrite(), dzioctl();
+struct  tty     dz_tty[];
+	   dzopen, dzclose, dzread, dzwrite, dzioctl, nulldev, dz_tty,      /* dz = 19 */
+</code></pre></div></div>
+
+<p>It’s 19, use that to create the devices.</p>
+
+<h2 id="create-the-devices">Create the devices:</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/mknod /dev/tty00 c 19 0
+/etc/mknod /dev/tty01 c 19 1
+/etc/mknod /dev/tty02 c 19 2
+/etc/mknod /dev/tty03 c 19 3
+
+/etc/mknod /dev/tty04 c 19 4
+/etc/mknod /dev/tty05 c 19 5
+/etc/mknod /dev/tty06 c 19 6
+/etc/mknod /dev/tty07 c 19 7
+
+/etc/mknod /dev/tty08 c 19 8
+/etc/mknod /dev/tty09 c 19 9
+/etc/mknod /dev/tty10 c 19 10
+/etc/mknod /dev/tty11 c 19 11
+
+/etc/mknod /dev/tty12 c 19 12
+/etc/mknod /dev/tty13 c 19 13
+/etc/mknod /dev/tty14 c 19 14
+/etc/mknod /dev/tty15 c 19 15
+chmod 640 /dev/tty??
+</code></pre></div></div>
+
+<h2 id="set-the-baud-rate">Set the baud rate</h2>
+
+<p>Edit .profile to set the baud rate to something reasonable:</p>
+
+<p><code class="language-plaintext highlighter-rouge">stty erase "^h" kill "^u" nl0 cr0 9600</code></p>
+
+<h2 id="shutdown-the-v7-instance">Shutdown the V7 instance</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># sync
+# sync
+# sync
+#
+Simulation stopped, PC: 002306 (MOV (SP)+,177776)
+sim&gt; q
+Goodbye
+</code></pre></div></div>
+
+<h2 id="modify-bootini-to-accommodate-the-dz">Modify boot.ini to accommodate the DZ</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi mboot.ini
+
+set dz en
+set dz line=16
+;att dz -m 2222
+att dz 2222
+</code></pre></div></div>
+
+<h2 id="test-it-out-with-telnet-on-the-host">Test it out with telnet on the host</h2>
+
+<p><code class="language-plaintext highlighter-rouge">telnet localhost 2222</code></p>
+
+<p>Celebrate!</p>
+
+<p><em>post added 2022-12-02 12:14:00 -0600</em></p>
+
+  </div><a class="u-url" href="/unix/research-unix/v7/2022/02/03/enabling-dz-in-research-unix-v7.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

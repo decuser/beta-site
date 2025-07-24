@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Merging binary files in Fossil - to do or not to do? | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Merging binary files in Fossil - to do or not to do?" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This is a note about merging (or not merging) binary files in Fossil. Scenario Two users Marilyn and Jim update to latest and begin working on their versions of the repository. Marilyn, changes a binary file called DEMO and commits her changes. Meanwhile, Jim changes his DEMO and tries to commit his changes. When he does so, he is warned that a fork would result from his commit. Current Situation flowchart LR START[ ]--&gt;id1((2))--&gt;id2((3)) id1((2))-..-&gt;STOP[ ] style START fill-opacity:0, stroke-opacity:0 style STOP fill-opacity:0, stroke-opacity:0 In this note, I look at different solutions to the problems arising when two different committers try to commit changes to the same binary file. This is just a note, not a published solution set. It presents my current thinking on the matter and will inevitably evolve as my understanding of Fossil grows." />
+<meta property="og:description" content="This is a note about merging (or not merging) binary files in Fossil. Scenario Two users Marilyn and Jim update to latest and begin working on their versions of the repository. Marilyn, changes a binary file called DEMO and commits her changes. Meanwhile, Jim changes his DEMO and tries to commit his changes. When he does so, he is warned that a fork would result from his commit. Current Situation flowchart LR START[ ]--&gt;id1((2))--&gt;id2((3)) id1((2))-..-&gt;STOP[ ] style START fill-opacity:0, stroke-opacity:0 style STOP fill-opacity:0, stroke-opacity:0 In this note, I look at different solutions to the problems arising when two different committers try to commit changes to the same binary file. This is just a note, not a published solution set. It presents my current thinking on the matter and will inevitably evolve as my understanding of Fossil grows." />
+<link rel="canonical" href="http://localhost:4000/fossil/merging/2023/01/23/fossil-merging-binary-files.html" />
+<meta property="og:url" content="http://localhost:4000/fossil/merging/2023/01/23/fossil-merging-binary-files.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-01-23T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Merging binary files in Fossil - to do or not to do?" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2023-01-23T00:00:00-06:00","datePublished":"2023-01-23T00:00:00-06:00","description":"This is a note about merging (or not merging) binary files in Fossil. Scenario Two users Marilyn and Jim update to latest and begin working on their versions of the repository. Marilyn, changes a binary file called DEMO and commits her changes. Meanwhile, Jim changes his DEMO and tries to commit his changes. When he does so, he is warned that a fork would result from his commit. Current Situation flowchart LR START[ ]--&gt;id1((2))--&gt;id2((3)) id1((2))-..-&gt;STOP[ ] style START fill-opacity:0, stroke-opacity:0 style STOP fill-opacity:0, stroke-opacity:0 In this note, I look at different solutions to the problems arising when two different committers try to commit changes to the same binary file. This is just a note, not a published solution set. It presents my current thinking on the matter and will inevitably evolve as my understanding of Fossil grows.","headline":"Merging binary files in Fossil - to do or not to do?","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/fossil/merging/2023/01/23/fossil-merging-binary-files.html"},"url":"http://localhost:4000/fossil/merging/2023/01/23/fossil-merging-binary-files.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Merging binary files in Fossil - to do or not to do?</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2023-01-23T00:00:00-06:00" itemprop="datePublished">
+        Jan 23, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This is a note about merging (or not merging) binary files in Fossil.</p>
+
+<h2 id="scenario">Scenario</h2>
+
+<p>Two users Marilyn and Jim update to latest and begin working on their versions of the repository. Marilyn, changes a binary file called DEMO and commits her changes. Meanwhile, Jim changes his DEMO and tries to commit his changes. When he does so, he is warned that a fork would result from his commit.</p>
+
+<p><strong>Current Situation</strong></p>
+
+<div class="mermaid">
+flowchart LR
+    START[ ]--&gt;id1((2))--&gt;id2((3)) 
+    id1((2))-..-&gt;STOP[ ]
+    style START fill-opacity:0, stroke-opacity:0
+    style STOP  fill-opacity:0, stroke-opacity:0
+</div>
+
+<p>In this note, I look at different solutions to the problems arising when two different committers try to commit changes to the same binary file. This is just a note, not a published solution set. It presents my current thinking on the matter and will inevitably evolve as my understanding of Fossil grows.</p>
+
+<!--more-->
+
+<p>Here’s the forum discussion that led to the current exploration:</p>
+
+<p><a href="https://fossil-scm.org/forum/forumpost/6d7e1a942e">https://fossil-scm.org/forum/forumpost/6d7e1a942e</a></p>
+
+<p>In diagram 1.1 above, both Jim and Marilyn start with commit 2. Marilyn edits the binary, adds it and commits, creating commit 3. Jim, meanwhile, edits the same binary file, adds it and tries to commit. But, fossil warns him that the commit could result in a fork and tells him to either branch or add –allow-fork to his command.</p>
+
+<p>At this point, Jim has some reasonable options:</p>
+
+<ol>
+  <li>He can stash his work, revert the changes, update to commit 3 (with Marilyn’s changes), pop his stash, add and commit his changes as commit 4.</li>
+  <li>He can revert his changes and accept Marilyn’s work by updating to commit 3.</li>
+  <li>He can fork the repository and allow multiple threads of development - commit 3 and 4.</li>
+</ol>
+
+<p>There are probably other scenarios possible, but these are the most reasonable.</p>
+
+<h3 id="option-1---jim-wants-his-changes-to-be-the-latest">Option 1 - Jim wants his changes to be the latest</h3>
+
+<p><strong>Current Situation</strong></p>
+
+<div class="mermaid">
+flowchart LR
+    START[ ]--&gt;id1((2))--&gt;id2((3)) 
+    id1((2))-..-&gt;STOP[ ]
+    style START fill-opacity:0, stroke-opacity:0
+    style STOP  fill-opacity:0, stroke-opacity:0
+</div>
+
+<p><strong>Desired Situation</strong></p>
+
+<div class="mermaid">
+flowchart LR
+    START[ ]--&gt;id1((2))--&gt;id2((3))--&gt;id3((4))-.-&gt;STOP[ ]
+    style START fill-opacity:0, stroke-opacity:0
+    style STOP  fill-opacity:0, stroke-opacity:0
+</div>
+
+<p>Where 4 is Jim’s commit.</p>
+
+<p>To achieve this desired situation, the following commands are executed by Jim:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fossil stash save -m "stashing j's changes"
+fossil update
+fossil stash pop
+fossil add .
+fossil commit -m "j's changes"
+</code></pre></div></div>
+
+<h3 id="option-2---jim-wants-marilyns-changes-to-be-the-latest">Option 2 - Jim wants Marilyn’s changes to be the latest</h3>
+
+<p><strong>Current Situation</strong></p>
+
+<div class="mermaid">
+flowchart LR
+    START[ ]--&gt;id1((2))--&gt;id2((3)) 
+    id1((2))-..-&gt;STOP[ ]
+    style START fill-opacity:0, stroke-opacity:0
+    style STOP  fill-opacity:0, stroke-opacity:0
+</div>
+
+<p><strong>Desired Situation</strong></p>
+
+<div class="mermaid">
+flowchart LR
+    START[ ]--&gt;id1((2))--&gt;id2((3))-.-&gt;STOP[ ]
+    style START fill-opacity:0, stroke-opacity:0
+    style STOP  fill-opacity:0, stroke-opacity:0
+</div>
+
+<p>This is the simplest solution. Jim just reverts his changes and updates to Marilyn’s commit, 3.</p>
+
+<p>To achieve this desired situation, the following commands are executed by Jim:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fossil revert
+fossil update
+</code></pre></div></div>
+
+<h3 id="option-3---jim-wants-to-create-a-fork">Option 3 - Jim wants to create a fork</h3>
+
+<p><strong>Current Situation</strong></p>
+
+<div class="mermaid">
+flowchart LR
+    START[ ]--&gt;id1((2))--&gt;id2((3)) 
+    id1((2))-..-&gt;STOP[ ]
+    style START fill-opacity:0, stroke-opacity:0
+    style STOP  fill-opacity:0, stroke-opacity:0
+</div>
+
+<p><strong>Desired Situation</strong></p>
+
+<div class="mermaid">
+flowchart LR
+    START[ ]--&gt;id1((2))--&gt;id2((3))-..-&gt;STOP[ ]
+    id1((2))---&gt;id4((4))-.-&gt;STOP2[ ]
+    style START fill-opacity:0, stroke-opacity:0
+    style STOP  fill-opacity:0, stroke-opacity:0
+    style STOP2  fill-opacity:0, stroke-opacity:0
+</div>
+
+<p>This is not what I would call an ideal situation as it will likely lead to a need to merge the fork later, but it’s simple enough to create:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fossil commit --allow-fork -m "j's change"
+</code></pre></div></div>
+
+<h4 id="merging-the-fork">Merging the fork</h4>
+
+<p>To merge the fork, just decide which fork needs to be merged and do it. In this case, Jim decides to merge Marilyn’s fork back into his, with his changes being latest.</p>
+
+<p><strong>Current Situation</strong></p>
+
+<div class="mermaid">
+flowchart LR
+    START[ ]--&gt;id1((2))--&gt;id2((3))-..-&gt;STOP[ ]
+    id1((2))---&gt;id4((4))-.-&gt;STOP2[ ]
+    style START fill-opacity:0, stroke-opacity:0
+    style STOP  fill-opacity:0, stroke-opacity:0
+    style STOP2  fill-opacity:0, stroke-opacity:0
+</div>
+
+<p><strong>Desired Situation</strong></p>
+
+<div class="mermaid">
+flowchart LR
+    START[ ]--&gt;id1((2))--&gt;id2((3))---&gt;id5((5))
+    id1((2))---&gt;id4((4))--&gt;id5((5))-.-&gt;STOP[ ]
+    style START fill-opacity:0, stroke-opacity:0
+    style STOP  fill-opacity:0, stroke-opacity:0
+</div>
+
+<p>To achieve this desired situation, the following commands are executed by Jim:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fossil timeline
+20:12:26 [3d37827c81] *CURRENT* j's changes (user: Jim tags: trunk)
+20:11:46 [02a9bbd315] m's changes (user: Marilyn tags: trunk)
+
+fossil checkout 02a9bbd315
+DEMO
+
+# get j's changed DEMO
+fossil update 3d37827c81 DEMO
+fossil merge
+fossil add .
+fossil commit -m "merging j's changes"
+</code></pre></div></div>
+
+<p>This is very much a note in progress. As I learn more and find better ways of doing things, I will update it.</p>
+
+<p>- will</p>
+
+  </div><a class="u-url" href="/fossil/merging/2023/01/23/fossil-merging-binary-files.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

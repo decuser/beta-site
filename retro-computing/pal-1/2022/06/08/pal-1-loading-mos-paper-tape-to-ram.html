@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>PAL-1 Loading MOS Paper Tape to RAM | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="PAL-1 Loading MOS Paper Tape to RAM" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This post describes how to get your Mac talking to your PAL-1 in order to send MOS papertape format ascii files via minicom to your PAL-1 and run them. Future installments will go into more detail, from the ground up." />
+<meta property="og:description" content="This post describes how to get your Mac talking to your PAL-1 in order to send MOS papertape format ascii files via minicom to your PAL-1 and run them. Future installments will go into more detail, from the ground up." />
+<link rel="canonical" href="http://localhost:4000/retro-computing/pal-1/2022/06/08/pal-1-loading-mos-paper-tape-to-ram.html" />
+<meta property="og:url" content="http://localhost:4000/retro-computing/pal-1/2022/06/08/pal-1-loading-mos-paper-tape-to-ram.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-06-08T01:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="PAL-1 Loading MOS Paper Tape to RAM" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2022-06-08T01:00:00-05:00","datePublished":"2022-06-08T01:00:00-05:00","description":"This post describes how to get your Mac talking to your PAL-1 in order to send MOS papertape format ascii files via minicom to your PAL-1 and run them. Future installments will go into more detail, from the ground up.","headline":"PAL-1 Loading MOS Paper Tape to RAM","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/retro-computing/pal-1/2022/06/08/pal-1-loading-mos-paper-tape-to-ram.html"},"url":"http://localhost:4000/retro-computing/pal-1/2022/06/08/pal-1-loading-mos-paper-tape-to-ram.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">PAL-1 Loading MOS Paper Tape to RAM</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2022-06-08T01:00:00-05:00" itemprop="datePublished">
+        Jun 8, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This post describes how to get your Mac talking to your PAL-1 in order to send MOS papertape format ascii files via minicom to your PAL-1 and run them. Future installments will go into more detail, from the ground up.</p>
+
+<!--more-->
+
+<h2 id="preliminaries">Preliminaries</h2>
+
+<ul>
+  <li>a PC (in this case, I’m using a Mac, running Mojave)</li>
+  <li>macports (homebrew might work, but support for older oses is suspect)</li>
+  <li>a PAL-1 (get one here)</li>
+  <li>a 7 volt 1 amp (or 2 amp) DC power supply w/ 2.5mm x 5.5mm tip</li>
+  <li>a DB-9 gender changer</li>
+  <li>a USB 2.0 to Serial (9-Pin) DB-9 RS-232 Converter Cable, Prolific Chipset</li>
+  <li>to install the Prolific USB2Serial driver (get it here)</li>
+  <li>to install minicom (sudo port install minicom)</li>
+  <li>a MOS file (to be described below)</li>
+</ul>
+
+<h2 id="create-a-mos-file">Create a MOS file</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi test.mos
+;030200A90C0000BA
+;0000010001
+</code></pre></div></div>
+
+<h2 id="configure-minicom">Configure minicom</h2>
+
+<p>Configure minicom by editing the configuration file (or use the interface):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo vi /opt/local/etc/minirc.dfl
+
+# add to file
+# Machine-generated file - use "minicom -s" to change parameters.
+pu pprog9           ascii-xfr -dsv -c10 -l100
+pu port             /dev/cu.usbserial
+pu baudrate         1200
+pu bits             8
+pu parity           N
+pu stopbits         1
+pu updir            /Users/wsenn/pal
+pu downdir          /Users/wsenn/pal
+pu rtscts           No
+</code></pre></div></div>
+
+<h2 id="connect-the-pal-1">Connect the PAL-1</h2>
+
+<p>Attach gender changer to the serial connector, attach the USB2Serial cable to that and to the USB connector of your Mac. Attach power to the PAL-1. Press RS.</p>
+
+<h2 id="start-minicom-and-connect-to-pal-1">Start minicom and connect to PAL-1</h2>
+
+<p><code class="language-plaintext highlighter-rouge">$ minicom</code></p>
+
+<p>press <code class="language-plaintext highlighter-rouge">enter</code></p>
+
+<p><img src="/assets/img/mos-tape/01.png" alt="one" /></p>
+
+<h2 id="send-a-file-to-the-pal-1">Send a file to the PAL-1</h2>
+
+<ul>
+  <li>Press <code class="language-plaintext highlighter-rouge">L</code></li>
+  <li>Press <code class="language-plaintext highlighter-rouge">CTRL-A S</code></li>
+  <li>
+    <p>select <code class="language-plaintext highlighter-rouge">ascii</code> for the Upload dialog</p>
+
+    <p><img src="/assets/img/mos-tape/02.png" alt="two" /></p>
+  </li>
+  <li>
+    <p>locate and select your test.mos file</p>
+
+    <p><img src="/assets/img/mos-tape/03.png" alt="three" /></p>
+  </li>
+  <li>
+    <p>you will briefly see progress</p>
+
+    <p><img src="/assets/img/mos-tape/04.png" alt="four" /></p>
+  </li>
+  <li>
+    <p>type 0200 space and enter a few times to see the changes to memory</p>
+
+    <p><img src="/assets/img/mos-tape/05.png" alt="five" /></p>
+  </li>
+</ul>
+
+<h2 id="run-the-program">Run the program</h2>
+
+<p>To run it, be sure to initialize 17FA/FB to 00 1C and 17FE/FF to same, then, type 0200 space and G to run the code. When it’s done, type 00F3 space to see the contents of the A register (0C).</p>
+
+<p><img src="/assets/img/mos-tape/06.png" alt="six" /></p>
+
+<p>That’s it. Success. I know it’s not a very sophisticated program (it just loads 0C into the A register), but this demonstrates the moving of a tape file into ram on the PAL-1, so celebrate!</p>
+
+<!--more-->
+
+<p><em>post added 2022-12-02 14:40:00 -0600</em></p>
+
+  </div><a class="u-url" href="/retro-computing/pal-1/2022/06/08/pal-1-loading-mos-paper-tape-to-ram.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

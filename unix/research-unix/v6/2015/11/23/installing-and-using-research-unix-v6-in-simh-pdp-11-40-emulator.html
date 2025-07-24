@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Installing and Using Research Unix Version 6 in SimH PDP-11/40 Emulator | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Installing and Using Research Unix Version 6 in SimH PDP-11/40 Emulator" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This note is intended to document the process of running v6 in a PDP-11/40 emulated environment. A subsequent note covers v7" />
+<meta property="og:description" content="This note is intended to document the process of running v6 in a PDP-11/40 emulated environment. A subsequent note covers v7" />
+<link rel="canonical" href="http://localhost:4000/unix/research-unix/v6/2015/11/23/installing-and-using-research-unix-v6-in-simh-pdp-11-40-emulator.html" />
+<meta property="og:url" content="http://localhost:4000/unix/research-unix/v6/2015/11/23/installing-and-using-research-unix-v6-in-simh-pdp-11-40-emulator.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-11-23T13:41:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Installing and Using Research Unix Version 6 in SimH PDP-11/40 Emulator" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2015-11-23T13:41:00-06:00","datePublished":"2015-11-23T13:41:00-06:00","description":"This note is intended to document the process of running v6 in a PDP-11/40 emulated environment. A subsequent note covers v7","headline":"Installing and Using Research Unix Version 6 in SimH PDP-11/40 Emulator","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/unix/research-unix/v6/2015/11/23/installing-and-using-research-unix-v6-in-simh-pdp-11-40-emulator.html"},"url":"http://localhost:4000/unix/research-unix/v6/2015/11/23/installing-and-using-research-unix-v6-in-simh-pdp-11-40-emulator.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Installing and Using Research Unix Version 6 in SimH PDP-11/40 Emulator</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2015-11-23T13:41:00-06:00" itemprop="datePublished">
+        Nov 23, 2015
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This note is intended to document the process of running v6 in a PDP-11/40 emulated environment. A subsequent note covers <a href="/unix/research-unix/v7/2015/12/07/installing-and-using-research-unix-v7-in-simh-pdp-11-45-and-70-emulators-rev-1.0.html">v7</a>
+<!--more--></p>
+
+<p>Minor updates on November 30, 2022.</p>
+
+<p>Helpful Reference Sites:</p>
+
+<ul>
+  <li>Setting up Unix - Sixth Edition: <a href="https://minnie.tuhs.org/PUPS/Setup/v6_setup.html">https://minnie.tuhs.org/PUPS/Setup/v6_setup.html</a></li>
+  <li>The Unix Heritage Society: <a href="http://www.tuhs.org">http://www.tuhs.org</a></li>
+  <li>The PDP Unix Preservation Society: <a href="http://minnie.tuhs.org/PUPS">http://minnie.tuhs.org/PUPS</a></li>
+  <li>The Computer History Simulation Project: <a href="http://simh.trailing-edge.com">http://simh.trailing-edge.com</a></li>
+  <li>Wolfgang Helbig’s notes, tape image, scripts, etc: <a href="http://doc.cat-v.org/unix/v6/operating-systems-lecture-notes/v6">http://doc.cat-v.org/unix/v6/operating-systems-lecture-notes/v6</a></li>
+  <li>Lion’s Commentary on Unix 6th Edition: <a href="http://www.lemis.com/grog/Documentation/Lions/book.pdf">http://www.lemis.com/grog/Documentation/Lions/book.pdf</a></li>
+  <li>Warren Toomey’s work on restoration and archiving: <a href="http://minnie.tuhs.org/">http://minnie.tuhs.org/</a></li>
+</ul>
+
+<p>This note details the process of building a working v6 instance from a copy of the original tape distribution. It is worth noting that calling them original bits, as would be obtained from the original tape could be misleading. There are a number of different versions extant, but the Unix Heritage Society, hereafter referred to as tuhs, has provided the public access to all of the versions they believe to most closely match what was on the original tape.</p>
+
+<p>Prerequisites:</p>
+
+<ul>
+  <li>The license - I am using the Caldera Unix Enthusiasts license available at <a href="http://www.tuhs.org/Archive/Caldera-license.pdf">http://www.tuhs.org/Archive/Caldera-license.pdf</a></li>
+  <li>A working Host - I have used Mac OS X Mavericks, Yosemite, and El Capitan, 10.9-10.11, as well as FreeBSD 10.2. I feel confident that it would work with Linux as well, but I haven’t tested it. Basically, any host capable of running SimH should work.</li>
+  <li>SimH PDP-11 Emulator - I have used versions 3+, this note is based on using the latest code as of 20151123 available at <a href="https://github.com/simh/simh">https://github.com/simh/simh</a></li>
+  <li>A distribution tape image - I am using the Ken Wellsch tape because it boots and is stated to be identical to Dennis Ritchie’s tape other than being bootable and having a different timestamp on root. Available at <a href="http://www.tuhs.org/Archive/Distributions/Research/Ken_Wellsch_v6/v6.tape.gz">http://www.tuhs.org/Archive/Distributions/Research/Ken_Wellsch_v6/v6.tape.gz</a></li>
+  <li>The man command and sundry from Wolfgang’s work - I will be using enblock and deblock from Wolfgang’s work and if you want the man command to work, and you do, you will want to apply Wolfgang’s fix for man. The en/deblock utilities and man and other fixes are available in the tarball available at <a href="http://www.tuhs.org/Archive/Distributions/Research/Bug_Fixes/V6enb/v6enb.tar.gz">http://www.tuhs.org/Archive/Distributions/Research/Bug_Fixes/V6enb/v6enb.tar.gz</a></li>
+</ul>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>This section describes creating a workspace, downloading the images, and building the enblock and deblock utilities.</p>
+
+<p>Create a working directory (I use retro-workarea in my sandboxes folder):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir ~/sandboxes/retro-workarea
+cd ~/sandboxes/retro-workarea
+</code></pre></div></div>
+
+<p>Get a copy of the distribution tape image:
+<code class="language-plaintext highlighter-rouge">curl -O http://www.tuhs.org/Archive/PDP-11/Distributions/research/Ken_Wellsch_v6/v6.tape.gz</code></p>
+
+<p>Get a copy of Wolfgang’s fixes and the enblock and deblock program source code:
+<code class="language-plaintext highlighter-rouge">curl -O http://www.tuhs.org/Archive/PDP-11/Bug_Fixes/V6enb/v6enb.tar.gz</code></p>
+
+<p>Unpack the two archives:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gunzip v6.tape.gz
+tar xvf v6enb.tar.gz
+</code></pre></div></div>
+
+<p>Build the enblock and deblock utilities, warnings are non-fatal and are related to the dialect of C that Wolfgang is using:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd v6enb
+cc enblock.c -o enblock
+cc deblock.c -o deblock
+</code></pre></div></div>
+
+<p>Copy the utilities into the working directory and change into that directory:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp enblock ..
+cp deblock ..
+cd ..
+</code></pre></div></div>
+<h2 id="tape-preparation">Tape Preparation</h2>
+
+<p>This section describes preparing the raw v6 tape image for use with the SimH emulator using the enblock utility program. enblock converts a raw tape image into a format that SimH expects (512 byte blocks, file size markers, and eof marker):</p>
+
+<p>Use enblock to read v6.tape and convert it into dist.tap:
+<code class="language-plaintext highlighter-rouge">./enblock &lt; v6.tape &gt; dist.tap</code></p>
+
+<h2 id="boot-from-the-converted-distribution-tape---the-ini-method">Boot from the converted distribution tape - The ini method</h2>
+<p>Create a tape boot ini file for SimH that will initialize the tape and give us access to the tmrk utility for copying from tape directly to disk without the need for much of an os:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat &gt; tboot.ini &lt;&lt; "EOF"
+set cpu 11/40
+set tm0 locked
+attach tm0 dist.tap
+attach rk0 rk0
+attach rk1 rk1
+attach rk2 rk2
+attach rk3 rk3
+d cpu 100000 012700
+d cpu 100002 172526
+d cpu 100004 010040
+d cpu 100006 012740
+d cpu 100010 060003
+d cpu 100012 000777
+g 100000
+EOF
+</code></pre></div></div>
+
+<p>I will explain the contents of the ini file in the next section on the manual method.</p>
+
+<p>Start the SimH PDP-11 emulator using the tboot.ini file to control it:
+<code class="language-plaintext highlighter-rouge">pdp11 tboot.ini</code></p>
+
+<p>What you will see is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PDP-11 simulator V4.0-0 Beta        git commit id: 4a1cf358
+Disabling XQ
+RK: creating new file
+RK: creating new file
+RK: creating new file
+</code></pre></div></div>
+
+<p>Halt the CPU by typing <strong>CTRL+E</strong> - the machine will break at 100012 and will display:
+<code class="language-plaintext highlighter-rouge">Simulation stopped, PC: 100012 (BR 100012)</code></p>
+
+<h2 id="boot-from-distribution-tape---the-manual-method">Boot from distribution tape - the manual method</h2>
+<p>Start the simulator without specifying an ini file:
+<code class="language-plaintext highlighter-rouge">pdp11</code></p>
+
+<p>Tell SimH that the model we want is PDP-11/40:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>simh&gt; set cpu 11/40
+Disabling XQ
+</code></pre></div></div>
+
+<p>Create a magnetic tape device on drive 0, set it locked for write:
+<code class="language-plaintext highlighter-rouge">sim&gt; set tm0 locked</code></p>
+
+<p>Attach the converted distribution tape to the magnetic tape device:
+<code class="language-plaintext highlighter-rouge">sim&gt; attach tm0 dist.tap</code></p>
+
+<p>Create three empty formatted disk packs on drives 0, 1, and 2 and attach them as RK05 devices:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sim&gt; attach rk0 rk0
+RK: creating new file
+sim&gt; attach rk1 rk1
+RK: creating new file
+sim&gt; attach rk2 rk2
+RK: creating new file
+</code></pre></div></div>
+
+<p>Key in and execute a program at memory location 100000 that loads the tape at address 0. After telling SimH that we intend to insert data into memory, the emulator will display successive word locations. We are providing octal bytes 2, at a time, to match the word size of the PDP-11:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sim&gt; id 100000-100012
+100000: 012700
+100002: 172526
+100004: 010040
+100006: 012740
+100010: 060003
+100012: 000777
+
+</code></pre></div></div>
+
+<p>Execute the loaded program:
+<code class="language-plaintext highlighter-rouge">simh&gt; g 100000</code></p>
+
+<p>Halt the CPU by typing <strong>CTRL+E</strong> - the machine will break at 100012 and will display:
+<code class="language-plaintext highlighter-rouge">Simulation stopped, PC: 100012 (BR 100012)</code></p>
+
+<h2 id="notes-up-to-this-point">Notes up to this point</h2>
+<p>The tape has virtually moved and the CPU looped (according to Setting up Unix). Halting and restarting the CPU will cause the tape to rewind. The next step will start the program now residing at CPU 0. At this point, I believe that we have loaded the minimal OS from the tape. The tape is composed of 512-byte blocks:</p>
+
+<ul>
+  <li>Blocks 0 - 100 are the tape bootstrap stuff</li>
+  <li>Blocks 101 - 4100 are the RK05 root image</li>
+  <li>Blocks 4101 - 8100 are the /usr RK05 image</li>
+  <li>Blocks 8101 - 12100 are the /doc RK05 image.</li>
+</ul>
+
+<p>Boot blocks for various types of device are stored at different locations:</p>
+
+<ul>
+  <li>Block 100 is the RK05 boot block</li>
+  <li>Block 99 is the RP03 boot block</li>
+  <li>Block 98 is the RP04 boot block</li>
+</ul>
+
+<p>If you want to use a different source device than the default TU10 (which is what we configured as tm0 attached to dist.tap), or target than RK05 (which is what we configured as rk0), you will need to modify the commands below to use the correct utility and offset for the correct boot block. Here are the rules from Setting Up Unix - Sixth Edition:</p>
+
+<p>If you have TU16 tape say <strong>htrk</strong> instead of <strong>tmrk</strong> in the above example. If you have an RP03 disk, say <strong>tmrp</strong> or <strong>htrp</strong>, and use a <strong>99</strong> instead of <strong>100</strong> tape offset. If you have an RP04 disk, use <strong>tmhp</strong> or <strong>hthp</strong> instead or <em>tmrk</em>, and use a <strong>98</strong> instead of <strong>100</strong> tape offset. The different offsets load bootstrap programs appropriate to the disk they will live on.</p>
+
+<p>At this point, all we are interested in are getting the bootstrap program and the root image in order to be able to boot from disk.</p>
+
+<h2 id="copy-tape-objects-to-disk">Copy tape objects to disk</h2>
+
+<p>Assumes TU10 and RK05 devices, which we selected in tboot.ini)</p>
+
+<p>Run the minimal os loaded at address 0:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>g 0
+=
+</code></pre></div></div>
+
+<p>Use the tmrk utility to copy the disk bootstrap program from tape to the disk block 0:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>=tmrk
+disk offset
+0
+tape offset
+100
+count
+1
+
+</code></pre></div></div>
+
+<p>Use tmrk to copy the root filesystem (tape position 101-4100) to disk</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>=tmrk
+disk offset
+1
+tape offset
+101
+count 3999
+=
+</code></pre></div></div>
+
+<p><strong>CTRL+E</strong> to break the emulation
+<code class="language-plaintext highlighter-rouge">Simulation stopped, PC: 137300 (BGE 137274)</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sim&gt; q
+Goodbye
+</code></pre></div></div>
+
+<h2 id="boot-from-disk">Boot from disk</h2>
+
+<p>simh has a built in boot rom for bootstrapping the disk and loading it’s bootblock</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat &gt; dboot.ini &lt;&lt; "EOF"
+set cpu 11/40
+set tto 7b
+set tm0 locked
+attach tm0 dist.tap
+attach rk0 rk0
+attach rk1 rk1
+attach rk2 rk2
+attach rk3 rk3
+attach ptr ptr.txt
+attach ptp ptp.txt
+attach lpt lpt.txt
+dep system sr 173030
+boot rk0
+EOF
+</code></pre></div></div>
+
+<p>Notes:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">set tto 7b</code> - set the terminal output to 7 bits, which is compatible with Unix v6.</li>
+  <li><code class="language-plaintext highlighter-rouge">attach rk3 rk3</code> - added an extra disk that we can use later… or not…</li>
+  <li><code class="language-plaintext highlighter-rouge">attach ptr ptr.txt</code> - added a paper tape reader virtual device which will come in handy to transfer files from the host to v6.</li>
+  <li><code class="language-plaintext highlighter-rouge">attach ptp ptp.txt</code> - added a paper tape punch virtual device which will be useful for transferring files from v6 to the host.</li>
+  <li><code class="language-plaintext highlighter-rouge">attach lpt lpt.txt</code> - added a virtual line printer that will allow us to print things to the host from v6</li>
+  <li><code class="language-plaintext highlighter-rouge">dep system sr 173030</code> - Unix will boot the system in single user mode (xref, man 8 boot procedures in v6)</li>
+  <li><code class="language-plaintext highlighter-rouge">boot rk0</code> - boot using the disk that we installed a boot loader and root filesystem to</li>
+</ul>
+
+<p>Start the Simulator:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pdp11 dboot.ini
+PDP-11 simulator V4.0-0 Beta        git commit id: 9b7c614b
+Disabling XQ
+@
+</code></pre></div></div>
+
+<p>The <strong>@</strong> symbol is the boot loader prompt. We tell it where the kernel is in relation to our filesystem:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@rkunix
+mem = 1035
+RESTRICTED RIGHTS
+Use, duplication or disclosure is subject to
+restrictions stated in Contract with Western
+Electric Company, Inc.
+#
+</code></pre></div></div>
+
+<p>If you stop here an look around there will be a number of really interesting, but annoying things happening. Feel free to stop at this point and just get a feel for how alien, but familiar the OS is…</p>
+
+<p>The first annoyance is that uppercase nonsense. To fix:</p>
+
+<p><code class="language-plaintext highlighter-rouge">#STTY -LCASE</code></p>
+
+<p>The second annoyance is the complete lack of a cd command. To fix, you will need to read on.</p>
+
+<h2 id="configuration-and-installation-of-a-new-kernel">Configuration and Installation of a new kernel</h2>
+
+<p>Note that even in 1975, a rebuild of the kernel only took 50 seconds.</p>
+
+<p>Build mkconf:
+mkconf is what configures the system to support various device types</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chdir /usr/sys/conf
+cc mkconf.c
+mv a.out mkconf
+</code></pre></div></div>
+
+<p>Run <code class="language-plaintext highlighter-rouge">mkconf</code> and tell it about our attached devices - rk05’s, tape reader and tape punch, magtape, DECtape, serial terminals, and line printer:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./mkconf
+rk
+pc
+tm
+tc
+8dc
+lp
+done
+</code></pre></div></div>
+
+<p>Compile and install the kernel which we will call unix:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">m40.s</code> is the machine language assist file</li>
+  <li><code class="language-plaintext highlighter-rouge">c.c</code> is the configuration table containing the major device switches for each device class, block or character</li>
+  <li><code class="language-plaintext highlighter-rouge">l.s</code> is the trap vectors for the devices</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>as m40.s
+mv a.out m40.o
+cc -c c.c
+as l.s
+ld -x a.out m40.o c.o ../lib1 ../lib2
+mv a.out /unix
+</code></pre></div></div>
+
+<p>Confirm that the resulting kernel is 30k:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -l /
+-rwxrwxrwx  1 root    30942 Oct 10 13:04 unix
+</code></pre></div></div>
+
+<p>Prior to making dev mods, the directory contains:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls /dev
+kmem
+mem
+null
+tty8
+</code></pre></div></div>
+
+<p>Each of these files is described in section IV of the manual on v6.</p>
+
+<p>Take a look at c.c to understand the device numbers:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat c.c
+/*
+*/
+int     (*bdevsw[])()
+{
+&amp;nulldev,       &amp;nulldev,       &amp;rkstrategy,    &amp;rktab, /* rk */
+&amp;nodev,         &amp;nodev,         &amp;nodev,         0,      /* rp */
+&amp;nodev,         &amp;nodev,         &amp;nodev,         0,      /* rf */
+&amp;tmopen,        &amp;tmclose,       &amp;tmstrategy,    &amp;tmtab, /* tm */
+&amp;nulldev,       &amp;tcclose,       &amp;tcstrategy,    &amp;tctab, /* tc */
+&amp;nodev,         &amp;nodev,         &amp;nodev,         0,      /* hs */
+&amp;nodev,         &amp;nodev,         &amp;nodev,         0,      /* hp */
+&amp;nodev,         &amp;nodev,         &amp;nodev,         0,      /* ht */
+0
+};
+int     (*cdevsw[])()
+{
+&amp;klopen,   &amp;klclose,  &amp;klread,   &amp;klwrite,  &amp;klsgtty,   /* console */
+&amp;pcopen,   &amp;pcclose,  &amp;pcread,   &amp;pcwrite,  &amp;nodev,     /* pc */
+&amp;lpopen,   &amp;lpclose,  &amp;nodev,    &amp;lpwrite,  &amp;nodev,     /* lp */
+&amp;dcopen,   &amp;dcclose,  &amp;dcread,   &amp;dcwrite,  &amp;dcsgtty,   /* dc */
+&amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,     /* dh */
+&amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,     /* dp */
+&amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,     /* dj */
+&amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,     /* dn */
+&amp;nulldev,  &amp;nulldev,  &amp;mmread,   &amp;mmwrite,  &amp;nodev,     /* mem */
+&amp;nulldev,  &amp;nulldev,  &amp;rkread,   &amp;rkwrite,  &amp;nodev,     /* rk */
+&amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,     /* rf */
+&amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,     /* rp */
+&amp;tmopen,   &amp;tmclose,  &amp;tmread,   &amp;tmwrite,  &amp;nodev,     /* tm */
+&amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,     /* hs */
+&amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,     /* hp */
+&amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,    &amp;nodev,     /* ht */
+0
+};
+int     rootdev {(0&lt;&lt;8)|0};
+int     swapdev {(0&lt;&lt;8)|0};
+int     swplo   4000;   /* cannot be zero */
+int     nswap   872;
+</code></pre></div></div>
+
+<p>Note that rk is block device major 0 (the first entry in the array) and that rrk is character device major 9, and so on.</p>
+
+<p>Create special files for each installed device that isn’t already there:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/mknod /dev/rk0 b 0 0
+/etc/mknod /dev/rk1 b 0 1
+/etc/mknod /dev/rk2 b 0 2
+/etc/mknod /dev/rk3 b 0 3
+/etc/mknod /dev/mt0 b 3 0
+/etc/mknod /dev/tap0 b 4 0
+/etc/mknod /dev/rrk0 c 9 0
+/etc/mknod /dev/rrk1 c 9 1
+/etc/mknod /dev/rrk2 c 9 2
+/etc/mknod /dev/rrk3 c 9 3
+/etc/mknod /dev/rmt0 c 12 0
+/etc/mknod /dev/ppt c 1 0
+/etc/mknod /dev/lp0 c 2 0
+/etc/mknod /dev/tty0 c 3 0
+/etc/mknod /dev/tty1 c 3 1
+/etc/mknod /dev/tty2 c 3 2
+/etc/mknod /dev/tty3 c 3 3
+/etc/mknod /dev/tty4 c 3 4
+/etc/mknod /dev/tty5 c 3 5
+/etc/mknod /dev/tty6 c 3 6
+/etc/mknod /dev/tty7 c 3 7
+</code></pre></div></div>
+
+<p>Secure the special files:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod 640 /dev/*rk*
+chmod 640 /dev/*pp*
+chmod 640 /dev/*lp*
+chmod 640 /dev/*mt*
+chmod 640 /dev/*tap*
+chmod 640 /dev/*tty*
+</code></pre></div></div>
+
+<p>In order to have a usable system, we will still need to install the sources, the docs, mount them, and edit the rc, and ttys file, and modify and rebuild the df command (I may revisit this note later as Ritchie’s notes refer to some other files that need to change).</p>
+
+<p>Restore doc and source from rk05s:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dd if=/dev/rmt0 of=/dev/rrk1 count=4000 skip=4100
+dd if=/dev/rmt0 of=/dev/rrk2 count=4000 skip=8100
+</code></pre></div></div>
+
+<p>Update the superblock (ensures that all output gets written to disk):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sync
+sync
+</code></pre></div></div>
+
+<p>Create mount point for doc and mount both doc and source (source mountpoint already exists):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /usr/doc
+/etc/mount /dev/rk1 /usr/source
+/etc/mount /dev/rk2 /usr/doc
+</code></pre></div></div>
+
+<p>Test that both now have files:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls /usr/source
+...
+
+ls /usr/doc
+...
+</code></pre></div></div>
+
+<p>Add mounts to rc using cat CTRL+D will tell cat that it has hit EOF:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat &gt;&gt; /etc/rc
+/etc/mount /dev/rk1 /usr/source
+/etc/mount /dev/rk2 /usr/doc
+CTRL+D
+</code></pre></div></div>
+
+<p>Modify df to show disk free on all devices using ed, the only delivered editor, see below for an ed cheatsheet. I have added rk3, even though, technically it doesn’t have a filesystem to check… yet:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chdir /usr/source/s1
+ed df.c
+5p
+5d
+4
+i
+"/dev/rk0",
+"/dev/rk1",
+.
+7
+i
+"/dev/rk3",
+.
+w
+q
+</code></pre></div></div>
+
+<p>Compile df and install it if no errors occurred</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cc df.c
+cp a.out /bin/df
+</code></pre></div></div>
+
+<p>Test the new df:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df
+/dev/rk0 989
+/dev/rk1 935
+/dev/rk2 1691
+/dev/rk3 bad free count
+</code></pre></div></div>
+
+<p>rk3 doesn’t have a file system on it… yet.</p>
+
+<p>Check the drives that have filesystems:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>icheck /dev/rrk0
+dcheck /dev/rrk0
+icheck /dev/rrk1
+dcheck /dev/rrk1
+icheck /dev/rrk2
+dcheck /dev/rrk2
+</code></pre></div></div>
+
+<p>Modify <code class="language-plaintext highlighter-rouge">/etc/ttys</code> to enable devices 1-8, these are serial consoles, which we will enable in the final version of our SimH ini file:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ed /etc/ttys
+1,8s/^0/1/p
+w
+q
+</code></pre></div></div>
+
+<p>Update the superblock and power off:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sync
+sync
+CTRL-E
+sim&gt; q
+</code></pre></div></div>
+
+<p>The system is functional at this point, but some post installation configuration is helpful/advisable.</p>
+
+<h2 id="post-install-notes">Post Install Notes</h2>
+<p>The system is ready for a normal multiuser boot with all of the devices attached</p>
+
+<h3 id="create-the-normal-boot-ini-file">create the normal boot ini file</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat &gt; nboot.ini &lt;&lt; "EOF"
+set cpu 11/40
+set cpu idle
+set tto 7b
+set tm0 locked
+attach rk0 rk0
+attach rk1 rk1
+attach rk2 rk2
+attach rk3 rk3
+attach ptr ptr.txt
+attach ptp ptp.txt
+attach lpt lpt.txt
+set dci en
+set dci lines=8
+set dco 7b
+att dci 5555
+boot rk0
+EOF
+</code></pre></div></div>
+
+<h3 id="boot-for-the-first-time">boot for the first time</h3>
+<p><code class="language-plaintext highlighter-rouge">pdp11 nboot.ini</code></p>
+
+<p>The PDP-11 running Unix is now available via telnet:
+<code class="language-plaintext highlighter-rouge">telnet localhost 5555</code></p>
+
+<p>login as root, with no password</p>
+
+<p>See command notes at bottom for command help</p>
+
+<h3 id="speed-up-the-terminal-cr-and-lf">speed up the terminal cr and lf</h3>
+<p>set the stty to be a bit faster
+<code class="language-plaintext highlighter-rouge">stty cr0 nl0</code></p>
+
+<h3 id="test-printing-from-the-simulation">test “printing” from the simulation</h3>
+<p>if you set up the lp device correctly, lp0 is a character device where text can be redirected, and picked up by simh.
+<code class="language-plaintext highlighter-rouge">cat /etc/rc &gt; /dev/lp0</code></p>
+
+<p>then on the host, open the lpt.txt file</p>
+
+<h3 id="add-man-command">add man command</h3>
+
+<p>suspend the simulation and mount wolfgang’s man.enb tape in the simulator</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CTRL-E
+simh&gt; attach tm0 v6enb/man.enb
+co
+</code></pre></div></div>
+
+<h3 id="list-the-files-on-the-tape">list the files on the tape</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tp tm
+
+sav
+res
+man0/naa.df
+man0/tocrc.df
+man3/pow.3.df
+man3/printf.3.df
+man3/rand.3.df
+man5/fs.5.df
+man5/a.out.5.df
+man6/factor.6.df
+man6/primes.6.df
+/usr/bin/man
+/usr/source/s7/nroff1.s
+
+13 entries
+45 used
+107 last
+</code></pre></div></div>
+
+<p>the tape contains a save and restore script, a number fo diff files, the man script, and an nroff1.s assembly file</p>
+
+<h3 id="restore-the-files-from-the-tape-into-usrdocman">restore the files from the tape into /usr/doc/man</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chdir /usr/doc/man
+tp xm res
+cat res
+</code></pre></div></div>
+
+<h3 id="restore-the-files-modify-some-files">restore the files (modify some files)</h3>
+
+<p><code class="language-plaintext highlighter-rouge">sh res</code></p>
+
+<p>The error ‘/usr/source/s7/nroff1.s.df: cannot open` is not fatal and the man command will work fine.</p>
+
+<h3 id="test-man">test man</h3>
+<p><code class="language-plaintext highlighter-rouge">man man</code></p>
+
+<h3 id="test-that-a-telnet-session-from-the-host-works">test that a telnet session from the host works</h3>
+
+<p>open a terminal
+<code class="language-plaintext highlighter-rouge">telnet localhost 5555</code>
+note the escape character is ^]
+press enter if the word login doesn’t immediately appear</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>login
+stty nl0 cr0
+ls
+</code></pre></div></div>
+
+<p>Press <code class="language-plaintext highlighter-rouge">CTRL-D</code> to log out of unix. Press <code class="language-plaintext highlighter-rouge">CTRL-]</code> to close the telnet session and <code class="language-plaintext highlighter-rouge">q</code> to quit telnet altogether. Press <code class="language-plaintext highlighter-rouge">CTRL-D</code> again to close the terminal</p>
+
+<h3 id="test-copying-text-files-to-and-from-the-simulator">test copying text files to and from the simulator</h3>
+
+<p>Because we set up rk03 and ppt above, we can either read and write from /dev/rk03 or /dev/ppt</p>
+
+<p>This test is for the paper tape device, see the longer note on Copying Files for more information</p>
+
+<h4 id="on-the-host-put-some-text-in-the-ptrtxt-file">on the host, put some text in the ptr.txt file</h4>
+
+<p>–snip</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hello, v6 from
+the HOST!!!
+
+</code></pre></div></div>
+
+<p>–snip</p>
+
+<h4 id="in-v6-read-the-file-from-the-ppt-device">in v6, read the file from the ppt device</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat &gt; myfile &lt; /dev/ppt
+cat myfile
+Hello, v6 from
+the HOST!!!#
+</code></pre></div></div>
+
+<hr />
+<p>in v6, write the file to the ppt device
+—-
+cat myfile &gt; /dev/ppt
+sync</p>
+
+<p>Press <code class="language-plaintext highlighter-rouge">CTRL-E</code> to suspend the simulation and type <code class="language-plaintext highlighter-rouge">co</code> to resume v6</p>
+
+<p>on the host, read the ptp file</p>
+
+<p>Note: as of 20151120.0642pm, it appears to be necessary to suspend the simulator to get anything written to the device. This can be done multiple times, as needed.</p>
+
+<h3 id="set-up-users-in-v6">Set up users in v6</h3>
+<p>Fire up pdp-11</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@unix
+cat &gt;&gt; /etc/passwd
+wsenn::10:1::/usr/wsenn:
+CTRL+D
+
+mkdir /usr/wsenn
+chown wsenn /usr/wsenn
+login wsenn
+pwd
+/usr/wsenn
+
+sync
+sync
+sync
+
+CTRL+E
+sim&gt; q
+</code></pre></div></div>
+
+<h3 id="back-up-the-working-instance-baseline">Back up the working instance (baseline)</h3>
+<p>On the host:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir baseline-v6
+cp nboot.ini baseline-v6/
+cp rk? baseline-v6/
+tar cvzf baseline-v6.tar.gz baseline-v6
+cp baseline-v6.tar.gz ../
+rm -fr baseline-v6*
+</code></pre></div></div>
+
+<h3 id="test-the-backup">test the backup</h3>
+<p>On the host:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ..
+tar xvf baseline-v6.tar.gz
+cd baseline-v6
+pdp11 nboot.ini
+
+PDP-11 simulator V4.0-0 Beta        git commit id: 0f43551d
+Disabling XQ
+PTR: creating new file
+PTP: creating new file
+LPT: creating new file
+Listening on port 5555
+
+@unix
+
+login: wsenn
+%
+
+CTRL-E
+simh&gt;q
+
+cd ..
+rm -fr ./baseline-v6
+cd v6-20151121
+</code></pre></div></div>
+
+<h3 id="add-cd-command-using-host-editor-and-reading-and-writing-from-ppt">add cd command using host editor and reading and writing from ppt</h3>
+
+<p>Note: <code class="language-plaintext highlighter-rouge">sh</code> is critically important, <strong>don’t muck it up</strong> :).  The issue is that if you do, there really isn’t an easy way to recover. Just be careful and don’t replace the original shell until you have tested the build. The idea of this fix is simply to add a cd command handler to the existing code. I chose to exactly mimic chdir and use the chdir command itself for simplicity and less chance of error.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pdp11 nboot.ini
+
+@unix
+root
+stty cr0 nl0
+</code></pre></div></div>
+
+<h4 id="cat-to-the-paper-tape-punch">cat to the paper tape punch</h4>
+
+<p><code class="language-plaintext highlighter-rouge">cat /usr/source/s2/sh.c &gt; /dev/ppt</code></p>
+
+<p>Press <code class="language-plaintext highlighter-rouge">CTRL-E</code> to suspend the sim (ensure that the device complete’s its write)
+and type <code class="language-plaintext highlighter-rouge">co</code> to continue</p>
+
+<p>open ptp.txt in your favorite editor that doesn’t muck with the invisible characters</p>
+
+<p>copy it’s contents except for the header and footer lines, but be sure to get every non-header or footer character</p>
+
+<p>edit it
+by changing:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if(equal(cp1, "chdir")) {
+if(t[DCOM+1] != 0) {
+if(chdir(t[DCOM+1]) &lt; 0)
+err("chdir: bad directory");
+} else
+err("chdir: arg count");
+return;
+}
+</code></pre></div></div>
+
+<p>to:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if(equal(cp1, "chdir")) {
+if(t[DCOM+1] != 0) {
+if(chdir(t[DCOM+1]) &lt; 0)
+err("chdir: bad directory");
+} else
+err("chdir: arg count");
+return;
+}
+if(equal(cp1, "cd")) {
+if(t[DCOM+1] != 0) {
+if(chdir(t[DCOM+1]) &lt; 0)
+err("cd: bad directory");
+} else
+err("cd: arg count");
+return;
+}
+</code></pre></div></div>
+
+<p>paste it into <code class="language-plaintext highlighter-rouge">ptr.txt</code>, be sure to end with an empty line</p>
+
+<h4 id="in-v6-read-from-ppt-into-a-new-file">in v6, read from ppt into a new file</h4>
+
+<p><code class="language-plaintext highlighter-rouge">CTRL-E</code> to suspend</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>detach ptr
+attach ptr ptr.txt
+co
+
+cat &gt; sh.c.new &lt; /dev/ppt
+</code></pre></div></div>
+<h4 id="compare-the-new-file-to-the-old-file">compare the new file to the old file</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diff sh.c.new /usr/source/s2/sh.c
+569,576d568
+*               if(equal(cp1, "cd")) {
+*                       if(t[DCOM+1] != 0) {
+*                               if(chdir(t[DCOM+1]) &lt; 0)
+*                                       err("cd: bad directory");
+*                       } else
+*                               err("cd: arg count");
+*                       return;
+*               }
+</code></pre></div></div>
+
+<h4 id="figure-out-how-to-build-and-install-sh">figure out how to build and install sh</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chdir /usr/source/s2
+cp sh.c sh.c.original
+cp /sh.c.new sh.c
+
+grep sh run
+cc -s -n -O sh.c
+cmp a.out /bin/sh
+cp a.out /bin/sh
+</code></pre></div></div>
+<h4 id="build-and-install-sh">build and install sh</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cc -s -n -O sh.c
+cmp a.out /bin/sh
+a.out /bin/sh differ: char 4, line 1
+./a.out
+</code></pre></div></div>
+
+<p>test that it works - should display a shell prompt and act in every way identically to the previous shell, with the exception that cd  should now work. If it doesn’t you will likely need to halt the simulation and reboot. Only if it works, copy it over the original after backing the original up.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mv /bin/sh /bin/sh.original
+cp a.out /bin/sh
+chown bin /bin/sh
+
+CTRL-D
+</code></pre></div></div>
+
+<p>relogin</p>
+
+<p><code class="language-plaintext highlighter-rouge">cd /usr</code></p>
+
+<p>Woohoo!</p>
+
+<h4 id="backup-baseline-v6-withcd">backup baseline-v6-withcd</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir baseline-v6-withcd
+cp nboot.ini baseline-v6-withcd/
+cp rk? baseline-v6-withcd/
+tar cvzf baseline-v6-withcd.tar.gz baseline-v6-withcd
+cp baseline-v6-withcd.tar.gz ../
+rm -fr baseline-v6-withcd*
+</code></pre></div></div>
+
+<h3 id="copying-files">Copying Files</h3>
+
+<p>From Unix v6 on PDP-11/40 SimH to Host:</p>
+
+<h4 id="create-and-attach-an-additional-rk-device">create and attach an additional rk device</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>simh&gt; attach rk3 rk3
+co
+</code></pre></div></div>
+
+<h4 id="get-a-file-of-interest-and-note-its-size-in-bytes">get a file of interest and note it’s size in bytes</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -l /etc/rc
+-rw-rw-r--  1 bin        90 Oct 10 12:32 /etc/rc
+</code></pre></div></div>
+
+<h4 id="look-at-the-od-dump-of-the-file-for-comparison-later">look at the od dump of the file for comparison later</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>od -c /etc/rc
+0000000  r  m     -  f     /  e  t  c  /  m  t  a  b \n
+0000020  /  e  t  c  /  u  p  d  a  t  e \n  /  e  t  c
+0000040  /  m  o  u  n  t     /  d  e  v  /  r  k  1
+0000060  /  u  s  r  /  s  o  u  r  c  e \n  /  e  t  c
+0000100  /  m  o  u  n  t     /  d  e  v  /  r  k  2
+0000120  /  u  s  r  /  d  o  c \n \n
+0000132
+</code></pre></div></div>
+
+<h4 id="write-the-file-to-the-rk-device">write the file to the rk device</h4>
+<p>(the sync may not be needed, but the result looks cleaner, also it doesn’t apper that you can specify bs=1, device errors out)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dd if=/etc/rc of=/dev/rrk03 conv=sync
+0+1 records in
+1+0 records out
+</code></pre></div></div>
+
+<h4 id="read-it-on-the-host">read it on the host</h4>
+
+<p>exit the sim and then on the host, read from the rk image using bs=1 and count from the ls output</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ dd if=rk3 of=rc bs=1 count=90
+90+0 records in
+90+0 records out
+</code></pre></div></div>
+
+<h4 id="look-at-the-od-dump">look at the od dump</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ od -c rc
+0000000    r   m       -   f       /   e   t   c   /   m   t   a b  \n
+0000020    /   e   t   c   /   u   p   d   a   t   e  \n   /   e t   c
+0000040    /   m   o   u   n   t       /   d   e   v   /   r   k 1
+0000060    /   u   s   r   /   s   o   u   r   c   e  \n   /   e t   c
+0000100    /   m   o   u   n   t       /   d   e   v   /   r   k 2
+0000120    /   u   s   r   /   d   o   c  \n \n
+0000132
+</code></pre></div></div>
+
+<p>A match!</p>
+
+<p>From Host to Unix v6 on PDP11/40 SimH Host:</p>
+
+<h4 id="edit-the-rc-file">edit the rc file</h4>
+<p>make a minor edit to the rc file (change m to n in the word mtab) and note it’s size in bytes</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ls -l rc
+-rw-r--r--  1 wsenn  staff  90 Nov 20 16:15 rc
+</code></pre></div></div>
+
+<p>it better be 90, unless I did something other than changing a letter</p>
+
+<h4 id="write-rc-to-a-new-rk3-file">write rc to a new rk3 file</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dd if=rc of=rk3 conv=sync
+0+1 records in
+1+0 records out
+512 bytes transferred in 0.000037 secs (13854733 bytes/sec)
+</code></pre></div></div>
+
+<p>note the count of blocks</p>
+
+<h4 id="read-from-rk">read from rk</h4>
+<p>with the number of blocks on hand, fire up the simulation and read from the rk to disk</p>
+
+<p><code class="language-plaintext highlighter-rouge">dd if=/dev/rrk3 of=rc.dd count=1</code></p>
+
+<p>because of the fact that I can’t specify bs=1, the result is padded</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>od -c rc.dd
+0000000  r  m     -  f     /  e  t  c  /  n  t  a  b \n
+0000020  /  e  t  c  /  u  p  d  a  t  e \n  /  e  t  c
+0000040  /  m  o  u  n  t     /  d  e  v  /  r  k  1
+0000060  /  u  s  r  /  s  o  u  r  c  e \n  /  e  t  c
+0000100  /  m  o  u  n  t     /  d  e  v  /  r  k  2
+0000120  /  u  s  r  /  d  o  c \n \n \0 \0 \0 \0 \0 \0
+0001000
+</code></pre></div></div>
+
+<h4 id="read-the-dd-file">read the dd file</h4>
+<p>read from the dd file with the number of bytes still in hand</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dd if=rc.dd of=rc bs=1 count=90
+90+0 records in
+90+0 records out
+</code></pre></div></div>
+
+<h4 id="then-diff-the-file-against-the-original">then diff the file against the original</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diff rc /etc/rc
+1c1
+* rm -f /etc/ntab
+---
+. rm -f /etc/mtab
+</code></pre></div></div>
+
+<p>Success!</p>
+
+<h2 id="some-confusing-but-special-points-to-remember">Some confusing, but special points to remember</h2>
+
+<ul>
+  <li>there is no vi, use ed (see below)</li>
+  <li>there is no cd, use chdir</li>
+  <li>characters are not good for pasting, they require an escape #</li>
+  <li><code class="language-plaintext highlighter-rouge">ctime.README</code> points the way to successfully compiling stuff:
+sometimes you need to be bin, login as bin with no password
+the correct command to add an object to a lib is:
+ar r ../lib2 myfile.o</li>
+  <li>
+    <p>to learn how to compile stuff, the run script in the source directories
+are good skeletons. to see how to compile login.c in /usr/source/s1:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  chdir /usr/source/s1
+  ed login.c and make any changes you desire (such as fixing the login:
+  prompt which shows Name: on subsequent retries)
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>if you can’t remember the right commands to compile and install this
+program, do the following:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  grep login run
+  cc -s -O login.c
+  cmp a.out /bin/login
+  cp a.out /bin/login
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>to see who needs to do the compiling</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ls -l /bin/login
+  -rwsr-xr-x  1 root     2606 Oct 10 14:19 /bin/login
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>looks like root in this case, whereas for getty.c:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  grep getty run
+  cc -s -n -O getty.c
+  cmp a.out /etc/getty
+  cp a.out /etc/getty
+  ls -l /etc/getty
+  -rwxrwxr--  1 bin      1002 Oct 10 14:09 /etc/getty
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>looks like bin.</p>
+
+<ul>
+  <li>
+    <p>As noted in ctime.README, run in /usr/sys does not actually update the libraries</p>
+  </li>
+  <li>
+    <p>Before you update libraries, ls -l to see the mode and ownership of the files</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ls -l /usr/sys/lib?
+  -rw-rw-r--  1 bin     59342 Oct 10 13:17 lib1
+  -rw-rw-r--  1 bin     48630 Oct 10 13:18 lib2
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>if you try to remove a special file (whatever that is), it will display a mode that is six digits long</p>
+
+    <p>```
+  rm /usr/sys/lib1
+  /usr/sys/lib1: 110664 mode</p>
+
+    <p>man 2 stat</p>
+
+    <p>The flags are as follows:
+  100000 i-node is allocated
+  060000 2-bit file type:
+  000000 plain file
+  040000 directory
+  020000 character-type special file
+  060000 block-type special file.
+  010000 large file
+  004000 set user-ID on execution
+  002000 set group-ID on execution
+  001000 save text image after execution
+  000400 read (owner)
+  000200 write (owner)
+  000100 execute (owner)
+  000070 read, write, execute (group)
+  000007 read, write, execute (others)
+‘’’</p>
+  </li>
+</ul>
+
+<p>that makes 110664 read:
+the i-node is allocated, it’s a large file, it’s a plain file, and it is rw-rw-r–.</p>
+
+<h3 id="ed-cheatsheet">ed cheatsheet</h3>
+
+<ul>
+  <li>ed is the editor, there is no vi</li>
+  <li>ed is ok, here’s a quick cheat sheet</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">m,nC</code> - <code class="language-plaintext highlighter-rouge">m</code> is a starting line number, <code class="language-plaintext highlighter-rouge">n</code> is an ending line number, <code class="language-plaintext highlighter-rouge">C</code> is command</p>
+
+<p>The current line is the default target for a command</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a - append
+c - change
+d - delete
+i - insert
+p - print
+
+e - edit file
+f - file being edited
+r - read file
+w - write file
+. ends input
+
+s/this/that
+</code></pre></div></div>
+
+<h3 id="command-help">Command Help</h3>
+
+<ul>
+  <li>find - find files</li>
+</ul>
+
+<p>this command is tricky, but once you get the hang of it, works great!</p>
+
+<p>to find a file use the following syntax -a means “and” and is absolutely required:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -name tty.h -a -print
+/usr/sys/tty.h
+</code></pre></div></div>
+
+<p>to find a pattern is straightforward:
+<code class="language-plaintext highlighter-rouge">find / -name "tty*" -a -print</code></p>
+
+<p><em>post added 2022-11-30 12:29:00 -0600</em></p>
+
+  </div><a class="u-url" href="/unix/research-unix/v6/2015/11/23/installing-and-using-research-unix-v6-in-simh-pdp-11-40-emulator.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

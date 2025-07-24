@@ -1,0 +1,1013 @@
+[
+  
+    {
+
+      "title"    : "Fix for Thunderbird hangs while indexing messages",
+      "url"      : "/unix/2024/08/16/thunderbird-hangs-indexing.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2024-08-16 06:05:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Research Unix Version 7 - 3.2",
+      "url"      : "/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2024-05-23 09:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Will&#39;s Geometry - A Setting Out.",
+      "url"      : "/geometry/2023/12/19/wills-geometry.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-12-19 06:05:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Geometry Explorations",
+      "url"      : "/geometry/2023/12/19/geometry-explorations.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-12-19 05:05:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "MACLISP in ITS running on an emulated PDP-10",
+      "url"      : "/lisp/2023/07/31/maclisp.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-07-31 10:03:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Franz LISP Opus 32 in 3BSD running on an emulated VAX 780",
+      "url"      : "/lisp/2023/07/31/franz-lisp.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-07-31 08:03:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "pdp1-lisp running on an emulated PDP-1",
+      "url"      : "/lisp/2023/07/30/pdp-1-lisp.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-07-30 13:38:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Rob Pike&#39;s LISP 1.5 in Go running on Debian 12",
+      "url"      : "/lisp/2023/07/24/pike-lisp-1.5-in-go.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-07-24 14:35:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "LISP 1.5 running on an emulated IBM 7094",
+      "url"      : "/lisp/2023/07/24/lisp-1.5.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-07-24 13:23:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Schemes, LISPs, and Lambda",
+      "url"      : "/lisp/2023/07/24/lisp-explorations.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-07-24 13:05:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Research Unix Version 7 on the OpenSIMH PDP-11 Emulator",
+      "url"      : "/unix/research-unix/v7/videos/2023/07/14/installing-and-using-research-unix-v7-in-open-simh-video.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-07-14 13:34:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "UCB STk Scheme Interpreter for Working Through Brian Harvey&#39;s CS61A Course",
+      "url"      : "/development/scheme/ucb-stk/2023/06/27/ucb-stk-for-harveys-cs61a.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-06-27 00:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Setting up Slackware 15 on T430 for X Window Programming",
+      "url"      : "/development/x-windows/slackware15/2023/02/22/slackware-15-t430-x-windows.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-02-22 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "A Modern PDF Cleanup Workflow",
+      "url"      : "/pdfs/2023/02/01/pdf-cleanup-workflow.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-02-01 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Xlib basics",
+      "url"      : "/development/x-windows/xlib/2023/01/31/xlib-basics.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-01-31 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Setting up for X-Windows Development on MacOS",
+      "url"      : "/operating-systems/mojave/x-windows/2023/01/24/x-windows-dev-on-mac.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-01-24 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Site Update for Monday, January 23, 2023",
+      "url"      : "/general/2023/01/23/site-update.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-01-23 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Enabling Mermaid in Jekyll without a Plugin",
+      "url"      : "/github/jekyll/mermaid/2023/01/23/mermaid.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-01-23 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Merging binary files in Fossil - to do or not to do?",
+      "url"      : "/fossil/merging/2023/01/23/fossil-merging-binary-files.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-01-23 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and running DragonFly BSD 6.4",
+      "url"      : "/operating-systems/bsd/dragonfly-bsd/2023/01/16/dragonfly.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-01-16 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and running Fossil on TrueNAS Core",
+      "url"      : "/operating-systems/truenas-core/fossil/2023/01/07/fossil-on-truenas.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2023-01-07 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Sculpt 22.10 - A Truly Alternative OS",
+      "url"      : "/operating-systems/genode/sculpt/2022/12/30/sculpt-os-22.10-a-truly-alternative-os.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-30 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Building Sculpt 22.10 on Debian 11.6 Bullseye without a Desktop",
+      "url"      : "/operating-systems/genode/sculpt/2022/12/30/building-sculpt-22.10-on-debian-11.6-no-desktop.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-30 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Building Sculpt 22.10 on Debian 11.6 Bullseye",
+      "url"      : "/operating-systems/genode/sculpt/2022/12/29/building-sculpt-22.10-on-debian-11.6.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-29 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Warren Toomey Awarded 2022 USENIX Flame",
+      "url"      : "/unix/2022/12/15/usenix-flame-award-2022.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-15 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "dircmp.py - a plan to improve and extend",
+      "url"      : "/unix/python/2022/12/15/dircmp.py-improvements.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-15 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Site Update for Thursday, December 8, 2022",
+      "url"      : "/general/2022/12/08/site-update.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-08 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Creating a github pages jekyll minima themed site with pagination",
+      "url"      : "/github-pages/jekyll/minima/2022/12/05/github-pages-jekyll-minima.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-05 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Site Update for December 3, 2022",
+      "url"      : "/general/2022/12/03/site-update.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-03 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Site Update for December 2, 2022",
+      "url"      : "/general/2022/12/02/site-update.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-02 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Site Update for December 1, 2022",
+      "url"      : "/general/2022/12/01/site-update.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-12-01 17:32:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Under Construction Notice",
+      "url"      : "/general/2022/11/30/under-construction-notice.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-11-30 17:17:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Welcome to Decuser&#39;s Blog on GitHub",
+      "url"      : "/general/2022/11/29/welcome-to-jekyll.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-11-29 15:17:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Research Unix Version 7 in the OpenSIMH PDP-11/45 and 11/70 Emulators 3.0",
+      "url"      : "/unix/research-unix/v7/2022/10/29/installing-and-using-research-unix-v7-in-open-simh-pdp-11-45-and-70-emulators-rev-3.0.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-10-29 12:10:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Research Unix Version 7 in the OpenSIMH PDP-11/45 and 11/70 Emulators 3.1",
+      "url"      : "/unix/research-unix/v7/2022/10/28/installing-and-using-research-unix-v7-in-open-simh-pdp-11-45-and-70-emulators-rev-3.1.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-10-28 09:16:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Notoriously S.L.O.W BASIC",
+      "url"      : "/retro-computing/m100/basic/2022/10/26/notoriously-s.l.o.w-basic.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-10-26 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "model-100-bibliography",
+      "url"      : "/retro-computing/m100/2022/10/23/model-100-bibliography.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-10-23 14:01:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Long Road Back to the Tandy TRS-80 Model 100",
+      "url"      : "/retro-computing/pal-1/2022/10/22/long-road-back-to-the-tandy-trs-80-model-100.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-10-22 09:52:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Unix V6 in the Open SIMH PDP-11 Emulator",
+      "url"      : "/unix/research-unix/v6/2022/10/19/installing-and-using-research-unix-v6-in-open-simh-pdp-11-emulator.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-10-19 15:50:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Programming the PAL-1 Using the Keypad",
+      "url"      : "/retro-computing/pal-1/videos/2022/07/09/programming-the-pal-1-using-the-keypad.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-07-09 08:57:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Ohm&#39;s Law Power Wheel Made Simple and Rational",
+      "url"      : "/electronics/theory/videos/2022/06/29/ohms-law-power-wheel-made-simple-and-rational.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-29 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Nyquist what?! Gobsmacked by Sampling Frequency",
+      "url"      : "/electronics/theory/2022/06/09/nyquist-what-gobsmacked-by-sampling-frequency.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-09 15:45:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Using an el-cheapo logic analyser to detect address bus activity",
+      "url"      : "/electronics/analysis/2022/06/09/using-an-el-cheapo-logic-analyzer-to-detect-address-bus-activity.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-09 11:34:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "PAL-1 Entering a Program via Serial Port",
+      "url"      : "/retro-computing/pal-1/2022/06/08/pal-1-entering-a-program-via-serial-port.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-08 10:34:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "PAL-1 Entering a Program at the Keypad",
+      "url"      : "/retro-computing/pal-1/2022/06/08/pal-1-entering-a-program-at-the-keypad.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-08 07:45:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "PAL-1 Loading MOS Paper Tape to RAM",
+      "url"      : "/retro-computing/pal-1/2022/06/08/pal-1-loading-mos-paper-tape-to-ram.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-08 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "PAL-1 Resources A Curated List",
+      "url"      : "/retro-computing/pal-1/2022/06/07/pal-1-resources-a-curated-list.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-07 10:12:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "PAL-1 Getting Started",
+      "url"      : "/retro-computing/pal-1/2022/06/07/pal-1-getting-started.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-07 07:56:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Updated and expanded Lions v6 source v1.4",
+      "url"      : "/unix/research-unix/v6/2022/06/06/updated-lions-v6-source-w-appendices-and-helps-v1.4.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-06 18:37:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "PAL-1 A KIM-1 replica",
+      "url"      : "/retro-computing/pal-1/2022/06/06/pal-1-a-kim-1-replica.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-06-06 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Tweaked version of Lions for Printing and Viewing",
+      "url"      : "/unix/research-unix/v6/2022/02/26/tweaked-version-of-lions-v6-source-code-for-printing-and-viewing.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-02-26 11:50:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Research Unix Version 7 in the SIMH PDP-11/45 and 11/70 Emulators 2.1",
+      "url"      : "/unix/research-unix/v7/2022/02/08/installing-and-using-research-unix-v7-in-simh-pdp-11-45-and-70-emulators-rev-2.1.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-02-08 12:37:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "ratfor and Kernighan and Plaugers Software Tools",
+      "url"      : "/unix/research-unix/v7/ratfor/2022/02/03/ratfor-and-kernighan-and-plaugers-software-tools-getting-started-using-v7.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-02-03 13:43:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Enabling the DZ in v7",
+      "url"      : "/unix/research-unix/v7/2022/02/03/enabling-dz-in-research-unix-v7.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-02-03 12:56:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Research Unix Version 7 in the SIMH PDP-11/45 and 11/70 Emulators 2.0",
+      "url"      : "/unix/research-unix/v7/2022/01/03/installing-and-using-research-unix-v7-in-simh-pdp-11-45-and-70-emulators-rev-2.0.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2022-01-03 16:28:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Research Unix Version 7 in the SimH PDP-11/45 and 11/70 Emulators v1.7",
+      "url"      : "/unix/research-unix/v7/2021/12/30/installing-and-using-research-unix-v7-in-simh-pdp-11-45-and-70-emulators-rev-1.7.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2021-12-30 13:51:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2021 ep 2 logging in and out",
+      "url"      : "/unix/freebsd/videos/2021/03/23/freebsd-2021-ep-2-logging-in-and-out.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2021-03-23 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Vim User Manual in txt and ps and pdf us-letter",
+      "url"      : "/unix/vim/2021/02/21/vim-user-manual-in-txt-ps-and-pdf-us-letter.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2021-02-21 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2021 ep 1 installation",
+      "url"      : "/unix/freebsd/videos/2021/02/12/freebsd-2021-ep-1-installation.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2021-02-12 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "An Open Letter to Apple and the Time Machine Bug",
+      "url"      : "/unix/macos/2020/10/26/an-open-letter-apple-and-the-time-machine-bug.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-10-26 08:35:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2020 ep 7 all about manpages",
+      "url"      : "/unix/freebsd/videos/2020/09/20/freebsd-2020-ep-7-all-about-manpages.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-09-20 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2020 ep 6 system programming who command",
+      "url"      : "/unix/freebsd/videos/2020/09/18/freebsd-2020-ep-6-system-programming-who-command.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-09-18 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2020 ep 5 playing with zfs and zfs snapshots",
+      "url"      : "/unix/freebsd/videos/2020/09/15/freebsd-2020-ep-5-playing-with-zfs-and-zfs-snapshots.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-09-15 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2020 ep 4 updating your freebsd 12.1 system safely with zfs boot environments",
+      "url"      : "/unix/freebsd/videos/2020/09/13/freebsd-2020-ep-4-updating-your-freebsd-12.1-system-safely-with-zfs-boot-environments.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-09-13 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing freebsd 8.4 to work with Kongs driver book",
+      "url"      : "/unix/freebsd/videos/2020/08/06/freebsd-2020-installing-freebsd-8.4-for-kongs-freebsd-driver-boot.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-08-06 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2020 ep 3 installing plasma on freebsd 12.1 on virtualbox 6.1",
+      "url"      : "/unix/freebsd/videos/2020/08/05/freebsd-2020-ep-3-installing-plasma-on-freebsd-12.1-on-virtualbox-6.1.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-08-05 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2020 ep 2 freebsd 12.1 on virtualbox with xorg twm and lumina",
+      "url"      : "/unix/freebsd/videos/2020/08/05/freebsd-2020-ep-2-freebsd-12.1-on-virtualbox-with-xorg-twm-and-lumina.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-08-05 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2020 ep 1a freebsd 12.1 on virtualbox 6.1 the short version",
+      "url"      : "/unix/freebsd/videos/2020/08/05/freebsd-2020-ep-1a-freebsd-12.1-on-virtualbox-6.1-the-short-version.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-08-05 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "freebsd 2020 ep 1 installing freebsd 12.1 on virtualbox 6.1 the long version",
+      "url"      : "/unix/freebsd/videos/2020/08/03/freebsd-2020-ep-1-installing-freebsd-12.1-on-virtualbox-6.1-the-long-version.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-08-03 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Mounting tar files in v7",
+      "url"      : "/unix/research-unix/v7/2020/07/28/mounting-tar-files-in-v7.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-07-28 08:59:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Fonts and Colours in xterm",
+      "url"      : "/unix/2020/07/24/fonts-and-colors-in-xterm.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-07-24 08:53:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "How to forward mail from root to user",
+      "url"      : "/unix/2020/07/22/forward-mail-from-root-to-user-in-freebsd-12.1.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-07-22 11:31:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Setting up XDM on FreeBSD 12.1",
+      "url"      : "/unix/freebsd/2020/07/21/setting-up-xdm-on-freebsd-12.1.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-07-21 18:48:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "How to Monitor Battery Life and Sleep on FreeBSD 12.1",
+      "url"      : "/unix/freebsd/2020/07/21/how-to-monitor-battery-life-and-sleep-non-ui-freebsd-12.1.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-07-21 17:53:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Turn off that pesky Visual Mode mouse integration in VIM",
+      "url"      : "/unix/vim/2020/07/21/turn-off-that-pesky-visual-mode-mouse-integration-in-vim.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-07-21 17:04:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Using a Mac&#39;s xterm as a remote Tektronics display for a FreeBSD 12.1 Server",
+      "url"      : "/unix/macos/2020/07/21/using-a-macs-xterm-as-a-remote-tektronics-display-for-freebsd-12.1-server.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2020-07-21 17:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Restoring Grub - dual boot FreeBSD and Linux",
+      "url"      : "/unix/2018/08/09/restoring-grub-dual-boot-freebsd-and-linux.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2018-08-09 15:29:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "How to set up tor on FreeBSD 11.2",
+      "url"      : "/unix/freebsd/2018/07/27/how-to-set-up-tor-on-freebsd-11.2.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2018-07-27 11:38:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Linux Mint Note",
+      "url"      : "/unix/linux/mint/2018/04/21/linux-mint-note.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2018-04-21 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing Centos 5.11 with-2.6.17.8 kernel",
+      "url"      : "/unix/linux/centos/2018/03/06/centos-5.11-with-2.6.17.8-kernel.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2018-03-06 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing Centos 5.11 with 2.6.18-kernel",
+      "url"      : "/unix/linux/centos/2018/03/04/centos-5.11-with-2.6.18-kernel.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2018-03-04 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing Centos 4.8 with 2.6.11 Kernel",
+      "url"      : "/unix/linux/centos/2018/03/03/centos-4.8-with-2.6.11-kernel.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2018-03-03 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing Centos 6.9 with 2.6.34 Kernel",
+      "url"      : "/unix/linux/centos/2018/03/02/centos-6.9-with-2.6.34-kernel.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2018-03-02 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Algebra of sets",
+      "url"      : "/math/algebra/2018/01/14/algebra-of-sets.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2018-01-14 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Boolean Algebra Notes",
+      "url"      : "/math/algebra/boolean/2018/01/04/boolean-algebra-notes.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2018-01-04 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "v6 Bootable Tape",
+      "url"      : "/unix/research-unix/v6/2017/11/11/v6-bootable-tape.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2017-11-11 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Research Unix Version 7 in the SimH PDP-11/45 and 11/70 Emulators v1.6",
+      "url"      : "/unix/research-unix/v7/2017/10/11/installing-and-using-research-unix-v7-in-simh-pdp-11-45-and-70-emulators-rev-1.6.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2017-10-11 22:39:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "Hello, World! in Assembly on Research Unix Version 6",
+      "url"      : "/unix/research-unix/v6/2016/01/22/hello-world-in-assembly-on-research-unix-v6.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2016-01-22 18:30:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Quick Setup RT-11v5.3 (Mac/Linux)",
+      "url"      : "/pdp-11/rt-11/macro-11s/2016/01/20/quick-setup-rt-11v5.3-mac-linux.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2016-01-20 12:17:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "A tutorial introduction to programming PDP-11 Macro-11 Assembly in RT-11 v5.3",
+      "url"      : "/pdp-11/rt-11/macro-11/2016/01/20/a-tutorial-introduction-to-programming-pdp-11-macro-11-assembly-in-rt-11v5.3.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2016-01-20 10:19:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Tutorial - Setting up RT-11 v5.3 on SimH PDP-11",
+      "url"      : "/pdp-11/rt-11/2015/12/30/tutorial-setting-up-rt-11-v5.3-on-simh-pdp-11.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2015-12-30 12:17:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "PDP-11 Bootstrap loaders - some analysis",
+      "url"      : "/pdp-11/2015/12/24/pdp-11-bootstrap-loaders-some-analysis.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2015-12-24 17:20:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "PDP-11 BASIC, booting the hard way",
+      "url"      : "/pdp-11/analysis/2015/12/24/pdp-11-basic-booting-the-hard-way.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2015-12-24 09:47:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Analysis of the PDP-11 bootstrap loader code",
+      "url"      : "/pdp-11/analysis/2015/12/21/analysis-of-the-pdp-11-bootstrap-loader-code.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2015-12-21 16:34:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Adding tar to Research Unix Version 6 Running on a PDP 11/40 in SimH",
+      "url"      : "/unix/research-unix/v6/2015/12/11/adding-tar-to-research-unix-v6-running-on-pdp-11-40-in-simh.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2015-12-11 20:14:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Research Unix Version 7 in SimH PDP-11/45 Emulator",
+      "url"      : "/unix/research-unix/v7/2015/12/07/installing-and-using-research-unix-v7-in-simh-pdp-11-45-and-70-emulators-rev-1.0.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2015-12-07 00:47:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Installing and Using Research Unix Version 6 in SimH PDP-11/40 Emulator",
+      "url"      : "/unix/research-unix/v6/2015/11/23/installing-and-using-research-unix-v6-in-simh-pdp-11-40-emulator.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2015-11-23 13:41:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "Raspberry Pi B+, i2c, and DS3231 RTC",
+      "url"      : "/hardware/raspberry-pi/2015/02/23/raspberry-pi-b-plus-i2c-and-ds3231-rtc.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2015-02-23 00:00:00 -0600"
+
+    } ,
+  
+    {
+
+      "title"    : "HelloMono - Mono on Windows XP",
+      "url"      : "/programming/mono/2004/05/06/codeproject-hellomono-mono-on-windows-xp.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2004-05-06 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "hello, world - A primitive view of the state of the art",
+      "url"      : "/programming/c%23/2004/04/30/codeproject-hello-world-a-primitive-view-of-the-state-of-the-art.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2004-04-30 01:00:00 -0500"
+
+    } ,
+  
+    {
+
+      "title"    : "LogDriver - A simplified log4j using C++",
+      "url"      : "/programming/c++/2002/01/04/codeproject-logdriver-a-simplified-log4j-using-c-plus-plus.html",
+      "category" : "",
+      "tags"     : "",
+      "date"     : "2002-01-04 00:00:00 -0600"
+
+    } 
+  
+]

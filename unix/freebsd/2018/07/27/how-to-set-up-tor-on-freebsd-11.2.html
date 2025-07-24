@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>How to set up tor on FreeBSD 11.2 | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="How to set up tor on FreeBSD 11.2" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A note describing how to install and set up the tor browser on freebsd 11.2" />
+<meta property="og:description" content="A note describing how to install and set up the tor browser on freebsd 11.2" />
+<link rel="canonical" href="http://localhost:4000/unix/freebsd/2018/07/27/how-to-set-up-tor-on-freebsd-11.2.html" />
+<meta property="og:url" content="http://localhost:4000/unix/freebsd/2018/07/27/how-to-set-up-tor-on-freebsd-11.2.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-07-27T11:38:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="How to set up tor on FreeBSD 11.2" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2018-07-27T11:38:00-05:00","datePublished":"2018-07-27T11:38:00-05:00","description":"A note describing how to install and set up the tor browser on freebsd 11.2","headline":"How to set up tor on FreeBSD 11.2","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/unix/freebsd/2018/07/27/how-to-set-up-tor-on-freebsd-11.2.html"},"url":"http://localhost:4000/unix/freebsd/2018/07/27/how-to-set-up-tor-on-freebsd-11.2.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">How to set up tor on FreeBSD 11.2</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2018-07-27T11:38:00-05:00" itemprop="datePublished">
+        Jul 27, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>A note describing how to install and set up the tor browser on freebsd 11.2
+<!--more--></p>
+
+<p>created 20180727.1036</p>
+
+<p>Note: Tricky business, this tor on freebsd, but when it’s all said and done, it really works fine.</p>
+
+<h2 id="get-the-package">get the package</h2>
+
+<p><code class="language-plaintext highlighter-rouge">sudo pkg install tor</code></p>
+
+<h2 id="allow-system-to-assign-random-ip_ids-to-outgoing-packets">allow system to assign random IP_ID’s to outgoing packets</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo vi /etc/sysctl.conf
+net.inet.ip.random_id=1
+
+sudo sysctl net.inet.ip.random_id=1
+</code></pre></div></div>
+
+<h2 id="edit-the-torrc-config-file">edit the torrc config file</h2>
+
+<p><code class="language-plaintext highlighter-rouge">sudo vi /usr/local/etc/tor/torrc</code></p>
+
+<p>uncomment lines 18, 38, and 42:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SOCKSPort 9050
+Log notice file /var/log/tor/notices.log
+Log notice syslog
+</code></pre></div></div>
+
+<h2 id="start-tor">start tor</h2>
+
+<p><code class="language-plaintext highlighter-rouge">sudo -u _tor tor</code></p>
+
+<p>in another console:</p>
+
+<p><code class="language-plaintext highlighter-rouge">sudo tail -f /var/log/tor/notices.log</code></p>
+
+<p>open firefox, enable tor using tor switch or manually configure the proxy and browse to:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://check.torproject.org</code></p>
+
+<h2 id="add-the-tor-service-to-rcconf">Add the tor service to rc.conf</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo vi /etc/rc.conf
+tor_enable="YES"
+
+reboot
+</code></pre></div></div>
+
+<h2 id="notes">Notes</h2>
+
+<h3 id="firefox-quantum-6101-configuration">Firefox Quantum 61.0.1 Configuration</h3>
+
+<ul>
+  <li>add the default new private browsing window button to the toolbar</li>
+  <li>Useful addons:</li>
+  <li>noscript (on/off switch for javascript)</li>
+  <li>tor switch (on/off switch for tor)</li>
+  <li>cookie (on/off switch for cookies)</li>
+  <li>Manual Configuration of Proxy Settings (about-&gt;preferences scroll down to proxy settings, skip if using tor switch):</li>
+  <li>Manual proxy configuration
+    <ul>
+      <li>clear HTTP Proxy and Port</li>
+      <li>clear SSL Proxy and Port</li>
+      <li>clear FTP Proxy and Port</li>
+      <li>set SOCKS Host 127.0.0.1 and Port 9050</li>
+      <li>set SOCKS v5</li>
+      <li>No Proxy for localhost, 120.0.0.1</li>
+      <li>Select Proxy DNS when using Socks v5 or not, for faster resolution, don’t.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="to-completely-remove-tor">To completely remove tor</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -s
+pkg remove tor
+pkg autoremove
+pw userdel _tor
+rm -fr /var/log/tor
+rm -fr /usr/local/etc/tor
+
+vi /etc/rc.conf
+remove:
+tor_enable="YES"
+
+reboot 
+</code></pre></div></div>
+
+<p><em>post added 2022-12-01 15:20:00 -0600</em></p>
+
+  </div><a class="u-url" href="/unix/freebsd/2018/07/27/how-to-set-up-tor-on-freebsd-11.2.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

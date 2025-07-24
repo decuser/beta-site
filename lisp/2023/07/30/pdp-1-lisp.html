@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>pdp1-lisp running on an emulated PDP-1 | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="pdp1-lisp running on an emulated PDP-1" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This note describes how to set up and run PDP-1 lisp. It’s a pretty brief walkthrough. If you run into any issues, let me know." />
+<meta property="og:description" content="This note describes how to set up and run PDP-1 lisp. It’s a pretty brief walkthrough. If you run into any issues, let me know." />
+<link rel="canonical" href="http://localhost:4000/lisp/2023/07/30/pdp-1-lisp.html" />
+<meta property="og:url" content="http://localhost:4000/lisp/2023/07/30/pdp-1-lisp.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-07-30T13:38:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="pdp1-lisp running on an emulated PDP-1" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2023-07-30T13:38:00-05:00","datePublished":"2023-07-30T13:38:00-05:00","description":"This note describes how to set up and run PDP-1 lisp. It’s a pretty brief walkthrough. If you run into any issues, let me know.","headline":"pdp1-lisp running on an emulated PDP-1","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/lisp/2023/07/30/pdp-1-lisp.html"},"url":"http://localhost:4000/lisp/2023/07/30/pdp-1-lisp.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">pdp1-lisp running on an emulated PDP-1</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2023-07-30T13:38:00-05:00" itemprop="datePublished">
+        Jul 30, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This note describes how to set up and run PDP-1 lisp. It’s a pretty brief walkthrough. If you run into any issues, let me know.</p>
+
+<p><img src="/assets/img/lisp/Terminal_003.png" alt="one" /></p>
+
+<!--more-->
+<p>PDP-1 LISP is a LISP 1.5 dialect created at BBN by L. Peter Deutsch. It was released as a DECUS tape in 1964, it currently runs on the Open SimH PDP-1 emulator.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li>
+    <p><strong>The LISP Implementation for the PDP-1 Computer</strong>
+<a href="https://www.computerhistory.org/pdp-1/_media/pdf/DEC.pdp_1.1964.102650371.pdf">https://www.computerhistory.org/pdp-1/_media/pdf/DEC.pdp_1.1964.102650371.pdf</a></p>
+  </li>
+  <li>
+    <p><strong>OpenSIMH</strong> <a href="https://opensimh.org/">https://opensimh.org/</a></p>
+  </li>
+  <li>
+    <p><strong>Trailing-edge Software Kits</strong> <a href="http://simh.trailing-edge.com/software.html">http://simh.trailing-edge.com/software.html</a></p>
+  </li>
+</ul>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ul>
+  <li>Linux - I’m running Debian 12 (bookworm)</li>
+  <li>A build environement (make, cc, and ld) - build-essential package on debian systems</li>
+  <li>OpenSIMH - any reasonably recent version should work</li>
+</ul>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<ul>
+  <li>Create a workarea</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p ~/workarea/retro/pdp-1-lisp
+cd ~/workarea/retro/pdp-1-lisp
+</code></pre></div></div>
+
+<ul>
+  <li>Download the pdp-1 lisp software kit and upack it</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget http://simh.trailing-edge.com/kits/lispswre.zip
+unzip lispswre.zip
+</code></pre></div></div>
+
+<h2 id="compile-the-macro-assembler">Compile the macro assembler</h2>
+
+<p><code class="language-plaintext highlighter-rouge">cc macro1.c -o macro1</code></p>
+
+<h2 id="assemble-the-lisp-interpreter">Assemble the lisp interpreter</h2>
+
+<p><code class="language-plaintext highlighter-rouge">./macro lisp.mac</code></p>
+
+<h2 id="create-an-ini-file-for-the-pdp-1-emulator">Create an ini file for the PDP-1 emulator</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat &lt;&lt;EOF &gt;run.ini
+set cpu mdv
+load lisp.rim
+d extm_init 1
+run
+
+d tw 7777
+c
+
+d tw 400
+c
+
+d ss 2
+save lisp.sav
+
+echo READY
+c
+EOF
+</code></pre></div></div>
+
+<h2 id="run-the-emulator-and-load-the-lisp-binary">Run the emulator and load the lisp binary</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pdp1 run.ini
+
+PDP-1 simulator Open SIMH V4.1-0 Current        simh git commit id: cf47a20f
+
+HALT instruction, PC: 002353 (CLA LAT CLI)
+
+HALT instruction, PC: 002357 (CLA LAT)
+
+HALT instruction, PC: 000005 (STF6)
+READY
+</code></pre></div></div>
+
+<p>The system is ready to act as a repl, but it’s funny, you have to end a lisp form with a space in order for the interpreter to process it! So, if you want to add two numbers, you would use
+(plus 2 2) , with a trailing space - as in, (plus 2 2)<SPACE>, replacing <SPACE> with the actual space character ' '.</SPACE></SPACE></p>
+
+<p>The system will reply with the evaluation:</p>
+
+<p>a</p>
+
+<p>To end the simulation, type CTL-e, then at the sim&gt; prompt type q to exit.</p>
+
+<p>A full session would look like this:</p>
+
+<p><img src="/assets/img/lisp/Terminal_003.png" alt="one" /></p>
+
+<p>If you encounter an interpreter error, during your session, the system will halt after displaying the error message, but can often be continued, by typing <code class="language-plaintext highlighter-rouge">c</code> at the sim&gt; prompt.</p>
+
+<p>This is similar to modern lisps that dump you into a debugger where you can look around and then restart the interpreter, only the debugger, in this case, is simh.</p>
+
+<p>Later - Will</p>
+
+<p><em>post added 2023-07-30 20:02:00 -0600</em></p>
+
+  </div><a class="u-url" href="/lisp/2023/07/30/pdp-1-lisp.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

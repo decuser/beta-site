@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>PDP-11 Bootstrap loaders - some analysis | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="PDP-11 Bootstrap loaders - some analysis" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This note provides some short analyses of several of the PDP-11 bootstrap loaders used to install the Research Unix Sixth edition. It is a work in progress…" />
+<meta property="og:description" content="This note provides some short analyses of several of the PDP-11 bootstrap loaders used to install the Research Unix Sixth edition. It is a work in progress…" />
+<link rel="canonical" href="http://localhost:4000/pdp-11/2015/12/24/pdp-11-bootstrap-loaders-some-analysis.html" />
+<meta property="og:url" content="http://localhost:4000/pdp-11/2015/12/24/pdp-11-bootstrap-loaders-some-analysis.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-12-24T17:20:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="PDP-11 Bootstrap loaders - some analysis" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2015-12-24T17:20:00-06:00","datePublished":"2015-12-24T17:20:00-06:00","description":"This note provides some short analyses of several of the PDP-11 bootstrap loaders used to install the Research Unix Sixth edition. It is a work in progress…","headline":"PDP-11 Bootstrap loaders - some analysis","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/pdp-11/2015/12/24/pdp-11-bootstrap-loaders-some-analysis.html"},"url":"http://localhost:4000/pdp-11/2015/12/24/pdp-11-bootstrap-loaders-some-analysis.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">PDP-11 Bootstrap loaders - some analysis</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2015-12-24T17:20:00-06:00" itemprop="datePublished">
+        Dec 24, 2015
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This note provides some short analyses of several of the PDP-11 bootstrap loaders used to install the Research Unix Sixth edition. It is a work in progress…</p>
+
+<!--more-->
+
+<p>Each bootstrap loader described below is presented without much explanation in Setting Up Unix - Sixth edition, in Unix Programmer’s Manual Sixth Edition Volume II, by K. Thompson and D.M. Ritchie, 1975.</p>
+
+<h2 id="resources">Resources</h2>
+<p>The following are resources that are available on bitsavers or elsewhere. The documents are extremely well written and are invaluable sources of technical information. However, they do require multiple readings to truly appreciate. The helpful folks on the SimH and TUHS mailing lists are also great resources and I appreciate their willingness to help poor retrocomputing hobbyists. Without their help, this sort of exploration would be much more painful.</p>
+
+<ul>
+  <li>
+    <p>Setting Up Unix - Sixth edition, in Unix Programmer’s Manual Sixth Edition Volume II, by K. Thompson and D.M. Ritchie, 1975 - This little document is critical for installing Unix Sixth Edition and is the source of the following loaders, but it does not describe the programs or their function in any detail.</p>
+  </li>
+  <li>
+    <p>PDP-11 Programming Card for the Family of PDP-11 Computers, 1975 - This is a most terse reference, but very handy once you understand it. It provides a quick reference for the PDP-11 addressing modes, instruction set, memory layout, and bootstrap loaders.</p>
+  </li>
+  <li>PDP-11/40 Processor Handbook, 1972 - This is a pretty terse reference too, but indispensable once you get it.
+    <blockquote>
+      <p>Chapter 3, Addressing Modes, Section 3.7 Summary of Addressing Modes</p>
+
+      <p>Chapter 4, Instruction Set, Section 4.3 List of Instructions</p>
+    </blockquote>
+  </li>
+  <li>PDP-11 Peripherals Handbook, 1976 - This is a pretty straightforward book.
+    <blockquote>
+      <p>Chapter 2 Programming</p>
+
+      <p>Chapter 3 Categories of Peripherals, Section 3.7 and 3.8 Magnetic Tape and Disks</p>
+
+      <p>Chapter 4 Descriptions of Peripherals, Section 4.3</p>
+
+      <p>List of Peripherals, PC11/PR11 High Speed Paper Tape Reader/Punch PC11, RK11/RK05 Decpack Disk Cartridge RK11-D, RP11 Disk Pack RP11-C, TM11/TU10 Magnetic Tape, TM11</p>
+    </blockquote>
+  </li>
+  <li>PDP-11 Paper Tape Software Handbook DEC-11-XPTSA-B-D, 1976 - This is a great reference for introductory PDP-11 Assembly Language and for understanding the paper tape bootstrap loader (not discussed, below, see prior note)
+    <blockquote>
+      <p>Chapter 6, Loading and Dumping Memory, Section 6.1.6.3 Bootstrap Loader Operation</p>
+
+      <p>Appendix F Loading and Dumping Core Memory</p>
+    </blockquote>
+  </li>
+  <li>PDP-11 Bootstrap Loaders <a href="https://web.archive.org/web/20170329153036/http://psych.usyd.edu.au/pdp-11/bootstraps.html">https://web.archive.org/web/20170329153036/http://psych.usyd.edu.au/pdp-11/bootstraps.html</a> - I wish I had seen this sooner. The author has done similar, but more condensed, analyses of many different bootstraps.</li>
+</ul>
+
+<h2 id="bootstraps">Bootstraps</h2>
+<p>With illustrative decoded instructions and comments</p>
+
+<h3 id="tu10">TU10</h3>
+
+<h4 id="tu10-analysis">TU10 Analysis</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>012700  MOV 175226,R0   ; Move MTCMA into R0
+172526                  ; MTCMA address
+010040  MOV R0,-(R0)    ; Move -5202(8) into the MTBRC address
+012740  MOV 60003,-(R0) ; Move 60003 into the MTC address
+060003                  ; Specify density, function, and go
+000777  BPL .           ; Loop. NPR won't take place if we HALT
+</code></pre></div></div>
+
+<p>Here are the memory addresses of the TU10 that are being used:</p>
+
+<ul>
+  <li>175222 MTC   Magnetic Tape Command Register</li>
+  <li>175224 MTBRC Magnetic Tape Byte Record Counter Register</li>
+  <li>175226 MTCMA Magnetic Tape Current Memory Address Register</li>
+</ul>
+
+<h5 id="mtc-magnetic-tape-command-register">MTC Magnetic Tape Command Register</h5>
+
+<p>The command register is used to control the tape device. The code above puts 60003 into this register to set the density, tell the tape device to perform a read operation, and to go do its thing.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 0  1  1  0  0  0  0  0  0  0  0  0  0  0  1  1 - 060003
+15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+</code></pre></div></div>
+
+<p>bits 13-14 specify density, 11 indicates 800 bpi 9 channel</p>
+
+<p>bits 1-3 specifies the tape function, 001 indicates read</p>
+
+<p>bit 0 specifies go which begins the operation specified by the function bits</p>
+
+<p>MTBRC Magnetic Tape Byte Record Counter Register
+The byte record counter register holds the count of bytes to be read (in this case) from the tape device into memory. The number is a two’s complement representation of the number, meaning that the value stored in this location is negative. The bootstrap above stores the MTCMA 1775226 in the counter. This number is simply a convenience number in this case, it is big enough to cause the device to completely read a block. It is not the actual number of bytes contained in the block. The reason for using it is to keep the program as short as possible and by referencing it using autodecrement mode, it conveniently provides the MTBRC address followed by the MTC, which is exactly how we use the device. Nifty for sure.</p>
+
+<p>If you’re curious to know what the actual value of the register is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1 111 111 101 010 010 110 - 1775226
+ 0 000 000 010 101 101 001 - one's complement
+                         1 - add one to get the two's complement
+--------------------------
+ 0 000 000 010 101 101 010 - 2552 (1386 base 10)
+</code></pre></div></div>
+
+<h5 id="mtcma-magnetic-tape-current-memory-address-register">MTCMA Magnetic Tape Current Memory Address Register</h5>
+
+<p>This address is only used by the bootstrap to initialize R0. It is used by the device to determine where in memory to write the bytes it reads. When the device is initialized, this register contains all zeros 000000. The code does not change this. The bytes read from the tape are loaded into consecutive addresses starting at memory location 000000.</p>
+
+<h4 id="tu10-summary">TU10 Summary</h4>
+
+<p>MTCMA is placed in R0 so that it can be decremented to obtain the MTBRC and provide the initial value for the MTBRC. R0 is decremented again to obtain the MTC, and the value 060003 is placed into the MTC and the device requests a direct memory access (DMA) read (aka non-processor request or NPR). Then the code loops on the same instruction which allows the pending NPR to take place.  Bytes are read from the tape, up to the two’s complement of the number in the MTBR, into consecutive bytes of memory beginning at location 000000.</p>
+
+<h3 id="rk05">RK05</h3>
+
+<h4 id="rk05-analysis">RK05 Analysis</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>01 012700       MOV 177414,R0 ; Move RKDB into R0
+02 177414                     ; RKDB Address
+03 005040       CLR -(R0)     ; Decrement R0, clear contents RKDA
+04 005040       CLR -(R0)     ; Decrement R0, clear contents RKBA
+05 010040       MOV R0,-(R0)  ; Move contents of R0(RKBA) into RKWC
+06 012740       MOV 5,-(R0)   ; Decrement R0 and move 5 into RKCS
+07 000005                     ; Read and go
+08 105710 WAIT: TSTB (R0)     ; Test the lower byte of RKCS
+09 002376       BGE WAIT      ; When bit 7 becomes 1, read is done
+10 005007       CLR PC        ; Set PC 000000, start of bytes read
+</code></pre></div></div>
+
+<h5 id="rkdb---rk-data-buffer-register-177414">RKDB - RK data buffer register (177414)</h5>
+
+<p>This register is RKDA+2 and is only used by the code above to initialize R0 so that subsequent RK addresses can be found by simply decrementing R0.</p>
+
+<h5 id="rkda---rk-disk-address-register-177412">RKDA - RK disk address register (177412)</h5>
+
+<p>This register determines the starting disk address of the read operation and is cleared by the code.</p>
+
+<h5 id="rkba---rk-current-bus-address-register-177410">RKBA - RK current bus address register (177410)</h5>
+
+<p>This register contains the bus address to or from which data will be transferred. Is this the same as memory address?</p>
+
+<h5 id="rkwc---rk-word-count-register-177406">RKWC - RK word count register (177406)</h5>
+
+<p>Two’s complement of the number of words to be transferred.</p>
+
+<h5 id="rkcs---rk-control-status-register-177404">RKCS - RK control status register (177404)</h5>
+
+<p>This is the register that controls the device and provides the device status to the program</p>
+
+<h5 id="lines-1-2">Lines 1-2</h5>
+
+<p>The execution of the boot loader code moves the address of RKDB into R0 to initialize the register so that it can be used to obtain the other RK buffer addresses as they are needed.</p>
+
+<h5 id="line-3">Line 3</h5>
+
+<p>The RKDA buffer is cleared, setting the disk address to 0.</p>
+
+<p>Line 4The RKBA buffer is cleared, setting the bus address to 0.</p>
+
+<h5 id="line-5">Line 5</h5>
+
+<p>The value in R0 is transferred into the RKWC buffer. RKBA or 177410, the value in R0, is a convenient number to use for the read operation because it is big enough to cause the program to read in a block of data. The number is in two’s complement and represents -370. This tells the disk controller that 370 words (540 bytes) will be transferred.</p>
+
+<h5 id="lines-6-7">Lines 6-7</h5>
+
+<p>The value 5 is placed into RKCS, this value represents a read operation and go.</p>
+
+<h5 id="lines-8-9">Lines 8-9</h5>
+
+<p>The lower byte of RKCS is tested and when it is greater than or equal to zero (not negative), it loops, waiting until the value is negative, that is until bit 7 becomes 1, which indicates Control Ready (RDY) and done.</p>
+
+<h5 id="line-10">Line 10</h5>
+
+<p>PC is set to 00000 and execution of the bytes read from the disk begins at location 00000.</p>
+
+<h4 id="rk05-summary">RK05 Summary</h4>
+
+<p>RKDB is placed in R0 so that it can be decremented to obtain the addresses of RKDA, RKBA, RKWC, and RKCS. RKDA and RKBA are cleared and the address of RKBA representing -370 is placed into RKWC. The value 5 is placed into RKCS and the device is commanded to perform a read operation. Then the code loops until RKCS bit 7, RDY is detected. Finally, the PC is cleared and the program that is copied from the RK05 into memory location 0 is run.</p>
+
+<h3 id="rp03">RP03</h3>
+
+<h4 id="rp03-analysis">RP03 Analysis</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>01 012700       MOV 176726,R0 ; Move RPM1 into R0
+02 176726                     ; RPM1 Address
+03 005040       CLR -(R0)     ; Decrement R0, clear contents RPDA
+04 005040       CLR -(R0)     ; Decrement R0, clear contents RPCA
+05 005040       CLR -(R0)     ; Decrement R0, clear contents RPBA
+06 010040       MOV R0,-(R0)  ; Move contents of R0(RPBA) into RPWC
+07 012740       MOV 5,-(R0)   ; Decrement R0 and move 5 into RPCS
+08 000005                     ; Read and go
+09 105710 WAIT: TSTB (R0)     ; Test the lower byte of RPCS
+10 002376       BGE WAIT      ; When bit 7 becomes 1, read is done
+11 005007       CLR PC        ; Set PC 000000, start of bytes read
+</code></pre></div></div>
+
+<h5 id="rpm1---rp-maintenance-1-register-176726">RPM1 - RP Maintenance 1 Register (176726)</h5>
+
+<p>This register is a maintenance mode register and it is only used by the code above to initialize R0 so that subsequent RP addresses can be found by simply decrementing R0.</p>
+
+<h5 id="rpda---rp-disk-address-register-176724">RPDA - RP disk address register (176724)</h5>
+
+<p>This register determines the starting disk track and sector of the read operation and is cleared by the code.</p>
+
+<h5 id="rpca---rp-cylinder-address-register-176722">RPCA - RP cylinder address register (176722)</h5>
+
+<p>This register determines the starting cylinder of the read operation and is cleared by the code.</p>
+
+<h5 id="rpba---rp-bus-address-register-176720">RPBA - RP bus address register (176720)</h5>
+
+<p>This register contains the bus address to or from which data will be transferred. It is equivalent to the memory address of the PDP-11.</p>
+
+<h5 id="rpwc---rp-word-count-register-176716">RPWC - RP word count register (176716)</h5>
+
+<p>Two’s complement of the number of words to be transferred.</p>
+
+<h5 id="rpcs---rp-control-status-register-176714">RPCS - RP control status register (176714)</h5>
+
+<p>This is the register that controls the device and provides the device status to the program</p>
+
+<h5 id="lines-1-2-1">Lines 1-2</h5>
+
+<p>The execution of the boot loader code moves the address of RPM1 into R0 to initialize the register so that it can be used to obtain the other RP buffer address registers as they are needed.</p>
+
+<h5 id="line-3-1">Line 3</h5>
+
+<p>The RPDA buffer is cleared, setting the disk sector and track addresses to 0.</p>
+
+<h5 id="line-4">Line 4</h5>
+
+<p>The RPCA buffer is cleared, setting the cylinder address to 0.</p>
+
+<h5 id="line-5-1">Line 5</h5>
+
+<p>The RPBA buffer is cleared, setting the bus address to 0.</p>
+
+<h5 id="line-6">Line 6</h5>
+
+<p>The value in R0 is transferred into the RPWC buffer. RPBA or 176720, the value in R0, is a convenient number to use for the read operation because it is big enough to cause the program to read in a block of data. The number is in two’s complement and represents -1060. This tells the disk controller that 1060 words (2120 bytes) will be transferred.</p>
+
+<h5 id="lines-7-8">Lines 7-8</h5>
+
+<p>The value 5 is placed into RPCS, this value represents a read operation and go.</p>
+
+<h5 id="lines-9-10">Lines 9-10</h5>
+
+<p>The lower byte of RPCS is tested and when it is greater than or equal to zero (not negative), it loops, waiting until the value is negative, that is until bit 7 becomes 1, which indicates Control Ready (RDY) and done.</p>
+
+<h5 id="line-11">Line 11</h5>
+
+<p>PC is set to 00000 and execution of the bytes read from the disk begins at location 00000.</p>
+
+<h4 id="rp03-summary">RP03 Summary</h4>
+
+<p>RPM1 is placed in R0 so that it can be decremented to obtain the addresses of RPDA, RPCA, RPBA, RPWC, and RPCS. RPDA, RPCA, and RPBA are cleared and the address of RPBA representing -1060 is placed into RPWC. The value 5 is placed into RPCS and the device is commanded to perform a read operation. Then the code loops until RPCS bit 7, RDY is detected. Finally, the PC is cleared and the program that is copied from the RP03 into memory location 0 and is run.</p>
+
+<p><em>post added 2022-11-30 12:29:00 -0600</em></p>
+
+  </div><a class="u-url" href="/pdp-11/2015/12/24/pdp-11-bootstrap-loaders-some-analysis.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>A Modern PDF Cleanup Workflow | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="A Modern PDF Cleanup Workflow" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This note provides a workflow for taking a less than optimized PDF and optimizing it for viewing and printing. It isn’t a cure-all for sick PDF’s, but it does work for a lot of them. I’ve struggled with badly scanned PDF’s for a long time and this workflow represents my current best approach. The note also provides a cookbook of solutions to problems I have run up against and the solutions that I currently use to address those problems." />
+<meta property="og:description" content="This note provides a workflow for taking a less than optimized PDF and optimizing it for viewing and printing. It isn’t a cure-all for sick PDF’s, but it does work for a lot of them. I’ve struggled with badly scanned PDF’s for a long time and this workflow represents my current best approach. The note also provides a cookbook of solutions to problems I have run up against and the solutions that I currently use to address those problems." />
+<link rel="canonical" href="http://localhost:4000/pdfs/2023/02/01/pdf-cleanup-workflow.html" />
+<meta property="og:url" content="http://localhost:4000/pdfs/2023/02/01/pdf-cleanup-workflow.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-02-01T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="A Modern PDF Cleanup Workflow" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2023-02-01T00:00:00-06:00","datePublished":"2023-02-01T00:00:00-06:00","description":"This note provides a workflow for taking a less than optimized PDF and optimizing it for viewing and printing. It isn’t a cure-all for sick PDF’s, but it does work for a lot of them. I’ve struggled with badly scanned PDF’s for a long time and this workflow represents my current best approach. The note also provides a cookbook of solutions to problems I have run up against and the solutions that I currently use to address those problems.","headline":"A Modern PDF Cleanup Workflow","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/pdfs/2023/02/01/pdf-cleanup-workflow.html"},"url":"http://localhost:4000/pdfs/2023/02/01/pdf-cleanup-workflow.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">A Modern PDF Cleanup Workflow</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2023-02-01T00:00:00-06:00" itemprop="datePublished">
+        Feb 1, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This note provides a workflow for taking a less than optimized PDF and optimizing it for viewing and printing. It isn’t a cure-all for sick PDF’s, but it does work for a lot of them. I’ve struggled with badly scanned PDF’s for a long time and this workflow represents my current best approach.</p>
+
+<p>The note also provides a cookbook of solutions to problems I have run up against and the solutions that I currently use to address those problems.</p>
+
+<!--more-->
+
+<h2 id="caveats">Caveats</h2>
+
+<p>Not many, but they’re important to note</p>
+
+<ul>
+  <li>Every PDF is unique and no one solution fits them all</li>
+  <li>The workflow is a MacOS workflow. It should translate to the BSD’s and Linuxes without much difficulty. If you’re on Windows, YMMV.</li>
+</ul>
+
+<h2 id="packages">Packages</h2>
+
+<p>A variety of tools are useful if you are going to work with scanned images and pdfs. This note uses PhotoScape X to deal with Color adjustments. Feel free to use your tool of choice. If you can achieve good results with one of the other packages, drop me a line, I’ll happily change my workflow.</p>
+
+<ul>
+  <li><em>ghostscript</em> - pdf tools</li>
+  <li><em>ImageMagick</em> - conversion tools for images</li>
+  <li><em>libtiff</em> - tiff tools</li>
+  <li><em>mupdf</em> - more pdf tools</li>
+  <li><em>poppler</em> - more pdf tools</li>
+  <li><em>pandoc</em> - coversion tools for documents</li>
+  <li><em>PhotoScape X</em> - app that does nice batch operations on images</li>
+  <li><em>tesseract</em> and <em>tesseract-eng</em> - OCR tools</li>
+</ul>
+
+<p><strong>Install Packages</strong></p>
+
+<p>Get PhotoScape X. It’s available in the Apple App Store and the free version works great. I just downloaded it and archived off a copy of the app for later use as neeed. I am not a fan of apps, but this one is too good to ignore.</p>
+
+<p>The other packages are available via macports:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo port install ghostscript ImageMagick libtiff mupdf poppler pandoc tesseract tesseract-eng
+</code></pre></div></div>
+
+<h2 id="short-version">Short Version</h2>
+
+<p>Here is the short version, keep reading afterward for details and the cookbook. There are lots of details to follow. This pdf stuff is tricky. Testing is very time consuming and great results are hard to obtain. This is my current workflow for taking a less than optimal pdf and improving it. Caveats apply.</p>
+
+<h3 id="1-phase-one">1. Phase One</h3>
+
+<ul>
+  <li>Create a work area</li>
+  <li>Copy in a pdf</li>
+  <li>
+    <p>Extract tiffs</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p ~/pdf-work/{input,output,output-photoscape,output-small,output-ocr}
+cd ~/pdf-work/input
+cp ~/Desktop/input.pdf .
+cd ../input
+pdfimages -tiff -p input.pdf ../output/output
+</code></pre></div>    </div>
+    <h3 id="2-phase-two">2. Phase Two</h3>
+  </li>
+  <li>Use PhotoScape to adjust colors
+    <ul>
+      <li>Open PhotoScape X</li>
+      <li>Click Batch</li>
+      <li>Drag the <em>output</em> folder into the window</li>
+      <li>Choose Color-&gt;Grayscale</li>
+      <li>Magic Color</li>
+      <li>Lighten Shadows - 100</li>
+      <li>Darken Highlights - 50</li>
+      <li>Click SAVE</li>
+      <li>Change the Image Format to TIFF</li>
+      <li>Select DPI and change it to 150</li>
+      <li>Choose a custom destination to put the output (output-photoscape)</li>
+      <li>Click OK</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="phase-three">Phase Three</h3>
+
+<ul>
+  <li>Resize and compress the tiffs</li>
+  <li>Combine the tiffs into a single tiff</li>
+  <li>
+    <p>OCR the single tiff and produce the OCR’ed PDF</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ../output-photoscape
+for i in *.tiff; do convert $i -resize 1200x -compress zip ../output-small/$i.tiff;done
+cd ../output-small
+tiffcp *.tiff ../input/multi-image-input.tiff
+cd ../input
+tesseract multi-image-input.tiff ../output -l eng PDF
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>The result is found in <em>output.pdf</em></p>
+
+<h2 id="the-details">The Details</h2>
+
+<p>The following gets into the details about working with a not-so-great scanned pdf, trying to make it better and more useful - cleaner looking and with OCR. In the following discussion, I will be using a copy of Adrian Nye’s Volume 4 of <em>The Definitive Guides to the X Window System</em> about Xt Intrinsics from <a href="https://archive.org/details/xtoolkitintrinsic04nyemiss">archive.org</a>. This PDF is particularly suited to being reworked. It has huge images, it’s color, the color is neither needed, nor clear, it isn’t OCR’ed, and it’s a great book.</p>
+
+<p><strong>Tools provided by the packages</strong></p>
+
+<p>We will use a variety of tools in the exploration. Here is a summary list:</p>
+
+<ul>
+  <li><em>convert</em> from the package <em>ImageMagick</em>, convert between image formats</li>
+  <li><em>gs</em> from the package <em>ghostscript</em>, extract images from pdf (single image tiffs)</li>
+  <li><em>mutool</em> from the package <em>mupdf</em> - get info about images in pdf</li>
+  <li><em>pandoc</em> from the package <em>pandoc</em>, convert document formats (pdf, html, markdown, latex, etc)</li>
+  <li><em>pdfimages</em> from the package <em>poppler</em>, extract images from pdf (multi image tiff) and get info about images in pdf</li>
+  <li><em>pdfinfo</em> from the package <em>poppler</em>, get info from pdf</li>
+  <li><em>pdfunite</em> from the package <em>poppler</em>, combine pdfs into a single pdf</li>
+  <li><em>PhotoScape X</em> from the app <em>PhotoScape X</em>, color adjustment</li>
+  <li><em>tesseract</em> from the package <em>tesseract</em>, OCR of images and creation of pdf</li>
+  <li><em>tiffcp</em> from the package <em>libtiff</em>, combinine single-image tiffs into a multi-image tiff</li>
+  <li><em>tiffsplit</em> from the package <em>libtiff</em>, split multi-image tiffs into single-image tiffs</li>
+</ul>
+
+<h3 id="1-setting-up-a-work-area">1. Setting up a work area</h3>
+
+<p>Make a directory to work from (preferably on an SSD) with input and output subdirs, change into it, download our work of interest, and copy it to <em>input.pdf</em> to use as our source.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p ~/pdf-work/{input,output,output-photoscape,output-small,output-ocr}
+cd ~/pdf-work
+
+aria2c https://archive.org/download/xtoolkitintrinsic04nyemiss/xtoolkitintrinsic04nyemiss_200KB_jp2.pdf -o nye-vol-04.pdf
+
+cp nye-vol-04.pdf input/input.pdf
+</code></pre></div></div>
+
+<p>You might want to just use preview to drag a sampling of the pages into a pdf that you name input.pdf and work with that until you’re convinced you want to work with the many, many page input.pdf :).</p>
+
+<h3 id="2-getting-information-from-a-pdf">2. Getting Information from a PDF</h3>
+
+<p>Let’s take a look at the meta-data about the PDF using <em>pdfinfo</em> from the <em>poppler</em> package.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pdfinfo input.pdf
+...
+Producer:        iText 1.3 by lowagie.com (based on itext-paulo-153)
+CreationDate:    Sun Jan  8 00:02:44 2006 CST
+ModDate:         Sun Jan  8 00:02:44 2006 CST
+Custom Metadata: no
+Metadata Stream: no
+Tagged:          no
+UserProperties:  no
+Suspects:        no
+Form:            none
+JavaScript:      no
+Pages:           622
+Encrypted:       no
+Page size:       475 x 637 pts
+Page rot:        0
+File size:       127682751 bytes
+Optimized:       no
+PDF version:     1.5
+</code></pre></div></div>
+
+<p>The first things to notice are <em>Pages</em>, <em>Page size</em>, and <em>File size</em>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Pages:           622
+Page size:       475 x 637 pts
+File size:       127682751 bytes
+</code></pre></div></div>
+
+<p>This is one big pdf!</p>
+
+<p>Note that points are 1/72 of an inch. We can use the <code class="language-plaintext highlighter-rouge">units</code> command to find the conversion factors:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>units point in
+	* 0.013888889
+	/ 72
+</code></pre></div></div>
+
+<p>We can then do the math to figure out the size, in inches, of the pdf:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo '475/72' | bc -l
+6.59722222222222222222
+
+echo '637/72' | bc -l
+8.84722222222222222222
+</code></pre></div></div>
+
+<p>So, it’s a 6.5x9 pdf (I’m not convinced, but that’s what the pdf thinks it is, so we’ll roll with it).</p>
+
+<h3 id="3-getting-information-about-a-pdfs-images">3. Getting information about a PDF’s images</h3>
+
+<p>For this, we can use <em>mutool</em> from the <em>mupdf</em> package and <em>pdfimages</em> from the <em>poppler</em> package.</p>
+
+<p>Let’s start with <em>mutool</em>. this utility will display information about all of the images in a pdf, so be prepared for some lenghty output:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mutool info input.pdf
+input.pdf:
+
+PDF-1.5
+Info object (1939 0 R):
+&lt;&lt;/CreationDate(D:20060108060244Z)/Producer(iText 1.3 by lowagie.com \(based on itext-paulo-153\))/ModDate(D:20060108060244Z)&gt;&gt;
+Pages: 622
+
+Retrieving info from pages 1-622...
+Mediaboxes (15):
+	1	(4 0 R):	[ 0 0 475 637 ]
+	2	(7 0 R):	[ 0 0 455 630 ]
+	42	(131 0 R):	[ 0 0 461 629 ]
+	48	(149 0 R):	[ 0 0 464 632 ]
+	50	(155 0 R):	[ 0 0 457 632 ]
+	52	(162 0 R):	[ 0 0 468 637 ]
+	54	(168 0 R):	[ 0 0 466 636 ]
+	74	(230 0 R):	[ 0 0 471 639 ]
+	128	(397 0 R):	[ 0 0 465 637 ]
+	162	(503 0 R):	[ 0 0 458 642 ]
+	198	(614 0 R):	[ 0 0 461 639 ]
+	200	(620 0 R):	[ 0 0 468 642 ]
+	316	(980 0 R):	[ 0 0 468 638 ]
+	332	(1030 0 R):	[ 0 0 471 638 ]
+	490	(1519 0 R):	[ 0 0 463 638 ]
+
+Images (622):
+	1	(4 0 R):	[ JPX ] 2644x3542 1bpc ImageMask (1 0 R)
+	2	(7 0 R):	[ JPX ] 2528x3502 1bpc ImageMask (5 0 R)
+...
+</code></pre></div></div>
+
+<p>There is a lot of information being displayed. But, we’re mostly concerned with the image resolutions at this point.</p>
+
+<p>Pixels are picture elements and they don’t readily convert to more intuitive units like inches. But, we can do a conversion for the monitor that’ll give us a hint as to the actual size.</p>
+
+<p>First, let’s get the dpi information from X (go get XQuartz and install it, if you don’t already have it):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xdpyinfo | grep dots
+resolution:    96x96 dots per inch
+</code></pre></div></div>
+
+<p>and</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xrandr | grep -w connected
+default connected 2560x1440+0+0 0mm x 0mm
+</code></pre></div></div>
+
+<p>This tells us how many dots per inch our monitor has and how many dots there are both horizontally and vertically.</p>
+
+<p>Converting to inches is pretty straightforward since we now know the DPI and dots:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo '2560/96' | bc -l
+26.66666666666666666666
+(base) nebula:~ wsenn$ echo '1440/96' | bc -l
+15.00000000000000000000
+</code></pre></div></div>
+
+<p>This monitor is 27 x 15… get the measuring tape out… I wish, it’s actually 23.5 x 13.25. Prolly some weird pixel thing… Not worth worrying about, it’s close enough :). Email me if you know something useful here.</p>
+
+<p>The question is how big is that image in relation to what we know about the monitor:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo '2600/96' | bc -l
+27.08333333333333333333
+echo '3500/96' | bc -l
+36.45833333333333333333
+</code></pre></div></div>
+
+<p>27 in x 36.5 in</p>
+
+<p>Wow! That’s huge :). It’s about the same width as my monitor and more than twice as tall. Way more than we need for viewing or printing.</p>
+
+<p>Similarly, we can get image information using <em>pdfimages</em> from the <em>poppler</em> package:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pdfimages -list input.pdf 
+page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio
+--------------------------------------------------------------------------------------------
+   1     0 image    2644  3542  rgb     3   8  jpx    no         1  0   401   400  200K 0.7%
+   2     1 image    2528  3502  rgb     3   8  jpx    no         5  0   400   400  200K 0.8%
+</code></pre></div></div>
+
+<p><em>pdfimages</em> is a lot slower than <em>mutools</em>, but we do get some additonal information making it a good utility to have around.</p>
+
+<h3 id="2-extracting-images-from-a-pdf">2. Extracting images from a PDF</h3>
+
+<p>To extract images, we can use <em>pdfimages</em> from the <em>poppler</em> package:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/pdf-work/input
+pdfimages -tiff -p input.pdf ../output/output
+</code></pre></div></div>
+
+<p>This will extract all of the images from the pdf and put them into <em>../output</em>. The images will be named ‘output-XXX-YYY.tif’. If there are a lot of big images, it will take a while… and use a lot of disk space to extract them all, so be patient.</p>
+
+<h3 id="3-tweaking-colors">3. Tweaking colors</h3>
+
+<p>I’m sure there are better ways to do this, I just haven’t figured them out yet. Email me with your tips. The command-line tools don’t seem to know about “magic color”. Twiddle as you like with Lighten/Darken, etc.</p>
+
+<p>To tweak colors, we can use <em>PhotoScape X</em> and preview our tweaks in real-time:</p>
+
+<ul>
+  <li>Open PhotoScape X</li>
+  <li>Click Batch</li>
+  <li>Drag the <em>output</em> folder into the window</li>
+  <li>Choose Color-&gt;Grayscale</li>
+  <li>Magic Color</li>
+  <li>Lighten Shadows - 100</li>
+  <li>Darken Highlights - 50</li>
+  <li>Click SAVE</li>
+  <li>Change the Image Format to TIFF</li>
+  <li>Select DPI and change it to 150</li>
+  <li>Choose a custom destination to put the output (output-photoscape)</li>
+  <li>Click OK</li>
+</ul>
+
+<p>Be patient. It’ll work.</p>
+
+<h3 id="4-resizing-images">4. Resizing images</h3>
+
+<p>I am going to resize the images to 1200 pixels wide and I’m going to preserve the scaling. I am also going to compress the images. You may want to tweak the size. We will use the <em>convert</em> utility from the <em>ImageMagick</em> package:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/pdf-work/output-photoscape
+for i in *.tiff; do convert $i -resize 1200x -compress zip ../output-small/$i.tiff;done
+</code></pre></div></div>
+
+<p>1200x might not be your speed, just change it as you see fit. I’m still trying to figure out an optimal size.</p>
+
+<p>Be patient, it’ll take a bit.</p>
+
+<h3 id="5-recombining-single-image-tiffs">5. Recombining single-image tiffs</h3>
+
+<p>To combine a bunch of individual tiffs into a multi-image tiff suitable for additional processing, we will use <em>tiffcp</em> from the <em>libtiff</em> package:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/pdf-work/output-small
+tiffcp *.tiff ../input/multi-image-input.tiff
+</code></pre></div></div>
+
+<h3 id="6-ocring-the-images">6. OCRing the images</h3>
+
+<p>We will be using <em>tesseract</em> from the <em>tesseract</em> package to perform OCR on our images. <em>tesseract</em> will work with either single-image tiffs or with a multi-image tiff. I will show both options, but for the workflow, we will only be concerned with the multi-image tiff version (a single file with many images).</p>
+
+<p><strong>Option 1. Multi-image tiffs</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/pdf-work/input
+tesseract multi-image-input.tiff ../output -l eng PDF
+</code></pre></div></div>
+
+<p><strong>Option 2. Single-image tiffs</strong></p>
+
+<p><strong>Don’t do this if you did option 1!</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/pdf-work/output-small
+for i in *.tiff; do tesseract $i ../output-ocr/$i -l eng PDF;done
+</code></pre></div></div>
+
+<p>Using option 2, there will be lots of pdfs to combine. We will use <em>pdfunite</em> from the <em>poppler</em> package to do the combination:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/pdf-work/output-ocr
+pdfunite *.pdf ../output.pdf
+</code></pre></div></div>
+
+<p>Either option will take quite a while and both will produce an OCR’ed PDF.</p>
+
+<p>The result is a cleaner, better looking, and more functional PDF.</p>
+
+<p>That’s it for the exploration! On to the cookbook!</p>
+
+<hr />
+
+<h2 id="cookbook-solutions-to-various-problems">Cookbook Solutions to various problems</h2>
+
+<p>This section provides snippets solving specific problems arising while working with pdf’s and images.</p>
+
+<h3 id="extract-images-to-single-image-tiff-files">Extract images to single-image tiff files</h3>
+
+<p><code class="language-plaintext highlighter-rouge">pdfimages -tiff -p input.pdf output</code></p>
+
+<p>This creates a bunch of tiff images named output-XXX-YYY.tif</p>
+
+<h3 id="extract-images-to-a-multi-image-tiff-file">Extract images to a multi-image tiff file</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gs -q -dNOPAUSE -dBATCH -sDEVICE=tifflzw -sPAPERSIZE=letter \
+    -sOutputFile=output.tiff input.pdf
+</code></pre></div></div>
+
+<p>This will extract all of the images in a pdf into a single .tiff</p>
+
+<p>A useful option to keep in mind is <em>-r</em> for resolution. A setting like <em>-r300</em> specifies a desired DPI.</p>
+
+<h3 id="combine-single-image-tiffs-into-a-multi-image-tiff">Combine single-image tiffs into a multi-image tiff</h3>
+
+<p><code class="language-plaintext highlighter-rouge">tiffcp -c zip *.tif ../output.tiff</code></p>
+
+<p>This combines all of the .tif files into a single .tiff</p>
+
+<h3 id="adjust-colors-of-multiple-images-at-once">Adjust Colors of Multiple Images at Once</h3>
+
+<ul>
+  <li>open <em>PhotoScape X</em> to batch correct the color</li>
+  <li>click batch</li>
+  <li>add in your image folder</li>
+  <li>adjust colors</li>
+  <li>save the results</li>
+</ul>
+
+<p>This creates a bunch of tiff images named whatever-XXX-YYY.tiff</p>
+
+<h3 id="ocr-a-tiff-file-and-produce-a-pdf">OCR a .tiff file and produce a PDF</h3>
+
+<p>The accuracy of tesseract rivals adobe now… finally.</p>
+
+<p><code class="language-plaintext highlighter-rouge">tesseract input.tiff output -l eng PDF</code></p>
+
+<h3 id="split-a-multi-image-tiff-into-single-image-tiffs">Split a multi-image tiff into single-image tiffs</h3>
+
+<p><code class="language-plaintext highlighter-rouge">tiffsplit input.tiff</code></p>
+
+<p>This will extract all of the images from the tiff into multiple tiffs with funky names like <em>xaaa.tif</em> <em>xaab.tif</em> and so on, but it does what it says :).</p>
+
+<h3 id="resize-multiple-tiffs">Resize multiple tiffs</h3>
+
+<p><code class="language-plaintext highlighter-rouge">for i in *.tif; do convert $i -resize 1200x ../$i.tiff;done</code></p>
+
+<p>This resizes tiffs to 1200xwhatever preserving the scale.</p>
+
+<h3 id="resize-multi-image-tiff">Resize multi-image tiff</h3>
+
+<p><code class="language-plaintext highlighter-rouge">convert input.tiff -resize 1200x output.tiff</code></p>
+
+<p>This does the same thing for a multi-image tiff.</p>
+
+<h3 id="join-pdfs">Join PDFs</h3>
+
+<p><strong>Option 1 - using <em>pdfunit</em> from the <em>poppler</em> package</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">pdfunite *.pdf ../output.pdf</code></p>
+
+<p>This joins all of the pdf files in a directory into a single pdf. It presumes that the pdfs are numbered appropriately so they are in sort order.</p>
+
+<p><strong>Option 2 - using MacOS’s delivered script</strong></p>
+
+<ul>
+  <li>deactivate any python environments you have running that aren’t the system python</li>
+  <li>run the script</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda deactivate
+python '/System/Library/Automator/Combine PDF Pages.action/Contents/Resources/join.py' -o 'senn_w_database_project.pdf' [your list of pdfs]
+</code></pre></div></div>
+
+<p>Reach out to me if you find any issues or have suggestions.</p>
+
+<p>- will</p>
+
+<p><em>post last updated 2023-02-01 20:39:00 -0600</em></p>
+
+  </div><a class="u-url" href="/pdfs/2023/02/01/pdf-cleanup-workflow.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

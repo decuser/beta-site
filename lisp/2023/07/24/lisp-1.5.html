@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>LISP 1.5 running on an emulated IBM 7094 | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="LISP 1.5 running on an emulated IBM 7094" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This note describes how to set up and run the oldest available ancestor of all extant LISPS and Schemes. LISP 1.5 was the first LISP that was made generally available. It is available to run on the OpenSIMH IBM 7094 emulator." />
+<meta property="og:description" content="This note describes how to set up and run the oldest available ancestor of all extant LISPS and Schemes. LISP 1.5 was the first LISP that was made generally available. It is available to run on the OpenSIMH IBM 7094 emulator." />
+<link rel="canonical" href="http://localhost:4000/lisp/2023/07/24/lisp-1.5.html" />
+<meta property="og:url" content="http://localhost:4000/lisp/2023/07/24/lisp-1.5.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-07-24T13:23:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="LISP 1.5 running on an emulated IBM 7094" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2023-07-24T13:23:00-05:00","datePublished":"2023-07-24T13:23:00-05:00","description":"This note describes how to set up and run the oldest available ancestor of all extant LISPS and Schemes. LISP 1.5 was the first LISP that was made generally available. It is available to run on the OpenSIMH IBM 7094 emulator.","headline":"LISP 1.5 running on an emulated IBM 7094","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/lisp/2023/07/24/lisp-1.5.html"},"url":"http://localhost:4000/lisp/2023/07/24/lisp-1.5.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">LISP 1.5 running on an emulated IBM 7094</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2023-07-24T13:23:00-05:00" itemprop="datePublished">
+        Jul 24, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This note describes how to set up and run the oldest available ancestor of all extant LISPS and Schemes.</p>
+
+<p>LISP 1.5 was the first LISP that was made generally available. It is available to run on the OpenSIMH IBM 7094 emulator.</p>
+
+<p><img src="/assets/img/lisp/Terminal_001.png" alt="one" /></p>
+
+<!--more-->
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li>
+    <p><strong>LISP 1.5 Programmer’s Manual</strong> <a href="https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf">https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf</a> or grab a <a href="/assets/files/lisp/LISP%201.5%20Programmers%20Manual.pdf">local copy</a></p>
+  </li>
+  <li>
+    <p><strong>LISP 1.5 Primer</strong> <a href="https://www.softwarepreservation.org/projects/LISP/book/Weismann_LISP1.5_Primer_1967.pdf">https://www.softwarepreservation.org/projects/LISP/book/Weismann_LISP1.5_Primer_1967.pdf</a> or grab a <a href="/assets/files/lisp/Weismann_LISP1.5_Primer_1967.pdf">local copy</a></p>
+  </li>
+  <li>
+    <p><strong>OpenSIMH</strong> <a href="https://opensimh.org/">https://opensimh.org/</a></p>
+  </li>
+  <li>
+    <p><strong>LISP 1.5 2023 tarball</strong> <a href="/assets/files/lisp/lisp15.2023.tar.gz">lisp15.2023.tar.gz</a> - note, this is a slightly modified version of Andre Luvisi’s tarball.</p>
+  </li>
+</ul>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ul>
+  <li>Linux - I’m running Debian 12 (bookworm)</li>
+  <li>A build environement (make, cc, and ld) - build-essential package on debian systems</li>
+  <li>OpenSIMH - any reasonably recent version should work</li>
+</ul>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<ul>
+  <li>Create a workarea</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p ~/workarea/retro/lisp-1.5/{dist,work}
+cd ~/workarea/retro/lisp-1.5/dist
+</code></pre></div></div>
+
+<ul>
+  <li>Download the tarball</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://decuser.github.io/assets/files/lisp/lisp15.2023.tar.gz
+</code></pre></div></div>
+
+<h2 id="build-the-system">Build the System</h2>
+
+<ul>
+  <li>Unpack the tarball and the utils tarball inside it</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ../work
+tar xvzf ../dist/lisp15.2023.tar.gz
+cd lisp15
+tar xvf utils-1.1.8.tar.gz
+</code></pre></div></div>
+
+<ul>
+  <li>Build the utils and copy txt2bcd to a directory on the path (critically important)</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd utils
+make
+cp ./txt2bcd ~/bin
+</code></pre></div></div>
+
+<ul>
+  <li>Test txt2bcd</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>txt2bcd
+Usage: txt2bcd infile [outfile] [reclen, default 80 [blklen, default 84]]
+</code></pre></div></div>
+
+<ul>
+  <li>Clean up from utilts build</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ..
+rm -fr utils
+</code></pre></div></div>
+
+<ul>
+  <li>Actually build the system</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make realclean; make
+</code></pre></div></div>
+
+<p>A successful build will result in a sysboot.tp in the current directory and a transcript similar to this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rm -f sys.log scratch/*
+(cd build; make clean)
+make[1]: Entering directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build'
+(cd boottape; make clean)
+make[2]: Entering directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape'
+rm -f syscore.tp sys.log scratch/*
+make[2]: Leaving directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape'
+make[1]: Leaving directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build'
+rm -f sysboot.tp
+(cd build; make realclean)
+make[1]: Entering directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build'
+(cd boottape; make clean)
+make[2]: Entering directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape'
+rm -f syscore.tp sys.log scratch/*
+make[2]: Leaving directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape'
+rm -f sysboot.tp boottape/lisp.obj
+make[1]: Leaving directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build'
+(cd build; make sysboot.tp)
+make[1]: Entering directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build'
+asm7090/asm7090 -o boottape/lisp.obj chist/lisp.job
+(cd boottape; make)
+make[2]: Entering directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape'
+i7094 lispimg.ini library.txt
+
+IBM 7094 simulator Open SIMH V4.1-0 Current        simh git commit id: cf47a20f
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-13&gt; at mta1 -r scratch/lisp.job.mt
+%SIM-INFO: MTA1: unit is read only
+%SIM-INFO: MTA1: Tape Image 'scratch/lisp.job.mt' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-14&gt; at mta2 scratch/systap.tp
+%SIM-INFO: MTA2: creating new file
+%SIM-INFO: MTA2: Tape Image 'scratch/systap.tp' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-15&gt; at mta3 syscore.tp
+%SIM-INFO: MTA3: creating new file
+%SIM-INFO: MTA3: Tape Image 'syscore.tp' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-16&gt; at mta4 scratch/syspot.tp
+%SIM-INFO: MTA4: creating new file
+%SIM-INFO: MTA4: Tape Image 'scratch/syspot.tp' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-17&gt; at mta5 scratch/sysppt.tp
+%SIM-INFO: MTA5: creating new file
+%SIM-INFO: MTA5: Tape Image 'scratch/sysppt.tp' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-19&gt; at cdr scratch/corrcards
+%SIM-INFO: CDR: creating new file
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-20&gt; at cdp scratch/lispout.whatever
+%SIM-INFO: CDP: creating new file
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-21&gt; at lpt sys.log
+%SIM-INFO: LPT: creating new file
+
+HALT instruction, PC: 10524 (TRA 10523)
+Goodbye
+make[2]: Leaving directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape'
+cp boottape/syscore.tp sysboot.tp
+make[1]: Leaving directory '/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build'
+cp build/sysboot.tp sysboot.tp
+</code></pre></div></div>
+
+<h2 id="run-the-system">Run the system</h2>
+
+<p>If you successfully built the system, you should be ready to run LISP 1.5. A few words are in order… Running LISP 1.5, so far as I can tell, consists of running the simulator against a tape image of a lisp source file. So, you type LISP 1.5 compatible code into a file and then invoke the emulator against that file. It processes your source and outputs the result.</p>
+
+<p>The tarball includes three source files that are in the correct format to be run in LISP 1.5:</p>
+
+<ul>
+  <li>
+    <p>factorial.txt - test code that will calculate the factorial of a number, in this case 10, which should result in 3,628,800.</p>
+  </li>
+  <li>
+    <p>funarg.txt - a function argument test</p>
+  </li>
+  <li>
+    <p>propcal.txt - test the Wang algorithm for propositional calculus</p>
+  </li>
+</ul>
+
+<p>To run them, invoke the emulator and provide the ini file to initialize the emulator and the text file with the source, for example, to run the factorial program type:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>i7094 lisptape.ini factorial.txt
+</code></pre></div></div>
+
+<p>A successful run will generate a sys.log file and the output will resemble:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>IBM 7094 simulator Open SIMH V4.1-0 Current        simh git commit id: cf47a20f
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-12&gt; at mta1 -r scratch/lisp.job.mt
+%SIM-INFO: MTA1: unit is read only
+%SIM-INFO: MTA1: Tape Image 'scratch/lisp.job.mt' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-13&gt; at mta2 -r sysboot.tp
+%SIM-INFO: MTA2: unit is read only
+%SIM-INFO: MTA2: Tape Image 'sysboot.tp' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-14&gt; at mta3 scratch/syscore.tp
+%SIM-INFO: MTA3: Tape Image 'scratch/syscore.tp' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-15&gt; at mta4 scratch/syspot.tp
+%SIM-INFO: MTA4: Tape Image 'scratch/syspot.tp' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-16&gt; at mta5 scratch/sysppt.tp
+%SIM-INFO: MTA5: Tape Image 'scratch/sysppt.tp' scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-20&gt; at lpt sys.log
+%SIM-INFO: LPT: creating new file
+
+HALT instruction, PC: 10524 (TRA 10523)
+Goodbye
+</code></pre></div></div>
+
+<p>The results will be in the file sys.log:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat sys.log
+             TEST  FACTORIAL
+
+
+
+  THE TIME ( 0/ 0  000.0) HAS COME, THE WALRUS SAID, TO TALK OF MANY THI
+NGS .....   -LEWIS CARROLL-
+ EVALQUOTE OPERATOR AS OF 1 MARCH 1961.    INPUT LISTS NOW BEING READ.
+
+
+  THE TIME ( 0/ 0  000.0) HAS COME, THE WALRUS SAID, TO TALK OF MANY THI
+NGS .....   -LEWIS CARROLL-
+  FUNCTION   EVALQUOTE   HAS BEEN ENTERED, ARGUMENTS..
+ DEFINE
+
+ (((FACTORIAL (LAMBDA (X) (COND ((EQUAL X 0) 1) (T (TIMES X (FACTORIAL (
+SUB1 X)))))))))
+
+ END OF EVALQUOTE, VALUE IS ..
+ *TRUE*
+
+  FUNCTION   EVALQUOTE   HAS BEEN ENTERED, ARGUMENTS..
+ FACTORIAL
+
+ (10)
+
+
+ END OF EVALQUOTE, VALUE IS ..
+ 3628800
+
+
+
+  THE TIME ( 0/ 0  000.0) HAS COME, THE WALRUS SAID, TO TALK OF MANY THI
+NGS .....   -LEWIS CARROLL-
+ END OF EVALQUOTE OPERATOR
+             FIN      END OF LISP RUN
+</code></pre></div></div>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>This was an interesting exploration. I enjoyed getting it up and running with a minimum of fuss. I didn’t appreciate the fact that it was effectively a job submission environment and not an interactive system.</p>
+
+<p>Something to note is the use of evaluquote as the top-level, not eval…</p>
+
+<p>In the next exploration, I will investigate a system that is much more modern, yet directly descended from LISP 1.5. Rob Pike’s LISP 1.5 interpreter in Go. A minimal implementation of 1.5’s evalquote from pg. 13 of the Programming LISP 1.5 text.</p>
+
+<h3 id="afterthoughts">Afterthoughts</h3>
+
+<p>Andre Luvisi’s original work exists (for now) in Archive.org’s repository of crawled pages:</p>
+
+<ul>
+  <li><strong>Luvisi’s LISP 1.5 tarball</strong> <a href="https://web.archive.org/web/20211202101850/http://web.sonoma.edu/users/l/luvisi/lisp/lisp15.tar.gz">https://web.archive.org/web/20211202101850/http://web.sonoma.edu/users/l/luvisi/lisp/lisp15.tar.gz</a></li>
+</ul>
+
+<p>It won’t build because of duplicate names (fin and fon are defined in multiple files), but the fix is easy, just change line 19 of prsf2.c to read:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>static char fin[300], fon[300];
+</code></pre></div></div>
+
+<p>and it should work the same way as described above.</p>
+
+<p>Later - Will</p>
+
+<p><em>post added 2023-07-24 19:28:00 -0600</em></p>
+
+  </div><a class="u-url" href="/lisp/2023/07/24/lisp-1.5.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

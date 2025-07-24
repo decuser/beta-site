@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Building Sculpt 22.10 on Debian 11.6 Bullseye | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Building Sculpt 22.10 on Debian 11.6 Bullseye" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This note is about building a bootable Sculpt OS 22.10 image using a Debian 11 “Bullseye” Guest OS running in VirtualBox. This is useful as a starting point for building a custom image. My Thinkpad T430 runs Sculpt just fine, but wifi doesn’t work, so I would like to add the needed firmware. This is work in that direction. The note also applies, leaving out the VirtualBox specifics, to building Sculpt OS 22.10 on a Debian instance running on metal (confirmed working 12/28)." />
+<meta property="og:description" content="This note is about building a bootable Sculpt OS 22.10 image using a Debian 11 “Bullseye” Guest OS running in VirtualBox. This is useful as a starting point for building a custom image. My Thinkpad T430 runs Sculpt just fine, but wifi doesn’t work, so I would like to add the needed firmware. This is work in that direction. The note also applies, leaving out the VirtualBox specifics, to building Sculpt OS 22.10 on a Debian instance running on metal (confirmed working 12/28)." />
+<link rel="canonical" href="http://localhost:4000/operating-systems/genode/sculpt/2022/12/29/building-sculpt-22.10-on-debian-11.6.html" />
+<meta property="og:url" content="http://localhost:4000/operating-systems/genode/sculpt/2022/12/29/building-sculpt-22.10-on-debian-11.6.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-12-29T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Building Sculpt 22.10 on Debian 11.6 Bullseye" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2022-12-29T00:00:00-06:00","datePublished":"2022-12-29T00:00:00-06:00","description":"This note is about building a bootable Sculpt OS 22.10 image using a Debian 11 “Bullseye” Guest OS running in VirtualBox. This is useful as a starting point for building a custom image. My Thinkpad T430 runs Sculpt just fine, but wifi doesn’t work, so I would like to add the needed firmware. This is work in that direction. The note also applies, leaving out the VirtualBox specifics, to building Sculpt OS 22.10 on a Debian instance running on metal (confirmed working 12/28).","headline":"Building Sculpt 22.10 on Debian 11.6 Bullseye","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/operating-systems/genode/sculpt/2022/12/29/building-sculpt-22.10-on-debian-11.6.html"},"url":"http://localhost:4000/operating-systems/genode/sculpt/2022/12/29/building-sculpt-22.10-on-debian-11.6.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Building Sculpt 22.10 on Debian 11.6 Bullseye</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2022-12-29T00:00:00-06:00" itemprop="datePublished">
+        Dec 29, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This note is about building a bootable Sculpt OS 22.10 image using a Debian 11 “Bullseye” Guest OS running in VirtualBox. This is useful as a starting point for building a custom image. My Thinkpad T430 runs Sculpt just fine, but wifi doesn’t work, so I would like to add the needed firmware. This is work in that direction.</p>
+
+<p>The note also applies, leaving out the VirtualBox specifics, to building Sculpt OS 22.10 on a Debian instance running on metal (confirmed working 12/28).</p>
+
+<!--more-->
+
+<h3 id="resources">Resources</h3>
+
+<ul>
+  <li>Genode Operating System Framework Website <a href="https://genode.org/">https://genode.org/</a></li>
+  <li>Genode OS Framework 22.05 Foundations Document <a href="https://genode.org/documentation/genode-foundations/22.05/index.html">html</a> <a href="https://genode.org/documentation/genode-foundations-22-05.pdf">pdf</a></li>
+  <li>Sculpt OS 22.10 Documentation <a href="https://genode.org/documentation/articles/sculpt-22-10">html</a> <a href="https://genode.org/documentation/sculpt-22-10.pdf">pdf</a></li>
+  <li>Mailing List <a href="https://genode.org/community/mailing-lists">https://genode.org/community/mailing-lists</a></li>
+  <li>Genodians - Stories around the Genode Operating System <a href="https://genodians.org/">https://genodians.org/</a></li>
+  <li>Git repository - <a href="https://github.com/genodelabs/genode">https://github.com/genodelabs/genode</a></li>
+</ul>
+
+<h3 id="prerequisites">Prerequisites</h3>
+
+<ul>
+  <li>Host system - Mine is 2010 Mac Pro running Mojave</li>
+  <li>VirtualBox w/extension pack - I’m running 6.1.40</li>
+</ul>
+
+<h3 id="download-the-debian-116-bullseye-netinstiso">Download the Debian 11.6 Bullseye netinst.iso</h3>
+
+<p><code class="language-plaintext highlighter-rouge">aria2c https://gemmei.ftp.acc.umu.se/debian-cd/current/amd64/iso-cd/debian-11.6.0-amd64-netinst.iso</code></p>
+
+<h3 id="create-a-new-debian-virtualbox-instance">Create a new debian virtualbox instance</h3>
+<ul>
+  <li>name: debian-11.6</li>
+  <li>8GB RAM</li>
+  <li>2 CPUs</li>
+  <li>20GB HDD</li>
+  <li>attach ~/shared</li>
+  <li>attach debian-11.6.0-amd64-netinst.iso</li>
+</ul>
+
+<h3 id="install-debian">Install Debian</h3>
+
+<p>Start the VM and let it boot to the installer. Choose Install and not Graphical Install to use the perfectly adequate and much faster text installer.</p>
+
+<p>Make the following choice for packages:</p>
+
+<ul>
+  <li>Debian desktop environment
+    <ul>
+      <li>Cinnamon (relatively lightweight and just works)</li>
+    </ul>
+  </li>
+  <li>standard system utilities</li>
+</ul>
+
+<h3 id="prepare-debian-for-building-sculpt">Prepare Debian for building Sculpt</h3>
+
+<h4 id="add-user-to-sudo">Add user to sudo</h4>
+
+<ul>
+  <li>enable sudo with no password</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>su -
+visudo
+%sudo	ALL=(ALL:ALL) NOPASSWD:ALL
+</code></pre></div></div>
+
+<ul>
+  <li>add user to sudo group</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">usermod -a -G sudo wsenn</code></p>
+
+<ul>
+  <li>Restart to get the group to take (should just require logout and back in, but it’s what it is)</li>
+</ul>
+
+<h4 id="install-packages">Install Packages</h4>
+
+<ul>
+  <li>update apt package list and upgrade packages</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">sudo apt update &amp;&amp; sudo apt full-upgrade -y</code></p>
+
+<ul>
+  <li>install basic dev tools</li>
+</ul>
+
+<p>Note: build-essential and gdisk are already installed)</p>
+
+<ul>
+  <li>basics
+    <ul>
+      <li>build-essential</li>
+      <li>vim</li>
+    </ul>
+  </li>
+  <li>vbox dependencies
+    <ul>
+      <li>dkms</li>
+      <li>linux-headers</li>
+    </ul>
+  </li>
+  <li>build system dependencies see Genode Foundations - Getting Started
+    <ul>
+      <li>autoconf</li>
+      <li>autogen</li>
+      <li>bison</li>
+      <li>byacc</li>
+      <li>ccache</li>
+      <li>e2tools</li>
+      <li>expect</li>
+      <li>flex</li>
+      <li>gdisk</li>
+      <li>git-gui</li>
+      <li>gperf</li>
+      <li>libsdl2-dev</li>
+      <li>libxml2-utils</li>
+      <li>qemu</li>
+      <li>subversion</li>
+      <li>xorriso</li>
+      <li>xsltproc</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Note: apt will ignore already installed packages and different base selections such as Gnome vs Cinnamon may result in a different mix of already installed packages.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt install build-essential vim \
+     dkms linux-headers-$(uname -r) \
+     autoconf autogen bison byacc ccache e2tools expect flex gdisk git-gui \
+     gperf libsdl2-dev libxml2-utils qemu subversion xorriso xsltproc
+</code></pre></div></div>
+
+<ul>
+  <li>as regular user set vim as default editor</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">sudo update-alternatives --config editor # pick vim.basic</code></p>
+
+<ul>
+  <li>turn off mouse nonsense in vim</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi ~/.vimrc
+set mouse-=a
+</code></pre></div></div>
+
+<ul>
+  <li>add sbin to path for build resize2fs requirement</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi .bashrc
+export PATH=$PATH:/sbin
+</code></pre></div></div>
+
+<h4 id="install-guest-additions">Install Guest Additions</h4>
+
+<ul>
+  <li>
+    <p>mount the cd and install guest additions</p>
+  </li>
+  <li>
+    <p>in vbox - <code class="language-plaintext highlighter-rouge">Devices-&gt;Insert Guest Additions CD Image</code></p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo mount /dev/cdrom /mnt
+cd /mnt
+sudo sh ./VBoxLinuxAdditions.run
+</code></pre></div></div>
+
+<ul>
+  <li>create a location to mount shared files</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">mkdir ~/shared</code></p>
+
+<ul>
+  <li>add it to fstab</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo vi /etc/fstab
+shared    /home/wsenn/shared    vboxsf    defaults    0    0
+</code></pre></div></div>
+
+<ul>
+  <li>enable vbox module for sharing</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo vi /etc/modules
+vboxsf
+</code></pre></div></div>
+
+<ul>
+  <li>Reboot</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">sudo shutdown -r now</code></p>
+
+<h4 id="test-shared-folder-and-enable-clipboard">Test shared folder and enable clipboard</h4>
+
+<ul>
+  <li>Test the share</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">ls ~/shared</code></p>
+
+<p>Should list any files you’ve put in shared.</p>
+
+<ul>
+  <li>Enable bi-directional clipboard</li>
+</ul>
+
+<p>in vbox <code class="language-plaintext highlighter-rouge">Devices-&gt;Shared Clipboard-&gt;Bidirectional</code></p>
+
+<h3 id="install-genode-toolchain-and-source-code">Install Genode Toolchain and Source Code</h3>
+
+<ul>
+  <li>Download the toolchain and install it in /usr/local/genode</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/Downloads
+wget -O genode-toolchain-21.05-x86_64.tar.xz https://sourceforge.net/projects/genode/files/genode-toolchain/21.05/genode-toolchain-21.05-x86_64.tar.xz/download
+sudo tar xvPf genode-toolchain-21.05-x86_64.tar.xz
+</code></pre></div></div>
+
+<ul>
+  <li>Clone the source code and switch to the 22.10 release branch</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd
+git clone https://github.com/genodelabs/genode.git
+cd genode
+git checkout -b sculpt-22.10 sculpt-22.10
+</code></pre></div></div>
+
+<h3 id="build-sculpt">Build Sculpt</h3>
+
+<ul>
+  <li>Get the nova kernel files</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">./tool/depot/download genodelabs/bin/x86_64/base-nova/2022-10-11</code></p>
+
+<ul>
+  <li>Get the sculpt files</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">./tool/depot/download genodelabs/pkg/x86_64/sculpt/2022-10-13</code></p>
+
+<ul>
+  <li>Handle vim-minimal tarball error by just restarting</li>
+</ul>
+
+<p>If you get an error concerning vim-minimal (I do), just restart the download of the sculpt packages…</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>download genodelabs/src/vim-minimal/2022-08-30.tar.xz
+download genodelabs/src/vim-minimal/2022-08-30.tar.xz.sig
+xz: (stdin): Unexpected end of input
+tar: Unexpected EOF in archive
+tar: Unexpected EOF in archive
+tar: Error is not recoverable: exiting now
+make[1]: *** [/home/wsenn/genode/tool/depot/mk/downloader:45: /home/wsenn/genode/depot/genodelabs/src/vim-minimal/2022-08-30] Error 2
+</code></pre></div></div>
+
+<ul>
+  <li>Restart the sculpt files download</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">./tool/depot/download genodelabs/pkg/x86_64/sculpt/2022-10-13</code></p>
+
+<ul>
+  <li>Get the drivers, wifi, and ipxe files</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./tool/depot/download genodelabs/pkg/x86_64/drivers_managed-pc/2022-10-11 \
+ genodelabs/pkg/x86_64/wifi/2022-10-13 \
+ genodelabs/bin/x86_64/ipxe_nic_drv/2022-10-11
+</code></pre></div></div>
+
+<ul>
+  <li>Create the build directory</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">./tool/create_builddir x86_64</code></p>
+
+<ul>
+  <li>Edit the build configuration (required)</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">vi build/x86_64/etc/build.conf</code></p>
+
+<ul>
+  <li>
+    <p>Enable parallel threads in make</p>
+
+    <p><code class="language-plaintext highlighter-rouge">MAKE += -j8</code></p>
+
+    <p>Note: if your cpu can’t handle it, dial it back to -j4.</p>
+  </li>
+  <li>
+    <p>Enable ccache</p>
+
+    <p><code class="language-plaintext highlighter-rouge">CCACHE := yes</code></p>
+  </li>
+  <li>
+    <p>Enable depot updates</p>
+
+    <p><code class="language-plaintext highlighter-rouge">RUN_OPT += --depot-auto-update</code></p>
+  </li>
+  <li>
+    <p>Change from iso target to disk in QEMU_RUN_OPT</p>
+
+    <p><code class="language-plaintext highlighter-rouge">QEMU_RUN_OPT := --include power_on/qemu  --include log/qemu --include image/disk</code></p>
+  </li>
+  <li>Enable port repos by uncommenting them
+    <ul>
+      <li>libports</li>
+      <li>ports</li>
+      <li>dde_linux</li>
+      <li>dde_rump</li>
+      <li>gems</li>
+      <li>pc</li>
+      <li>dde_bsd</li>
+      <li>dde_ipxe</li>
+    </ul>
+  </li>
+  <li>Prepare ports</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./tool/ports/prepare_port bash coreutils curl dde_ipxe dde_linux dde_rump e2fsprogs-lib gnupg grub2 jitterentropy libarchive libc libgcrypt libnl libpng libssh linux linux-firmware ncurses nova openssl stb ttf-bitstream-vera vim wpa_supplicant x86emu xz zlib
+</code></pre></div></div>
+
+<ul>
+  <li>Build the image</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">make -C build/x86_64 run/sculpt KERNEL=nova BOARD=pc</code></p>
+
+<ul>
+  <li>Success is indicated by the creation of the image</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">Created image file var/run/sculpt.img (29140kiB)</code></p>
+
+<h3 id="test-the-created-image-on-metal">Test the created image on metal</h3>
+
+<ul>
+  <li>
+    <p>Attach usb to host</p>
+  </li>
+  <li>
+    <p>Capture it in VirtualBox</p>
+  </li>
+  <li>
+    <p>Determine the assigned usb device</p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dmesg|grep sd
+...
+[ 7754.230860] sd 3:0:0:0: [sdb] Attached SCSI removable disk
+</code></pre></div></div>
+
+<ul>
+  <li>Determine the mounted drives</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">mount | grep sd</code></p>
+
+<p>Note: this important as the order of assigned devices could change and you want to be sure to write to the usb and not a hard drive (virtual or otherwise).</p>
+
+<ul>
+  <li>Write the image to the target USB</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">sudo dd if=build/x86_64/var/run/sculpt.img of=/dev/sdb bs=1M conv=fsync</code></p>
+
+<ul>
+  <li>
+    <p>Test it out with your target device (mine is T430)</p>
+  </li>
+  <li>
+    <p>Hope it works great!</p>
+  </li>
+</ul>
+
+<p><em>post last updated 2022-12-29 11:53:00 -0600</em></p>
+
+  </div><a class="u-url" href="/operating-systems/genode/sculpt/2022/12/29/building-sculpt-22.10-on-debian-11.6.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

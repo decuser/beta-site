@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ratfor and Kernighan and Plaugers Software Tools | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="ratfor and Kernighan and Plaugers Software Tools" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A short note documenting the process of getting ratfor working on a v7 instance." />
+<meta property="og:description" content="A short note documenting the process of getting ratfor working on a v7 instance." />
+<link rel="canonical" href="http://localhost:4000/unix/research-unix/v7/ratfor/2022/02/03/ratfor-and-kernighan-and-plaugers-software-tools-getting-started-using-v7.html" />
+<meta property="og:url" content="http://localhost:4000/unix/research-unix/v7/ratfor/2022/02/03/ratfor-and-kernighan-and-plaugers-software-tools-getting-started-using-v7.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-02-03T13:43:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ratfor and Kernighan and Plaugers Software Tools" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2022-02-03T13:43:00-06:00","datePublished":"2022-02-03T13:43:00-06:00","description":"A short note documenting the process of getting ratfor working on a v7 instance.","headline":"ratfor and Kernighan and Plaugers Software Tools","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/unix/research-unix/v7/ratfor/2022/02/03/ratfor-and-kernighan-and-plaugers-software-tools-getting-started-using-v7.html"},"url":"http://localhost:4000/unix/research-unix/v7/ratfor/2022/02/03/ratfor-and-kernighan-and-plaugers-software-tools-getting-started-using-v7.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ratfor and Kernighan and Plaugers Software Tools</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2022-02-03T13:43:00-06:00" itemprop="datePublished">
+        Feb 3, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>A short note documenting the process of getting ratfor working on a v7 instance.</p>
+
+<!--more-->
+
+<h2 id="prereqs">Prereqs</h2>
+
+<p>This note assumes you have a working v7 setup. The most current post is <a href="/unix/research-unix/v7/2022/02/08/installing-and-using-research-unix-v7-in-simh-pdp-11-45-and-70-emulators-rev-2.1.html">here</a></p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>Fire up the v7 instance</p>
+
+<h3 id="log-in-as-a-normal-user">log in as a normal user</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/workspaces/v7-work
+pdp11 mboot.ini
+...
+login: wsenn
+
+$
+</code></pre></div></div>
+
+<h3 id="create-a-working-directory">Create a working directory</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir copy
+cd copy
+</code></pre></div></div>
+
+<h2 id="create-a-simple-ratfor-program">Create a simple ratfor program</h2>
+
+<p>This is really mostly a fortran program</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ed hello.r
+a
+# hello world in ratfor
+		print *, 'hello, world!'
+		stop
+		end
+.
+w
+q
+</code></pre></div></div>
+
+<h2 id="run-ratfor">Run ratfor</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ratfor -C hello.r
+c hello world in ratfor
+	  print *, 'hello, world!'
+	  stop
+	  end
+</code></pre></div></div>
+
+<h3 id="run-it-again-and-redirect-the-output-to-a-file">Run it again and redirect the output to a file:</h3>
+
+<p><code class="language-plaintext highlighter-rouge">ratfor -C hello.r &gt; hello.f</code></p>
+
+<h2 id="run-fortran-to-compile-the-code">Run fortran to compile the code</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>f77 -o hello hello.f 
+
+hello.f:
+   MAIN:
+</code></pre></div></div>
+
+<h2 id="run-the-executable">Run the executable</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./hello
+
+hello, world!
+</code></pre></div></div>
+
+<h3 id="celebrate-if-you-like-job-well-done">Celebrate, if you like. Job well done.</h3>
+
+<p>Then, back to work. The copy routine and its dependencies, getc and putc, outlined in the first chapter contains 7 symbolic constants that we need to know the values of and a character type that we will change to integer, for convenience. Read the book to learn more about replacing constants and macros.</p>
+
+<p>The stuff we need to know about is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MAXLINE
+MAXCARD
+NEWLINE 
+STDIN
+STDOUT
+EOF
+SPACE
+character
+</code></pre></div></div>
+
+<ul>
+  <li><strong>MAXLINE</strong> - the number of characters on a card, plus one, 81.</li>
+  <li><strong>MAXCARD</strong> - the number of characters on a card, 80.</li>
+  <li><strong>NEWLINE</strong> - the end of a line of characters, the ascii value 10 works.</li>
+  <li><strong>STDIN</strong> - the LUN for the card reader, 5.</li>
+  <li><strong>STDOUT</strong> - the LUN for the card punch, 6.</li>
+  <li><strong>EOF</strong> - the end of file marker, -1.</li>
+  <li><strong>SPACE</strong> - the blank space character, 32.</li>
+  <li><strong>character</strong> - the character data type, integer works.</li>
+</ul>
+
+<p>The author’s copy program relies on two primitive operations, getc, and putc, that are not provided by v7 (they are provided in 4.2/4.3 BSD, but that’s another story for another day). The authors talk about this and provide simple implementations that we can leverage to get things rolling. The idea is to take the copy. getc, and putc routines provided by K&amp;P, replace the symbolic constants, replace character with integer and run the result.</p>
+
+<h2 id="create-a-more-realistic-combined-ratfor-source">Create a more realistic combined ratfor source</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ed copy.r
+?copy.r
+a
+# $ ratfor -C copynew.r &gt; copynew.f
+# $ f77 -o copynew copynew.f
+
+# getc (simple version) - get characters from standard input
+		integer function getc(c)
+		integer buf(81), c
+		integer i, lastc
+		data lastc /81/,buf(81) /10/
+		# note MAXLINE = MAXCARD + 1
+
+		lastc = lastc + 1
+		if(lastc &gt; 81) {
+				read(5, 100, end=10) (buf(i), i = 1, 80)
+						100 format(80 a 1)
+				lastc = 1
+				}
+		c = buf(lastc)
+		getc = c
+		return
+		
+10      c = -1
+		getc = -1
+		return
+		end
+
+# putc (simple version) - put characters on the standard output
+		subroutine putc(c)
+		integer buf(80), c
+		integer i, lastc
+		data lastc /0/
+
+		if (lastc &gt; 80 | c == 10) {
+				for (i = lastc + 1; i &lt;= 80; i = i + 1)
+						buf(i) = 32
+				write(6, 100) (buf(i), i = 1, 80)
+						100 format(80 a 1)
+				lastc = 0
+				}
+		if (c != 10) {
+				lastc = lastc + 1
+				buf(lastc) = c
+				}
+		return
+		end
+
+# copy - copy input characters to output
+		integer getc
+		integer c
+
+		while(getc(c) != -1)
+				call putc(c)
+		stop
+		end
+.
+w
+1337
+q
+</code></pre></div></div>
+
+<h2 id="run-ratfor-see-rafor1-for-incantations">Run ratfor (see rafor(1) for incantations):</h2>
+
+<p><code class="language-plaintext highlighter-rouge">$ ratfor -C copy.r &gt; copy.f</code></p>
+
+<h2 id="compile-the-fortran-see-f771-for-incantations">Compile the fortran (see f77(1) for incantations):</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ f77 -o copy copy.f
+copy.f:
+   getc:
+   putc:
+   MAIN:
+</code></pre></div></div>
+
+<h2 id="run-the-result">Run the result:</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ./copy
+This is a test.
+This is a test.                                                                
+^d
+$
+</code></pre></div></div>
+
+<h3 id="now-you-can-really-celebrate-">Now, you can really celebrate :)!</h3>
+
+<p><em>post added 2022-12-02 13:03:00 -0600</em></p>
+
+  </div><a class="u-url" href="/unix/research-unix/v7/ratfor/2022/02/03/ratfor-and-kernighan-and-plaugers-software-tools-getting-started-using-v7.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

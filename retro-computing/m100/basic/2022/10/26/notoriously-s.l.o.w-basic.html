@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Notoriously S.L.O.W BASIC | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Notoriously S.L.O.W BASIC" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This week, I spent some time writing code for my m100. On my list of things to do with the little machine, was to write a disassembler. In order to disassemble memory, it helps to know what’s there, so I decided to write a memory dump utility first." />
+<meta property="og:description" content="This week, I spent some time writing code for my m100. On my list of things to do with the little machine, was to write a disassembler. In order to disassemble memory, it helps to know what’s there, so I decided to write a memory dump utility first." />
+<link rel="canonical" href="http://localhost:4000/retro-computing/m100/basic/2022/10/26/notoriously-s.l.o.w-basic.html" />
+<meta property="og:url" content="http://localhost:4000/retro-computing/m100/basic/2022/10/26/notoriously-s.l.o.w-basic.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-26T01:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Notoriously S.L.O.W BASIC" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2022-10-26T01:00:00-05:00","datePublished":"2022-10-26T01:00:00-05:00","description":"This week, I spent some time writing code for my m100. On my list of things to do with the little machine, was to write a disassembler. In order to disassemble memory, it helps to know what’s there, so I decided to write a memory dump utility first.","headline":"Notoriously S.L.O.W BASIC","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/retro-computing/m100/basic/2022/10/26/notoriously-s.l.o.w-basic.html"},"url":"http://localhost:4000/retro-computing/m100/basic/2022/10/26/notoriously-s.l.o.w-basic.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Notoriously S.L.O.W BASIC</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2022-10-26T01:00:00-05:00" itemprop="datePublished">
+        Oct 26, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This week, I spent some time writing code for my m100. On my list of things to do with the little machine, was to write a disassembler. In order to disassemble memory, it helps to know what’s there, so I decided to write a memory dump utility first.</p>
+
+<!--more-->
+
+<p>After a bit of thought and planning, I figured I would take a starting location and ending location, in hex, and display those locations line by line, in the form:</p>
+
+<p><code class="language-plaintext highlighter-rouge">HHHH: HH HH HH HH HH HH HH HH  AAAAAAAA</code></p>
+
+<p>Where H is a hex digit, HHHH is a location, HH are hex bytes, and A are ASCII characters. When run, this looks like:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0000: 36 B6 21 17 46 00 6A 06  6.!.F.j.
+0008: B5 F0 3D 2E 51 E3 A6 26  ..=.Q..&amp;
+</code></pre></div></div>
+
+<p>The plan was to loop through the addresses from the start address to the end address, peeking into each memory location and displaying the hex bytes and ascii characters along the way, 8 bytes at a time. Pretty simple, right? Well, not so fast, it turns out PEEK takes a decimal argument, so I needed to write a HEX to DECIMAL converter… and, PEEK returns a decimal value, so I needed to write a DECIMAL to HEX converter… and, old school BASIC lacks a formatted print statement for strings, so I needed a way to format the output, so I decided to write a padding function.</p>
+
+<p>After thinking through it a bit more, the strategy for this little app became:</p>
+
+<ul>
+  <li>Ask the user for the start address in HEX</li>
+  <li>Convert the HEX to DECIMAL and check bounds</li>
+  <li>Ask the user for the end address in HEX</li>
+  <li>Convert the HEX to DECIMAL and check bounds</li>
+  <li>Check the range</li>
+  <li>Loop through memory getting bytes using PEEK</li>
+  <li>On each 8th byte or end of the range or memory, display a line with the location and as many bytes as have been collected in HEX and ASCII</li>
+</ul>
+
+<p>Where, we have three subroutines:</p>
+
+<ul>
+  <li><strong>HEX2DEC</strong> - convert a string of hex digits to decimal in the range 0 to 65535</li>
+  <li><strong>DEC2HEX</strong> - convert a decimal number to hex in the range 0 to FFFF</li>
+  <li><strong>PADSTR</strong> - pad a string of a given length, with a given padding character</li>
+</ul>
+
+<p>Here’s the minimally annotated code, with the full file attached below:</p>
+
+<h2 id="main-program">Main Program</h2>
+
+<h3 id="get-starting-address">Get Starting Address</h3>
+<p>Get the starting address and see if it’s valid, set HS to the start address</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 CLS
+20 INPUT "Starting HEX address: ";S$
+30 GOSUB 1000
+40 IF V = -1 THEN 20
+50 HS = V
+</code></pre></div></div>
+
+<h3 id="get-ending-address">Get Ending Address</h3>
+
+<p>Get the ending address and see if it’s valid, set HE to the end address</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>60 INPUT "Ending HEX address: ";S$
+70 GOSUB 1000
+80 IF V = -1 THEN 60
+90 HE = V
+</code></pre></div></div>
+
+<h3 id="validations">Validations</h3>
+
+<p>Validate the bounds and range</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>100 IF HS &lt; 0 OR HE &gt; 65535 THEN 110 ELSE GOTO 120
+110 BEEP: PRINT "INVALID RANGE ";HS;" to ";HE : GOTO 20
+120 IF HS &gt; HE THEN GOTO 110
+</code></pre></div></div>
+
+<h3 id="implement-more">Implement MORE</h3>
+
+<p>I thought I would need a <em>more</em> type functionality, but it’s so slow, the pause button is sufficient</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>130 REM print "Screenful at a time?"
+140 REM a$ = inkey$ : if a$ = "" then 140
+150 REM if a$ = "Y" or a$ = "y" then s1 = 1 else s1 = 0
+160 REM
+170 REM
+</code></pre></div></div>
+
+<h3 id="loop-through-the-memory">Loop through the memory</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>180 HL$ = "" : AL$ = ""
+190 B = 1 : P = 0
+200 FOR I = HS TO HE
+</code></pre></div></div>
+
+<h3 id="handle-start-of-line">Handle Start of Line</h3>
+
+<p>If this is the beginning of a line, set the line address to a 4 digit HEX address, padded with 0’s</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>210   IF P &lt;&gt; 0 THEN 270
+220   D = (HS+B)-1 : PL = 4 : PC$ = "0"
+230   GOSUB 3000
+240   GOSUB 4000
+250   LA$ = S$
+260   P = 1
+</code></pre></div></div>
+
+<h3 id="get-the-contents-of-memory-at-a-location-peek">Get the contents of memory at a location (PEEK)</h3>
+
+<p><code class="language-plaintext highlighter-rouge">270   HB=PEEK(I)</code></p>
+
+<h3 id="handle-non-printable-characters">Handle non-printable characters</h3>
+
+<p>Is it a printable character? If so, keep it, otherwise, change it to a “.”</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>290   IF HB &gt;= 32 AND HB &lt;= 122 THEN HA$ = CHR$(HB) ELSE HA$ = "."
+</code></pre></div></div>
+
+<h3 id="cruft">Cruft</h3>
+
+<p>Leftover cruft from when I was using random chars, need to clean up</p>
+
+<p><code class="language-plaintext highlighter-rouge">300   ' hb = peek(i)</code></p>
+
+<h3 id="padding">Padding</h3>
+
+<p>Pad each hex byte to 2 digits with 0’s</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>310   D = HB : PL = 2 : PC$ = "0"
+320   GOSUB 3000
+330   GOSUB 4000
+</code></pre></div></div>
+
+<h3 id="compose-line">Compose Line</h3>
+
+<p>Is this the 8th byte of a line? If so jump ahead, otherwise compose the line where each byte is separated with a space</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>340   IF B MOD 8 = 0 THEN 370 ' last byte
+350   HL$ = HL$+S$+" " : AL$ = AL$+HA$
+360   GOTO 450
+</code></pre></div></div>
+
+<h3 id="handle-end-of-line">Handle End of Line</h3>
+<p>Don’t add the space while composing</p>
+
+<p><code class="language-plaintext highlighter-rouge">370   HL$ = HL$+S$ : AL$ = AL$+HA$</code></p>
+
+<h4 id="reset-start-of-line">reset start of line</h4>
+
+<p><code class="language-plaintext highlighter-rouge">380   P = 0</code></p>
+
+<h3 id="format-the-line-for-display">Format the line for display</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>390   PL = 23 : PC$ = " " : S$ = HL$
+400   GOSUB 4000 : HL$ = S$
+410   PL = 8 : PC$ = " " : S$ = AL$
+420   GOSUB 4000 : AL$ = S$
+</code></pre></div></div>
+
+<h3 id="print-the-line">Print the line</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>430   PRINT LA$;": ";HL$;"  ";AL$
+440   HL$ = "" : AL$ = ""
+450   B = B+1
+460 NEXT I
+</code></pre></div></div>
+
+<h3 id="print-the-last-line">Print the last line</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>470 PL = 23 : PC$ = " " : S$ = HL$
+480 GOSUB 4000 : HL$ = S$
+490 PL = 8 : PC$ = " " : S$ = AL$
+500 GOSUB 4000 : AL$ = S$
+510 PRINT LA$;": ";HL$;"  ";AL$
+520 HL$ = "" : AL$ = ""
+530 END
+540 REM
+550 REM
+</code></pre></div></div>
+
+<h2 id="hex2dec-function">HEX2DEC Function</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1000 REM CONVERT HEX ADDRESS TO DECIMAL
+1010 V = 0 : C = 0
+1020 IF LEN(S$) &lt;&gt; 4 THEN 1130
+1030 FOR I = 4 TO 1 STEP -1
+1040   A$ = MID$(S$,I,1)
+1050   A = ASC(A$)
+1060   IF A &gt; 70 THEN A = A-32
+1070   IF A &lt; 58 THEN A = A-48
+1080   IF A &gt; 64 THEN A = A-55
+1090   IF A &lt; 0 OR A &gt; 15 THEN 1130
+1100   M = 16^C : V = V+(A*M) : C = C+1
+1110 NEXT I
+1120 GOTO 1140
+1130 BEEP: V = -1 : GOTO 1140
+1140 RETURN
+</code></pre></div></div>
+
+<h2 id="random-cruft">RANDOM cruft</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2000 REM GENERATE A RANDOM between 0 and 255
+2010 C = INT(RND(1)*256)
+2020 RETURN
+</code></pre></div></div>
+
+<h2 id="dec2hex-function">DEC2HEX Function</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3000 REM CONVERT DECIMAL ADDRESS TO HEX
+3010 REM d = decimal number
+3020 S$ = ""
+3030 D0 = D/16 : D1 = INT(D0) : D2 = (D0-D1)*16
+3040 IF D2 &gt; 9 THEN D2 = D2+55 : A$ = CHR$(D2) : GOTO 3070
+3050 A$ = STR$(D2) : IF LEFT$(A$,1) = " " THEN A$ = RIGHT$(A$,(LEN(A$)-1))
+3060 IF SGN(D0) = 0 THEN 3090
+3070 S$ = A$+S$
+3080 D = D1 : GOTO 3030
+3090 RETURN
+</code></pre></div></div>
+
+<h2 id="padstr-function">PADSTR Function</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>4000 REM PSTR S$ - str, PL=padlength
+4010 REM PC$=padchar
+4015 X = PL-LEN(S$) : IF X &lt; 1 THEN 4060
+4020 FOR WI = 1 TO X
+4030    S$ = PC$+S$
+4040 NEXT WI
+4060 RETURN
+</code></pre></div></div>
+
+<p>It works! What’s sad is that this is very, very slow - on the order of 3 seconds per line. So, I’m off to figuring out how to speed it up.</p>
+
+<p>After much discussion and back and forth, here is a fast and efficient best of breed solution that takes advantage of many intricacies of BASIC and the M100 implementation. It was provided by MikeS over on the m100 mailing list at <a href="http://lists.bitchin100.com/listinfo.cgi/m100-bitchin100.com">http://lists.bitchin100.com/listinfo.cgi/m100-bitchin100.com</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 REM Memory Dump 11/2022 Mike Stein V5
+10 DEFINTJ-Z:DIMH$(15):FORI=0TO15
+15 H$(I)=CHR$(48+I-(7*(I&gt;9))):NEXT:CLS
+20 GOSUB200:INPUT"From";A:INPUT"to";B
+25 T$=TIME$: FORI=ATOBSTEPW+1
+30 IFDTHENPRINT#1,USING"#####";I;:PRINT#1,": ";:GOTO50
+35 K=I/4096:PRINT#1,H$(K);
+40 L=(I-K*4096):PRINT#1,H$(L\256);
+45 PRINT#1,H$((LMOD256)\16)H$(LMOD16)" ";
+50 L$="":FORJ=0TOW:X=PEEK(I+J)
+55 PRINT#1,H$(X\16);H$(XMOD16)" ";
+60 Y$=".":IFX&gt;31ANDX&lt;127THENY$=CHR$(X)
+65 L$=L$+Y$:NEXT:PRINT#1,L$:NEXT
+70 E$=TIME$:PRINT#1," "T$+" to "+E$
+100 T=VAL(MID$(TIME$,4,2))*60+VAL(RIGHT$(TIME$,2))
+110 R=VAL(MID$(T$,4,2))*60+VAL(RIGHT$(T$,2))
+120 PRINT#1," "T-R" seconds":END
+200 D$="H":INPUT"(H)EX or (D)ec address";D$
+210 W=7:D=INSTR("dD",D$)&gt;0:B$="88n1e":C$="L"
+220 INPUT"(L)CD or (C)om output ";C$
+230 IF INSTR("cC",C$)=0THENOPEN"LCD:"FOR OUTPUT AS 1:GOTO260
+240 W=15:INPUT"Stat (88N1E)";B$
+250 F$="COM:"+B$:OPENF$FOR OUTPUT AS 1
+260 RETURN
+</code></pre></div></div>
+
+<p>Here is a link to my SLOW DO file:</p>
+
+<ul>
+  <li>Hex Dump - <a href="/assets/files/m100/HD.DO">HD.DO</a></li>
+</ul>
+
+<p><em>post added 2022-12-08 12:12:00 -0600</em></p>
+
+  </div><a class="u-url" href="/retro-computing/m100/basic/2022/10/26/notoriously-s.l.o.w-basic.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

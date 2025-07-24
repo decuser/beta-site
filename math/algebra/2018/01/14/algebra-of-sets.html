@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Algebra of sets | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Algebra of sets" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A note about the algebra of sets. This note informs Boolean Algebra Notes (Jan 4, 2018). The algebra of sets is a somewhat intuitive boolean algebra and it was the study of the algebra of sets that helped me better understand boolean algebra. I was introduced to the idea in NAVEDTRA, but this development is based solely on Whitesitt (1961)." />
+<meta property="og:description" content="A note about the algebra of sets. This note informs Boolean Algebra Notes (Jan 4, 2018). The algebra of sets is a somewhat intuitive boolean algebra and it was the study of the algebra of sets that helped me better understand boolean algebra. I was introduced to the idea in NAVEDTRA, but this development is based solely on Whitesitt (1961)." />
+<link rel="canonical" href="http://localhost:4000/math/algebra/2018/01/14/algebra-of-sets.html" />
+<meta property="og:url" content="http://localhost:4000/math/algebra/2018/01/14/algebra-of-sets.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-01-14T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Algebra of sets" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2018-01-14T00:00:00-06:00","datePublished":"2018-01-14T00:00:00-06:00","description":"A note about the algebra of sets. This note informs Boolean Algebra Notes (Jan 4, 2018). The algebra of sets is a somewhat intuitive boolean algebra and it was the study of the algebra of sets that helped me better understand boolean algebra. I was introduced to the idea in NAVEDTRA, but this development is based solely on Whitesitt (1961).","headline":"Algebra of sets","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/math/algebra/2018/01/14/algebra-of-sets.html"},"url":"http://localhost:4000/math/algebra/2018/01/14/algebra-of-sets.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Algebra of sets</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2018-01-14T00:00:00-06:00" itemprop="datePublished">
+        Jan 14, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>A note about the algebra of sets. This note informs <a href="/math/algebra/boolean/2018/01/04/boolean-algebra-notes.html">Boolean Algebra Notes (Jan 4, 2018)</a>. The algebra of sets is a somewhat intuitive boolean algebra and it was the study of the algebra of sets that helped me better understand boolean algebra. I was introduced to the idea in NAVEDTRA, but this development is based solely on Whitesitt (1961).</p>
+
+<!--more-->
+
+<p>created on 20180114</p>
+
+<p>last modified 20180114-2008</p>
+
+<h2 id="select-bibliography">Select Bibliography</h2>
+
+<p>NAVEDTRA 14142. (1986). Mathematics - Introduction to Statistics, Number Systems, and Boolean Algebra. Pensacola, FL: Naval Education and Training Professional Development and Technology Center.</p>
+
+<p>Whitesitt, J. E. (1961). Boolean Algebra and its Applications. Reading, MA: Addison-Wesley Publishing Company, Inc.</p>
+
+<h2 id="undefined-terms">Undefined terms</h2>
+<ul>
+  <li><strong>element</strong></li>
+  <li><strong>set</strong></li>
+  <li><strong>elements</strong> - basic objects in collections and constitute sets</li>
+  <li><strong>the lower case letters a, b, c, …</strong> - elements</li>
+  <li><strong>the upper case letters A, B, C, …</strong> - sets</li>
+  <li><strong>E</strong> - an undefined relation between elements and sets</li>
+  <li><strong>=</strong> - two sets are identical if they contain exactly the same elements</li>
+  <li><strong>subset</strong> - a set X is a subset of Y, if X is contained fully in Y, if Y has additional members, then the X is a proper subset Y</li>
+  <li><strong>1</strong> - unity, represents the universal set of all elements under consideration, it is also called the domain of discourse or the fundamental domain, every set is a subset of the universal set</li>
+  <li><strong>0</strong> - null set or empty set, 0 is a subset of every other set</li>
+  <li><strong>{}</strong> the unit set - since the algebra of sets is about sets, not individual members, the unit set exists to indicate individual members</li>
+  <li><strong>X’</strong> - the complement of X, all elements in the universal set that are not in X</li>
+  <li><strong>0’</strong> - 1</li>
+  <li><strong>1’</strong> - 0</li>
+</ul>
+
+<h2 id="combinations-of-sets">Combinations of sets</h2>
+
+<ul>
+  <li>X + Y - union, the set of all elements in either X or Y, or both X and Y</li>
+  <li>
+    <p>XY - intersection, the set of all elements in both X and Y</p>
+  </li>
+  <li>X + X’ = 1 and XX’ = 0, by the definitions of (+), (.), and (‘)</li>
+</ul>
+
+<h2 id="theorem-1">Theorem 1</h2>
+
+<p>If m is in 1, m is in one and only one of XY, X’Y, XY’, X’Y’</p>
+
+<p>Proof - if m is in X, then m is not in X’ and, if m is in Y, it is not in Y’
+so if m is in X, then m is in either XY, or XY’
+or if m is in X’, then m is in either X’Y, or X’Y’ QED.</p>
+
+<h2 id="fundamental-laws">Fundamental Laws</h2>
+
+<h3 id="commutative-laws">Commutative Laws</h3>
+<ul>
+  <li>1a. XY = YX</li>
+  <li>1b. X + Y = Y + X</li>
+</ul>
+
+<h3 id="associative-laws">Associative Laws</h3>
+<ul>
+  <li>2a. X(YZ) = (XY)Z</li>
+  <li>2b. X + (Y + Z) = (X + Y) + Z</li>
+</ul>
+
+<h3 id="distributive-laws">Distributive Laws</h3>
+<ul>
+  <li>3a. X(Y + Z) = XY + XZ</li>
+  <li>3b. X + YZ = (X + Y)(X +Z)</li>
+</ul>
+
+<h3 id="tautology">Tautology</h3>
+<ul>
+  <li>4a. XX = X</li>
+  <li>4b. X + X = X</li>
+</ul>
+
+<h3 id="absorption-laws">Absorption Laws</h3>
+<ul>
+  <li>5a. X(X + Y) = X</li>
+  <li>5b. X + XY = X</li>
+</ul>
+
+<h3 id="complementation-laws">Complementation Laws</h3>
+<ul>
+  <li>6a. XX’ = 0</li>
+  <li>6b. X + X’ = 1</li>
+</ul>
+
+<h3 id="law-of-double-complementation">Law of Double Complementation</h3>
+<ul>
+  <li>
+    <ol>
+      <li>(X’)’ = X</li>
+    </ol>
+  </li>
+</ul>
+
+<h3 id="de-morgans-laws">de Morgan’s Laws</h3>
+<ul>
+  <li>8a. (XY)’ = X’ + Y’</li>
+  <li>8b. (X + Y)’ = X’Y’</li>
+</ul>
+
+<h3 id="operations-on-0-and-1">Operations on 0 and 1</h3>
+<ul>
+  <li>9a. 0X = 0</li>
+  <li>9b. 1 + X = 1</li>
+  <li>10a. 1X = X</li>
+  <li>10b. 0 + X = X</li>
+  <li>11a. 0’ = 1</li>
+  <li>11b. 1’ = 0</li>
+</ul>
+
+<p>Principle of duality - exchange every (+) and (.) and every 1 and 0, in an identity and the result remains an identity.</p>
+
+<p><strong>monomial</strong> - a single letter representing a set with or without a prime or an indicated product of two or more symbols representing the intersection of these sets.</p>
+
+<p><strong>polynomial</strong> - an indicated sum of monomials, each of which is called a term of the polynomial. The polynomial represents the union of the sets.</p>
+
+<p><strong>factor</strong> - any set that is part of an intersection of sets.</p>
+
+<p><strong>linear factor</strong> - a single letter with or without a prime, or a sum of such symbols.</p>
+
+<h3 id="factoring-and-expanding">factoring and expanding</h3>
+
+<p>Use the two forms of the distributive law and other laws to expand or factor a polynomial into simplified form.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Expand (X + Y)(Z' + W) into a polynomial
+
+(X + Y)(Z' + W) = (X + Y)Z' + (X + Y)W, by (3a), X = (X + Y), (Y + Z) = (Z' + W) 
+                = Z'(X + Y) + W(X + Y), by (1a)
+                = Z'X + Z'Y + WX + WY,  by (3a)
+</code></pre></div></div>
+
+<p>Factor AC + AD + BC + BD into linear factors</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AC + AD + BC + BD = A(C + D) + B(C + D), by (3a)
+                  = (C + D)A + (C + D)B, by (1a), X = (C + D), Y = A, Z = B
+                  = (C + D)(A + B),      by (3a)
+                  = (A + B)(C +D),       by (1a)
+</code></pre></div></div>
+
+<p>Note that 3a is not sufficient in all cases, but 3b is.</p>
+
+<p>Factor XY + ZW into linear factors</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>XY + ZW = (XY + Z)(XY + W),             by (3b), X = XY, YZ = ZW
+        = (Z + XY)(W + XY),             by (1b)
+        = (Z + X)(Z + Y)(W + X)(W + Y), by (3b)
+</code></pre></div></div>
+
+<h3 id="inspection">Inspection</h3>
+<p>by 3a - form all possible products of terms in the left factor by the terms in the right factor.</p>
+
+<p><code class="language-plaintext highlighter-rouge">(X + Y)(Z' + W) = XZ' + XW + YZ' + YW</code></p>
+
+<p>by 3b - form all possible sums of terms in the left factor by the terms in the right factor.</p>
+
+<p><code class="language-plaintext highlighter-rouge">XY + ZW = (X + Z)(X + W)(Y + Z)(Y + W)</code></p>
+
+<h2 id="theorem-2">Theorem 2</h2>
+
+<ul>
+  <li>X + X’Y = X + Y</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>X + X'Y = (X + X')(X + Y), by (3b)
+        = 1(X + Y),        by (6b)
+        = X + Y,           by (10a)
+</code></pre></div></div>
+
+<p><strong>Simplest form</strong> - that form which requires the use of the least number of symbols where each operation is a symbol, each leter representing a set is a symbol, and each pair of parenthesis is a symbol.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">X(Y + Z')</code> consists of seven symbols <code class="language-plaintext highlighter-rouge">(X, Y, Z, ., +, ', and ())</code></li>
+  <li><code class="language-plaintext highlighter-rouge">XY + YZ'</code> consists of eight symbols <code class="language-plaintext highlighter-rouge">(X, Y, Y, Z, ', ., +, and .)</code></li>
+</ul>
+
+<p>In an expression where a prime appears outside of a parenthesis or other grouping symbol, it is usually necessary to apply de Morgan’s laws (which are easily extended to more than two sums or products).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(A + B + C)' = [(A + B) + C]'
+             = (A + B)'C' = A'B'C'
+             
+(ABC)'       = A' + B' + C'`
+</code></pre></div></div>
+
+<p><em>post added 2022-12-01 15:01:00 -0600</em></p>
+
+  </div><a class="u-url" href="/math/algebra/2018/01/14/algebra-of-sets.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

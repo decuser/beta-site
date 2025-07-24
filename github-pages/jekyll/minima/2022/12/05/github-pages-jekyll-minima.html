@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Creating a github pages jekyll minima themed site with pagination | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Creating a github pages jekyll minima themed site with pagination" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A note about creating a github pages jekyll minima themed blog site and about adding pagination after the fact. This note captures what I learned when I created this blog." />
+<meta property="og:description" content="A note about creating a github pages jekyll minima themed blog site and about adding pagination after the fact. This note captures what I learned when I created this blog." />
+<link rel="canonical" href="http://localhost:4000/github-pages/jekyll/minima/2022/12/05/github-pages-jekyll-minima.html" />
+<meta property="og:url" content="http://localhost:4000/github-pages/jekyll/minima/2022/12/05/github-pages-jekyll-minima.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-12-05T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Creating a github pages jekyll minima themed site with pagination" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2022-12-05T00:00:00-06:00","datePublished":"2022-12-05T00:00:00-06:00","description":"A note about creating a github pages jekyll minima themed blog site and about adding pagination after the fact. This note captures what I learned when I created this blog.","headline":"Creating a github pages jekyll minima themed site with pagination","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/github-pages/jekyll/minima/2022/12/05/github-pages-jekyll-minima.html"},"url":"http://localhost:4000/github-pages/jekyll/minima/2022/12/05/github-pages-jekyll-minima.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Creating a github pages jekyll minima themed site with pagination</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2022-12-05T00:00:00-06:00" itemprop="datePublished">
+        Dec 5, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>A note about creating a github pages jekyll minima themed blog site and about adding pagination after the fact. This note captures what I learned when I created this blog.</p>
+
+<!--more-->
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ul>
+  <li>ruby - I use rbenv <a href="https://github.com/rbenv">https://github.com/rbenv</a> with the ruby-build plugin <a href="https://github.com/rbenv/ruby-build">https://github.com/rbenv/ruby-build</a></li>
+  <li>github account - <a href="https://github.com/">https://github.com</a></li>
+  <li>git - It is available for download <a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a> but, I use macports to install <a href="https://www.macports.org/install.php">https://www.macports.org/install.php</a></li>
+  <li>markdown editor - I use macdown <a href="https://macdown.uranusjr.com/">https://macdown.uranusjr.com</a></li>
+  <li>text editor - bbedit on mac <a href="https://www.barebones.com/products/bbedit/download.html">https://www.barebones.com/products/bbedit/download.html</a></li>
+</ul>
+
+<h2 id="first-steps">First Steps</h2>
+
+<p>First things first. To get started we will:</p>
+
+<ol>
+  <li>Create a github repository</li>
+  <li>Clone the repo</li>
+  <li>Create a branch to track with our blog</li>
+  <li>Commit the repo</li>
+  <li>Turn on github-pages for the repo</li>
+  <li>Create a jekyll site</li>
+  <li>Make some changes</li>
+  <li>Check in the changes and push to github</li>
+  <li>Test the live blog</li>
+</ol>
+
+<h3 id="1-create-a-github-repository">1. Create a github repository</h3>
+<p>Log into your github account and click the New button to create new repository. Name it whatever works and click Create Repository. Clone the repo as you usually do.</p>
+
+<p>I named my repo “nifty”.</p>
+
+<h3 id="2-clone-the-repo">2. Clone the repo</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd sandboxes-git
+git clone git@github.com:decuser/nifty.git
+</code></pre></div></div>
+
+<p>The first issue was that I hadn’t added my ssh key, so I dutifully uploaded my public key id_rsa.pub and tried again.</p>
+
+<p>The second issue was <code class="language-plaintext highlighter-rouge">warning: You appear to have cloned an empty repository.</code>, but that’s not really an issue. I plowed on.</p>
+
+<h3 id="3-create-a-branch-to-track-with-our-blog">3. Create a branch to track with our blog</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd nifty
+git checkout --orphan gh-pages
+cat &lt;&lt;EOF &gt;readme.txt
+A repo to test jekyll and pagination.
+EOF
+</code></pre></div></div>
+
+<h3 id="4-commit-the-repo">4. Commit the repo</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add .
+git commit -m "first commit"
+git push
+</code></pre></div></div>
+
+<p>Git complains:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fatal: The current branch gh-pages has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin gh-pages
+</code></pre></div></div>
+
+<p>The solution is:</p>
+
+<p><code class="language-plaintext highlighter-rouge">git push --set-upstream origin gh-pages</code></p>
+
+<h3 id="5-confirm-github-pages-is-enabled-for-the-repo">5. Confirm github-pages is enabled for the repo</h3>
+<p>Pull up the repo in github and click on Settings. Select Pages from the left-nav. Your pages should be deployed and a <code class="language-plaintext highlighter-rouge">Your site is live at https://decuser.github.io/nifty/</code> message should be showing.</p>
+
+<p>Although it’s published, if you navigate to the site, you will be greeted with a 404 error. This is to be expected, we don’t have any content yet.</p>
+
+<h3 id="6-create-a-jekyll-site">6. Create a jekyll site</h3>
+
+<h4 id="install-bundler">Install bundler</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install bundler
+Fetching bundler-2.3.26.gem
+Successfully installed bundler-2.3.26
+Parsing documentation for bundler-2.3.26
+Installing ri documentation for bundler-2.3.26
+Done installing documentation for bundler after 0 seconds
+1 gem installed
+</code></pre></div></div>
+
+<h4 id="initialize-bundler">Initialize bundler</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle init
+Writing new Gemfile to /Volumes/Tiempo/_workarea/syms/sandboxes-git/nifty/Gemfile
+</code></pre></div></div>
+
+<h4 id="add-jekyll-and-webrick">Add jekyll and webrick</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle add jekyll webrick
+Fetching gem metadata from https://rubygems.org/............
+Resolving dependencies...
+Fetching gem metadata from https://rubygems.org/...........
+Resolving dependencies...
+Using public_suffix 5.0.0
+...
+</code></pre></div></div>
+
+<h4 id="add-jekyll-scaffolding">Add jekyll scaffolding</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle exec jekyll new --force --skip-bundle .
+New jekyll site installed in /Volumes/Tiempo/_workarea/syms/sandboxes-git/nifty. 
+Bundle install skipped. 
+tree
+.
+├── 404.html
+├── Gemfile
+├── Gemfile.lock
+├── _config.yml
+├── _posts
+│   └── 2022-12-05-welcome-to-jekyll.markdown
+├── about.markdown
+├── index.markdown
+└── readme.txt
+
+1 directory, 8 files
+</code></pre></div></div>
+
+<p>Yay, we have some content, boiler plate, though it is.</p>
+
+<h4 id="serve-the-site-locally">Serve the site locally</h4>
+
+<p><code class="language-plaintext highlighter-rouge">bundle exec jekyll serve</code></p>
+
+<p>Sheesh…</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Could not find gem 'minima (~&gt; 2.5)' in locally installed gems.
+Run `bundle install` to install missing gems.
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle install
+Fetching gem metadata from https://rubygems.org/...........
+Resolving dependencies...
+Using public_suffix 5.0.0
+...
+Bundle complete! 7 Gemfile dependencies, 32 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+
+bundle exec jekyll serve
+</code></pre></div></div>
+
+<p>Another sheesh - apparently jekyll uses the same port as NoMachine.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>------------------------------------------------
+Jekyll 4.3.1   Please append `--trace` to the `serve` command 
+for any additional information or backtrace. 
+------------------------------------------------
+/Users/wsenn/.rbenv/versions/3.1.2/lib/ruby/3.1.0/socket.rb:201:in `bind': Address already in use - bind(2) for 127.0.0.1:4000 (Errno::EADDRINUSE)
+</code></pre></div></div>
+
+<p>Either shutdown the conflict or…</p>
+
+<p><code class="language-plaintext highlighter-rouge">bundle exec jekyll serve -P anotherport</code></p>
+
+<p>I just shutdown my conflict (tried both, and both worked).</p>
+
+<p>browse to <code class="language-plaintext highlighter-rouge">http://localhost:4000</code></p>
+
+<h3 id="7-make-some-changes">7. Make some changes</h3>
+
+<p>Let’s create a couple of handfuls of posts so we can see what that looks like.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd _posts
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-11-25-01.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-11-26-02.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-11-27-03.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-11-28-04.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-11-29-05.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-11-30-06.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-12-01-07.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-12-02-08.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-12-03-09.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-12-04-10.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-12-05-11.markdown
+cp 2022-12-05-welcome-to-jekyll.markdown 2022-12-05-12.markdown
+cd ..
+</code></pre></div></div>
+
+<h4 id="test-locally">Test locally</h4>
+
+<p>browse to <code class="language-plaintext highlighter-rouge">http://localhost:4000</code></p>
+
+<p>Hmmm… not much to see here. Just a list of posts…</p>
+
+<h4 id="turn-on-excerpts">Turn on excerpts</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi _config.yml
+add
+show_excerpts: true
+excerpt_separator: &lt;!--more--&gt;
+</code></pre></div></div>
+
+<p>The more separator will come in handy down the road, but basically anything appearing before the more separator will be included in the excerpt.</p>
+
+<p>Restart jekyll <code class="language-plaintext highlighter-rouge">CTRL-C</code> to stop it and <code class="language-plaintext highlighter-rouge">bundle exec jekyll serve</code> to get it going again.</p>
+
+<p>Much better… a lot of repetition, but that’s what fixing pagination is for… and judicious use of the more tag.</p>
+
+<h3 id="8-check-in-the-changes-and-push-to-github">8. Check in the changes and push to github</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add .
+git commit -m "created some fake posts and turned on excerpts"
+git push
+</code></pre></div></div>
+
+<h3 id="9-test-the-live-blog">9. Test the live blog</h3>
+
+<p>browse to the url that was given in the Pages settings of the repo. In my case:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://decuser.github.io/nifty/</code></p>
+
+<p>It will take a moment for your changes to get published. To see the publishing happening, head over to the actions tab of your repo. When it goes green the site should be ready and available and match what you have been seeing locally.</p>
+
+<p>Next up is adding pagination - who needs a never ending stream of posts anyway?</p>
+
+<h2 id="adding-pagination">Adding pagination</h2>
+
+<p>After the blog is up and running, add pagination (sure, we should have though of it sooner, but this is real life :). In order to add pagination, after the fact, we will:</p>
+
+<ol>
+  <li>Clone the minima repo</li>
+  <li>Copy needed folders and files from the minima clone into our repo</li>
+  <li>Edit the Gemfile</li>
+  <li>Edit _config.yml</li>
+  <li>Covert our index.markdown file to index.html</li>
+  <li>Test locally</li>
+  <li>Commit local changes</li>
+  <li>Push changes to github</li>
+  <li>Test live</li>
+</ol>
+
+<h3 id="1-clone-the-minima-repo">1. Clone the minima repo</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd sandboxes-git
+git clone https://github.com/jekyll/minima.git
+Cloning into 'minima'...
+remote: Enumerating objects
+...
+</code></pre></div></div>
+
+<h3 id="2-copy-needed-folders-and-files-from-the-minima-clone-into-our-repo">2. Copy needed folders and files from the minima clone into our repo</h3>
+
+<p>The folders and files we will grab from the minima repo are:</p>
+
+<ul>
+  <li>_includes - new to our repo</li>
+  <li>_layouts - new to our repo</li>
+  <li>_sass - new to our repo</li>
+  <li>assets - new to our repo</li>
+  <li>_config.yml - we’ll back ours up</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/sandboxes-git/nifty
+cp -R ../minima/_includes .
+cp -R ../minima/_layouts .
+cp -R ../minima/_sass .
+cp -R ../minima/assets .
+cp _config.yml _config.yml-prev
+cp ../minima/_config.yml .
+</code></pre></div></div>
+
+<p>Comparing the old and new _config.yml yields very little meaningful differences. The new file has some social media and seo support, but we will just redo our changes to the previous version and move on.</p>
+
+<h3 id="3-edit-gemfile">3. Edit Gemfile</h3>
+<p>add jekyll-paginate to jekyll plugins section</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>group :jekyll_plugins do
+  gem "jekyll-feed", "~&gt; 0.12"
+  gem "jekyll-paginate"
+end
+</code></pre></div></div>
+
+<h3 id="4-edit-_configyml">4. Edit _config.yml</h3>
+
+<p>add jekyll-paginate to the plugins section:
+add excerpts properties
+add paginate property</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi _config.yml
+...
+plugins:
+ - jekyll-feed
+ - jekyll-seo-tag
+ - jekyll-paginate
+...
+show_excerpts: true
+excerpt_separator: &lt;!--more--&gt;
+paginate: 3
+...
+</code></pre></div></div>
+
+<p>restart the jekyll server and see where we are at…</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle exec jekyll serve
+
+The following destination is shared by multiple files.
+The written file may end up with unexpected contents.
+/Volumes/Tiempo/_workarea/syms/sandboxes-git/nifty/_site/assets/minima-social-icons.svg
+- assets/minima-social-icons.html
+- /Users/wsenn/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/minima-2.5.1/assets/minima-social-icons.svg
+</code></pre></div></div>
+
+<p>This issue isn’t a problem in the current context, so just ignore it.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Pagination: Pagination is enabled, but I couldn't find an index.html page to use as the pagination template. Skipping pagination.
+Conflict: The following destination is shared by multiple files.
+The written file may end up with unexpected contents.
+</code></pre></div></div>
+
+<p>This, on the other hand, is a problem, but let’s take a look anyway.</p>
+
+<p>browse to <code class="language-plaintext highlighter-rouge">http://localhost:4000</code></p>
+
+<p>Sure enough, it’s wonky.</p>
+
+<h3 id="5-covert-our-indexmarkdown-file-to-indexhtml">5. Covert our index.markdown file to index.html</h3>
+
+<p>In order for pagination to work, the index.markdown file has to be converted into an index.html file.</p>
+
+<p><code class="language-plaintext highlighter-rouge">mv index.markdown index.html</code></p>
+
+<h3 id="6-test-locally">6. Test locally</h3>
+
+<p>fire up the server again and ignore the shared files issue.</p>
+
+<p><code class="language-plaintext highlighter-rouge">bundle exec jekyll serve</code></p>
+
+<p>browse to <code class="language-plaintext highlighter-rouge">http://localhost:4000</code></p>
+
+<p>3 to a page, right on!</p>
+
+<h3 id="7-commit-local-changes">7. Commit local changes</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add .
+git commit -m "added pagination"
+</code></pre></div></div>
+
+<h3 id="8-push-changes-to-github">8. Push changes to github</h3>
+
+<p><code class="language-plaintext highlighter-rouge">git push</code></p>
+
+<p>watch progress over in Actions</p>
+
+<h3 id="9-test-live">9. Test live</h3>
+
+<p>browse to <code class="language-plaintext highlighter-rouge">https://decuser.github.io/nifty</code></p>
+
+<p>3 to a page? Success.</p>
+
+<h2 id="wrapping-up">Wrapping up</h2>
+
+<p>Celebrate or troubleshoot!</p>
+
+<p><em>post added 2022-12-05 17:38:00 -0600</em></p>
+
+  </div><a class="u-url" href="/github-pages/jekyll/minima/2022/12/05/github-pages-jekyll-minima.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

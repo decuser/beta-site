@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Boolean Algebra Notes | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Boolean Algebra Notes" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This set of notes is a synthesis of many sources. I was having a very difficult time understanding some of the simplifications that were being done in videos and texts on digital logic, so I dug a little deeper until I had enough of a grasp to appreciate the elegance of the boolean logic system." />
+<meta property="og:description" content="This set of notes is a synthesis of many sources. I was having a very difficult time understanding some of the simplifications that were being done in videos and texts on digital logic, so I dug a little deeper until I had enough of a grasp to appreciate the elegance of the boolean logic system." />
+<link rel="canonical" href="http://localhost:4000/math/algebra/boolean/2018/01/04/boolean-algebra-notes.html" />
+<meta property="og:url" content="http://localhost:4000/math/algebra/boolean/2018/01/04/boolean-algebra-notes.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-01-04T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Boolean Algebra Notes" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2018-01-04T00:00:00-06:00","datePublished":"2018-01-04T00:00:00-06:00","description":"This set of notes is a synthesis of many sources. I was having a very difficult time understanding some of the simplifications that were being done in videos and texts on digital logic, so I dug a little deeper until I had enough of a grasp to appreciate the elegance of the boolean logic system.","headline":"Boolean Algebra Notes","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/math/algebra/boolean/2018/01/04/boolean-algebra-notes.html"},"url":"http://localhost:4000/math/algebra/boolean/2018/01/04/boolean-algebra-notes.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Boolean Algebra Notes</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2018-01-04T00:00:00-06:00" itemprop="datePublished">
+        Jan 4, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This set of notes is a synthesis of many sources. I was having a very difficult time understanding some of the simplifications that were being done in videos and texts on digital logic, so I dug a little deeper until I had enough of a grasp to appreciate the elegance of the boolean logic system.</p>
+
+<!--more-->
+
+<p>Originally created 20171213</p>
+
+<p>Last modified 20180104-2008</p>
+
+<h2 id="overview">Overview</h2>
+
+<p>The set of notes is comprised in three parts:</p>
+
+<p>The first is what I eventually came to after the struggle and is based on the work of Whitesitt, who based his development on Huntington’s 1904 postulates.</p>
+
+<p>The second is based on the work of Claude Shannon, who used Huntington’s 1933 postulates, among others.</p>
+
+<p>The third is an amalgam of others, but is inspired by Roychoudhury’s lecture on youtube - her delivery is somewhat monotonous, but the content is excellent.</p>
+
+<p>Each note was constructed separately and are combined here for convenience of reference only. They aren’t complete, consistent, or without duplication, but I found the process of creating them helpful to my own understanding - YMMV.</p>
+
+<h2 id="select-bibliography">Select Bibliography</h2>
+
+<p>Wikipedia. (2017). Boolean Algebra. Retrieved December 1, 2017, from <a href="https://en.wikipedia.org/wiki/Boolean_algebra">https://en.wikipedia.org/wiki/Boolean_algebra</a></p>
+
+<p>Crowe, J., Hayes-Gill, B. (1998). Introduction to Digital Electronics. Oxford: Newnes.</p>
+
+<p>Gregg, J. (1998). Ones and Zeros: Understanding Boolean Algebra, Digital Circuits, and the Logic of Sets. Hoboken, NJ: John Wiley &amp; Sons.</p>
+
+<p>Huntington, E. V. (1904). Sets of Independent Postulates for the Algebra of Logic. Transactions of the American Mathematical Society, 5(3), 288-309. Retrieved from <a href="http://www.jstor.org/stable/1986459">http://www.jstor.org/stable/1986459</a>.</p>
+
+<p>Huntington, E. V. (1933). New Sets of Independent Postulates for the Algebra of Logic, with Special Reference to Whitehead and Russell’s Principia Mathematica. Transactions of the American Mathematical Society, 35(1933), 274-304.</p>
+
+<p>Levitz, K., &amp; Levitz, H. (1979). Logic and Boolean Algebra. Woodbury, NY: Barron’s Educational Series, Inc.</p>
+
+<p>NAVEDTRA 14142. (1986). Mathematics - Introduction to Statistics, Number Systems, and Boolean Algebra. Pensacola, FL: Naval Education and Training Professional Development and Technology Center.</p>
+
+<p>Roychoudhury, D. (2008) Lecture 6 - Boolean Algebra. Kharagpur: NPTEL. Video available at <a href="https://www.youtube.com/watch?time_continue=1274&amp;v=K73N9ES_8nI">https://www.youtube.com/watch?time_continue=1274&amp;v=K73N9ES_8nI</a></p>
+
+<p>Shannon, C. E. (1936). A Symbolic Analysis of Relay and Switching Circuits. Master’s Thesis: University of Michigan.</p>
+
+<p>Whitesitt, J. E. (1961). Boolean Algebra and its Applications. Reading, MA: Addison-Wesley Publishing Company, Inc.</p>
+
+<h2 id="first-note">First Note</h2>
+
+<p>This is a somewhat rigorous development of Boolean Algebra based on Whitesitt (1961), who based his development on Huntington (1904).</p>
+
+<h3 id="definitions">Definitions</h3>
+
+<ol>
+  <li>A binary operation * on a set M is a rule which assigns to each ordered pair (a,b) of elements of M a unique element c = a * b in M.</li>
+  <li>A binary operation * on a set of elements M is associative if and only if for every a, b, and c in M, a * (b * c) = (a * b) * c</li>
+  <li>A binary operation * on a set M is commutative if and only if for every a and b in M, a * b = b * a</li>
+  <li>if * and % are two binary operations on the same set M, * is distributive over % if and only if for every a, b, and c in M, a * (b % c) = (a * b) % (a * c)</li>
+  <li>An element e in a class M is an identity for the binary operation * if and only if a * e = e * a = a for every element a in M.</li>
+</ol>
+
+<h4 id="huntingtons-postulates">Huntington’s Postulates</h4>
+
+<h5 id="definition">Definition</h5>
+
+<p>A class of elements B together with two binary operations (+) and (.) (where a . b will be written ab) is a Boolean algebra if and only if the following postulates hold:</p>
+
+<ul>
+  <li>P1. The operations (+) and (.) are commutative.</li>
+  <li>P2. There exist in B distinct identity elements 0 and 1 relative to the operations (+) and (.) respectively.</li>
+  <li>P3. Each operation is distributive over the other.</li>
+  <li>P4. For every a in B there exists an element a’ in B such that a + a’ = 1 and aa’ = 0</li>
+</ul>
+
+<h5 id="theorems">Theorems</h5>
+
+<ul>
+  <li>
+    <p>T1. Every statement or algebraic identity deducible from the postulates of Boolean algebra remains valid if the operations (+) and (.), and the identity elements 0 and 1 are interchanged throughout. (This theorem is known as the principle of duality).</p>
+
+    <p>Proof. The proof of this theorem follows at once from the symmetry of the posulates with respect fo the two operations and the two identities. That is, if one statement or algebraic expression is obtained from another by a single application of the principle of duality, the second is said to be the dual of the first. Thus, it is clear that the first is also the dual of the second.</p>
+  </li>
+  <li>
+    <p>T2. For every element a in a Boolean algebra B, a + a = a and aa = a</p>
+
+    <p>Proof.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> a = a + 0           by P2
+    = a + aa'         by P4
+    = (a + a)(a + a') by P3
+    = (a + a)(1)      by P4
+    = a + a.          by P2
+</code></pre></div>    </div>
+
+    <p>Similarly,</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  a = a(1).        by P2
+    = a . (a + a') by P4
+    = aa + aa'     by P3
+    = aa + 0       by P4
+    = aa.          by P2
+</code></pre></div>    </div>
+
+    <p>Note that the second proof is the dual of the first, as aa is the dual of a + a. This is the nature of duality and will hold for all theorems. Thus it is only necessary to prove one of each pair of theorems below.</p>
+  </li>
+  <li>
+    <p>T3. For each element a in a Boolean algebra B, a + 1 = 1 and a . 0 = 0</p>
+
+    <p>Proof.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  1 = a + a'          by P4
+    = a + a'(1)       by P2
+    = (a + a')(a + 1) by P3
+    = 1(a + 1)        by P4
+    = a + 1.          by P2
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>TODO add the rest of the proofs.</p>
+
+<h2 id="second-note">Second Note</h2>
+
+<p>This note is primarily based on the development of boolean algebra developed in Claude Shannon’s master’s thesis.</p>
+
+<h2 id="definitions-1">Definitions</h2>
+
+<p>The circuit between any two terminals is either open, having infinite impedence, or closed, having zero impedence.</p>
+
+<ul>
+  <li>Let X take on one of two values (see note for differences in this interpretation and Shannon’s):</li>
+  <li>X = 0 when the circuit is open and there is no potential for current to flow</li>
+  <li>
+    <p>X = 1 when the circuit is closed and there is a possibility of current flowing</p>
+  </li>
+  <li>Let . represent the series connection of two circuits (see figure 1)</li>
+  <li>Let + represent the parallel connection of two circuits (see figure 2)</li>
+  <li>Let ‘ represent the negation of a circuit</li>
+</ul>
+
+<h3 id="figure-1-ascii-x-and-y---series-circuit">Figure 1. ASCII X AND Y - Series Circuit</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>X . Y
+
+X .--o o-o o--.  Y
+</code></pre></div></div>
+
+<h3 id="figure-2-ascii-x-or-y---parallel-circuit">Figure 2. ASCII X OR Y - Parallel Circuit</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>X + Y
+
+   /-o X o-\
+o-+    +   +-o
+   \-o Y o-/
+</code></pre></div></div>
+
+<p>Addition and Multiplication (+ and .) are dual operations with respect to 0 and 1, that is, given any expression, a dual exists that can be developed by exchanging every . with +, + with ., 0 with 1, and 1 with 0.</p>
+
+<h3 id="postulates">Postulates</h3>
+
+<p>The postulates are shown in pairs to highlight their duality.</p>
+
+<ul>
+  <li>1a. 1 + 1 = 1, a closed circuit in parallel with a closed circuit is a closed circuit.</li>
+  <li>
+    <p>1b. 0 . 0 = 0, an open circuit in series with an open circuit is an open circuit.</p>
+  </li>
+  <li>2a. 0 . 1 = 1 . 0 = 0, an open circuit in series with a closed circuit in either order is an oepen circuit.</li>
+  <li>
+    <p>2b. 1 + 0 = 0 + 1 = 1, a closed circuit in parallel with an open circuit in either order is a closed circuit.</p>
+  </li>
+  <li>3a. 1 . 1 = 1, a closed circuit in series with a closed circuit is a closed circuit.</li>
+  <li>3b. 0 + 0 = 0, an open circuit in parallel with an open circuit is an open circuit.</li>
+  <li>4. At any given time, X = 0, or X = 1, exclusively.</li>
+  <li>5. The negation of a circuit is an inversion of the circuit operation, it will be open if the circuit is originally closed and open if the circuit is originally closed.</li>
+</ul>
+
+<p>The above postulates are sufficient to develop all of the theorems below.</p>
+
+<h3 id="theorems-1">Theorems</h3>
+
+<p>Any theorem in boolean algebra can be proved using perfect induction (verification of all possible cases) or using an algebraic proof built from the definitions, postulates, and other previously proven theorems.</p>
+
+<ul>
+  <li>t1a. x . y = y . x</li>
+  <li>t1b. x + y = y + x</li>
+  <li>t2a. x . (y . z) = (x . y) . z</li>
+  <li>t2b. x + (y + z) = (x + y) + z</li>
+  <li>t3a. x + (y . z) = (x + y) . (x + z)</li>
+  <li>t3a. x . (y + z) = (x . y) + (x . z)</li>
+  <li>t4a. 0 + x = x</li>
+  <li>t4b. 1 . x = x</li>
+  <li>t5a. 0 . x = 0</li>
+  <li>t5b. 1 + x = 1</li>
+  <li>t6a. x . x’ = 0</li>
+  <li>t6b. x + x’ = 1</li>
+  <li>t7a. 1’ = 0</li>
+  <li>t7b. 0’ = 1</li>
+  <li>t8.  (x’)’ = x</li>
+  <li>t9a. (X . Y . …)’ = X’ + Y’ + …</li>
+  <li>t9b. (X + Y + …)’ = X’ . Y’ . …</li>
+  <li>t10a. f(x1, x2, …, xn) = x1 + f(1, x2, …, xn) . x’1 …</li>
+</ul>
+
+<h3 id="a-representative-algebraic-proof">A Representative Algebraic Proof</h3>
+
+<p>t4a. 0 + x = x</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> x is either 0 or 1; p4
+ if x = 0 then 0 + 0 = 0; p3b
+ if x = 1 then 0 + 1 = 1; p2b
+
+ therefore 0 + x = x
+</code></pre></div></div>
+
+<h3 id="discussion">Discussion</h3>
+<p>There is a perfect analogy between two value propositional calculus and that given above if the terms represent propositions that can be true (1) or false (0). Shannon works from E. V. Huntington’s postulates of symbolic logic:</p>
+
+<ol>
+  <li>The class K contains at least two distinct elements.</li>
+  <li>If a and b are in the class K then a + b is in the class K.</li>
+  <li>a + b = b + a</li>
+  <li>(a + b) + c = a + (b + c)</li>
+  <li>a + a = a</li>
+  <li>ab + ab’ = a</li>
+</ol>
+
+<h4 id="table-1-symbol-interpretation-in-circuits-vs-calculus">Table 1. Symbol interpretation in circuits vs calculus</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Symbols</th>
+      <th>Circuit</th>
+      <th>Calculus</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>x</td>
+      <td>The circuit x</td>
+      <td>The proposition x</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>The circuit is open</td>
+      <td>The proposition is false</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>The circuit is closed</td>
+      <td>The proposition is true</td>
+    </tr>
+    <tr>
+      <td>x + y</td>
+      <td>The parallel connection of x, y</td>
+      <td>The proposition which is true if either x or y is true</td>
+    </tr>
+    <tr>
+      <td>x . y</td>
+      <td>The series connection of x, y</td>
+      <td>The proposition which is true if both x and y is true</td>
+    </tr>
+    <tr>
+      <td>x’</td>
+      <td>The circuit open when x is closed</td>
+      <td>The contradictory of proposition x closed, and closed when x is open</td>
+    </tr>
+    <tr>
+      <td>=</td>
+      <td>The circuits open and close</td>
+      <td>Each proposition implies the other simultaneously</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Note: My read of his work seems to indicate that a modern interpretation requires that where Shannon used 0 we should use 1 and where he used plus, we should use multiplication (he looked at things from a hinderance perspective - 0, means no hindrance, which is a closed circuit, and 1, or unity, means complete hindrance, which is an open circuit, and he also saw addition as a series circuit and multiplication as a parallel circuit).</p>
+
+<h2 id="third-note">Third note</h2>
+
+<p>There are several different possible algebra’s, the one discussed below was helpful to my understanding.</p>
+
+<h3 id="concise-rules">Concise Rules</h3>
+
+<ul>
+  <li>1 = True, Present, Universe, On</li>
+  <li>
+    <p>0 = False, Absent, Empty set, Off</p>
+  </li>
+  <li>Reflexive Property: 0 = 0; 1 = 1</li>
+  <li>NOT: 0’ = 1; 1’ = 0; 0’’ = 0; 1’’ = 1; negation, complementation, inversion</li>
+  <li>OR:  0 + 0 = 0; 0 + 1 = 1 + 0 = 1; 1 + 1 = 1; disjunction, union, any input is 1, output will be 1</li>
+  <li>AND: 0 . 0 = 0; 0 . 1 = 1 . 0 = 0; 1 . 1 = 1; conjunction, intersection - all inputs 1, output will be 1</li>
+  <li>The principle of duality: Any expression can be converted from one operation to another changing AND to OR, OR to AND, 1 to 0, and 0 to 1</li>
+  <li>Identity laws - operations the identity</li>
+  <li>p1. A . 1 = A; 1 is the multiplicative identity</li>
+  <li>p2. A + 0 = A; 0 is the addition identity</li>
+  <li>Inverse laws - operations on the complement</li>
+  <li>p3. A + A’ = 1; tautology; true</li>
+  <li>p4. A . A’ = 0; contradition; false</li>
+  <li>Distributive properties of multiplication and addition</li>
+  <li>p5. A . (B + C) = (A . B) + (A . C)</li>
+  <li>p6. A + (B . C) = (A + B) . (A + C)</li>
+</ul>
+
+<h3 id="the-boolean-algebra">The Boolean Algebra</h3>
+
+<p>Boolean algebra may be defined by with:</p>
+
+<p>I.   a set of elements</p>
+
+<p>II.  a set of operators</p>
+
+<p>III. a set of laws</p>
+
+<h4 id="i-set-of-elements">I. Set of Elements</h4>
+
+<p>Sets in boolean algebra contain any number of elements that are capable of taking on either of two possible values:</p>
+
+<p><code class="language-plaintext highlighter-rouge">S = {A, B, C, ... N}</code> where each element can be 1 or 0, high or low, true or false, etc.</p>
+
+<h4 id="ii-operators">II. Operators</h4>
+
+<p>There are five basic operators that can be combined in an infinite number of secondary operations through composition.</p>
+
+<ol>
+  <li>
+    <p>NOT, also known as negation, complement, or inverse and signified by ‘, overbar, or ~</p>
+  </li>
+  <li>
+    <p>AND, also known as conjunction, intersection, or multiplication and signified by ., *, x, or ^</p>
+  </li>
+  <li>
+    <p>OR, also known as disjunction, union, addition, or inclusive or, and signified by +, or v</p>
+  </li>
+  <li>
+    <p>Implication, also known as if-then, or if-only, and signified by -&gt;</p>
+  </li>
+  <li>
+    <p>Bi-implication, also known as if-and-only-if, or iff, and signified by &lt;-&gt;</p>
+  </li>
+</ol>
+
+<p>These operations (and any others) are expressible in the form of truth tables, through the process of perfect induction, enumerating all possible outcomes</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">A</th>
+      <th style="text-align: center">B</th>
+      <th style="text-align: center">A AND B</th>
+      <th style="text-align: center">A OR B</th>
+      <th style="text-align: center">A -&gt; B</th>
+      <th style="text-align: center">A &lt;-&gt; B</th>
+      <th style="text-align: center">A</th>
+      <th style="text-align: center">NOT A</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>NOT, AND, and OR may also be expressed with arithmetic and min/max functions:</p>
+
+<ul>
+  <li>NOT A = A’ = 1 - A</li>
+  <li>A AND B = A . B = min(A, B)</li>
+  <li>A OR  B = A + B = max(A, B)</li>
+</ul>
+
+<p>Given NOT and one of AND or OR, the other operation, AND or OR, can be derived:</p>
+
+<ul>
+  <li>A AND B = (A’ OR  B’)’</li>
+  <li>A OR  B = (A’ AND B’)’</li>
+</ul>
+
+<h4 id="iii-laws-of-boolean-algebra">III. Laws of Boolean Algebra</h4>
+
+<p>A law is an identity between two boolean terms. Laws are used to define the boolean model.</p>
+
+<p>Duality Principle - every algebraic expression is deducible if the operands and the identity elements are interchanged:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A + 0 = A                       =&gt; A * 1 = A
+A + A' = 1                      =&gt; A . A' = 0
+A + B = B + A                   =&gt; A . B = B . A
+A . (B + C) = (A . B) + (A . C) =&gt; A + (B . C) = (A + B) . (A + C)
+</code></pre></div></div>
+
+<p>Closure Property - a set is closed with respect to an operator, when any result obtained by operating on the members of the set is also be a member of the set.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>S = {A, B, C, ..., N}
+A * B = x; where x is in S
+</code></pre></div></div>
+
+<h5 id="idempotent-laws">Idempotent Laws</h5>
+
+<p>operations on the variable with itself</p>
+
+<ul>
+  <li>t1. Idempotent (+)</li>
+  <li>A + A = A</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> A + A = (A + A) . 1;    p1. identity	
+          = (A + A) . (A + A'); p3. complement
+          = A + (A . A');       p6. distributive
+          = A + 0;              p3. complement
+          = A;                  p2. identity
+
+ therefore A + A = A
+</code></pre></div></div>
+
+<ul>
+  <li>t2. Idempotent (.)</li>
+  <li>A . A = A</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A . A = (A . A) + 0;    p2. identity
+      = (A . A) + (A . A'); p4. complement
+      = A . (A + A');       p5. distributive
+      = A . 1;              p3. complement
+      = A;                  p1. identity
+
+ therefore A . A = A
+</code></pre></div></div>
+
+<h5 id="annihilator-domination-laws">Annihilator (Domination) laws</h5>
+
+<p>operations on the annihilator</p>
+
+<ul>
+  <li>t3. Domination (+ 1)</li>
+  <li>A + 1 = 1</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ; OR operation - if either input is one, the output will be one
+ A = 0, A + 1 = 1
+ A = 1, A + 1 = 1;			
+
+ therefore A + 1 = 1
+
+ A + 1 = (A + 1) . 1;        p1. identity
+          = (A + 1) . (A + A'); p3. complement
+          = A + (1 . A');       p6. distributive
+          = A + A';             p1. identity
+          = 1;                  p3. complement
+
+ therefore A + 1 = 1
+</code></pre></div></div>
+
+<ul>
+  <li>t4. Domination (. 0)</li>
+  <li>A . 0 = 0</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ; AND operation - if either input is zero, the output will be zero
+ A = 0, A . 0 = 0
+ A = 1, A . 0 = 0;
+
+ therefore A . 0 = 0
+
+ A + 1 = 1; t3. domination
+ A . 0 = 0; duality
+
+ therefore A . 0 = 0
+</code></pre></div></div>
+
+<h5 id="involution-law">Involution law</h5>
+
+<p>the complement of the complement</p>
+
+<ul>
+  <li>t5. Involution - aka double not</li>
+  <li>A’’ = A</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> A = 0, A'' = 0; because 0' = 1 and 1' = 0
+ A = 1, A'' = 1; because 1' = 0 and 0' = 1;
+
+ therefore A'' = A
+</code></pre></div></div>
+
+<h5 id="absorption-laws">Absorption laws</h5>
+
+<ul>
+  <li>t6. Absorption (A + AX)</li>
+  <li>A + AB = A</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> A + AB = (A . 1) + AB; p1. identity		
+           = A . (1 + B);  p5. distributive
+           = A . 1;        t3. domination
+           = A             p1. identity
+
+ therefore A + AB = A
+</code></pre></div></div>
+
+<ul>
+  <li>t7. Absorption (A . (A + X))</li>
+  <li>A (A + B) = A</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> A (A + B) = (A + A)(A + B);    t1. idempotent
+              = A + (A . B);       p6. distributive
+              = (A . 1) + (A . B); p1. identity
+              = A . (1 + B);       p5. distributive
+              = A . 1;             t3. domination
+              = A;                 p1. identity
+	     
+ therefore A . (A + B) = A
+</code></pre></div></div>
+
+<ul>
+  <li>t8. Additional Theorem I</li>
+  <li>A + (A’ . B) = A + B</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> A + (A' . B)	= (A + AB) + (A' . B); t6. absorption, set A = A + AB
+                   = A + (B . (A + A'));  p5. distributive
+                   = A + (B . 1);	      p3. complement
+                   = A + B;               p1. identity
+
+ therefore A + (A' . B) = A + B
+</code></pre></div></div>
+
+<ul>
+  <li>t9. Additional Theorem II</li>
+  <li>A . (A’ + B) = A . B</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> A . (A' + B)	= (A + AB) . (A' + B);   t6. absorption
+                   = AA' + AB + ABA' + ABB; p6. distributive
+                   = 0 + AB + 0 + ABB;      p4. complement
+                   = AB + ABB;              p2. identity
+                   = AB + AB;               t2. idempotent
+                   = AB;                    t1. idempotent
+
+ therefore A . (A' + B) = A . B
+</code></pre></div></div>
+
+<h5 id="commutative-laws">Commutative laws</h5>
+
+<p>variables can be reordered in any order under . or +</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A . B = B . A
+A + B = B + A
+</code></pre></div></div>
+
+<h5 id="associative-laws">Associative laws</h5>
+
+<p>variables can be (re)grouped in any order under . or +</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(A . B) . C = A . B . C = A . (B . C)
+(A + B) + C = A + B + C = A + (B + C)
+</code></pre></div></div>
+
+<h5 id="de-morgans-laws">de Morgan’s laws</h5>
+
+<p>convert between forms of logic and types of gates</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(A + B)' = A' . B' =&gt; (A + B + C + ... + N) = A' . B' . C' ... . N'
+(A . B)' = A' + B' =&gt; (A . B . C . ... . N) = A' + B' + C' ... + N'
+</code></pre></div></div>
+
+<h5 id="arrow-law">Arrow law</h5>
+
+<p><code class="language-plaintext highlighter-rouge">A -&gt; B = A' + B</code></p>
+
+<h5 id="contraposition-law">Contraposition law</h5>
+
+<p><code class="language-plaintext highlighter-rouge">A -&gt; B = A' -&gt; B'</code></p>
+
+<h5 id="double-arrow-law">Double Arrow Law</h5>
+
+<p><code class="language-plaintext highlighter-rouge">A &lt;-&gt; B = (A -&gt; B) . (B -&gt; A)</code></p>
+
+<p><em>post added 2022-12-01 14:35:00 -0600</em></p>
+
+  </div><a class="u-url" href="/math/algebra/boolean/2018/01/04/boolean-algebra-notes.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

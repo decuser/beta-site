@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>UCB STk Scheme Interpreter for Working Through Brian Harvey’s CS61A Course | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="UCB STk Scheme Interpreter for Working Through Brian Harvey’s CS61A Course" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This note describes how to install the UCB STk 4.0.1 Scheme interpreter on modern 64 bit Debian based systems. It also describes a method of building the Debian Package used to install the program. This is the version of scheme used by Brian Harvey in his 2011 course, CS61A: Structure and Interpretation of Computer Programs, named after and using famed text, Structure and Interpretation of Computer Programs by Harold Abelson and Gerald Jay Sussman with Julie Sussman, a phenomenally good computer science textbook. Now, I’m not a package maintainer and I certainly don’t know the nuances of building packages, this is just meant to document how I was able to get this working in 2023 after reading tons of “too bad, so sad, I can’t get it to work posts”, YMMV, but I’ve tested on LMDE5 (Elsie), Mint 21.1 (Vera), MX Linux 21.3 (Wildflower), and Ubuntu 22.04.2 (Jammy Jellyfish). Here’s a screenshot of the working system running on LMDE5:" />
+<meta property="og:description" content="This note describes how to install the UCB STk 4.0.1 Scheme interpreter on modern 64 bit Debian based systems. It also describes a method of building the Debian Package used to install the program. This is the version of scheme used by Brian Harvey in his 2011 course, CS61A: Structure and Interpretation of Computer Programs, named after and using famed text, Structure and Interpretation of Computer Programs by Harold Abelson and Gerald Jay Sussman with Julie Sussman, a phenomenally good computer science textbook. Now, I’m not a package maintainer and I certainly don’t know the nuances of building packages, this is just meant to document how I was able to get this working in 2023 after reading tons of “too bad, so sad, I can’t get it to work posts”, YMMV, but I’ve tested on LMDE5 (Elsie), Mint 21.1 (Vera), MX Linux 21.3 (Wildflower), and Ubuntu 22.04.2 (Jammy Jellyfish). Here’s a screenshot of the working system running on LMDE5:" />
+<link rel="canonical" href="http://localhost:4000/development/scheme/ucb-stk/2023/06/27/ucb-stk-for-harveys-cs61a.html" />
+<meta property="og:url" content="http://localhost:4000/development/scheme/ucb-stk/2023/06/27/ucb-stk-for-harveys-cs61a.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-06-27T00:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="UCB STk Scheme Interpreter for Working Through Brian Harvey’s CS61A Course" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2023-06-27T00:00:00-05:00","datePublished":"2023-06-27T00:00:00-05:00","description":"This note describes how to install the UCB STk 4.0.1 Scheme interpreter on modern 64 bit Debian based systems. It also describes a method of building the Debian Package used to install the program. This is the version of scheme used by Brian Harvey in his 2011 course, CS61A: Structure and Interpretation of Computer Programs, named after and using famed text, Structure and Interpretation of Computer Programs by Harold Abelson and Gerald Jay Sussman with Julie Sussman, a phenomenally good computer science textbook. Now, I’m not a package maintainer and I certainly don’t know the nuances of building packages, this is just meant to document how I was able to get this working in 2023 after reading tons of “too bad, so sad, I can’t get it to work posts”, YMMV, but I’ve tested on LMDE5 (Elsie), Mint 21.1 (Vera), MX Linux 21.3 (Wildflower), and Ubuntu 22.04.2 (Jammy Jellyfish). Here’s a screenshot of the working system running on LMDE5:","headline":"UCB STk Scheme Interpreter for Working Through Brian Harvey’s CS61A Course","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/development/scheme/ucb-stk/2023/06/27/ucb-stk-for-harveys-cs61a.html"},"url":"http://localhost:4000/development/scheme/ucb-stk/2023/06/27/ucb-stk-for-harveys-cs61a.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">UCB STk Scheme Interpreter for Working Through Brian Harvey&#39;s CS61A Course</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2023-06-27T00:00:00-05:00" itemprop="datePublished">
+        Jun 27, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This note describes how to install the UCB STk 4.0.1 Scheme interpreter on modern 64 bit Debian based systems. It also describes a method of building the Debian Package used to install the program. This is the version of scheme used by Brian Harvey in his 2011 course, CS61A: Structure and Interpretation of Computer Programs, named after and using famed text, Structure and Interpretation of Computer Programs by Harold Abelson and Gerald Jay Sussman with Julie Sussman, a phenomenally good computer science textbook.</p>
+
+<p>Now, I’m not a package maintainer and I certainly don’t know the nuances of building packages, this is just meant to document how I was able to get this working in 2023 after reading tons of “too bad, so sad, I can’t get it to work posts”, YMMV, but I’ve tested on LMDE5 (Elsie), Mint 21.1 (Vera), MX Linux 21.3 (Wildflower), and Ubuntu 22.04.2 (Jammy Jellyfish).</p>
+
+<p>Here’s a screenshot of the working system running on LMDE5:</p>
+
+<p><img src="/assets/img/scheme/01.png" alt="one" /></p>
+
+<!--more-->
+
+<h3 id="resources">Resources</h3>
+
+<ul>
+  <li>
+    <p>CS561A: Structure and Interpretation of Computer Programs Video Lectures - <a href="https://archive.org/details/ucberkeley-webcast-PL3E89002AA9B9879E">https://archive.org/details/ucberkeley-webcast-PL3E89002AA9B9879E</a></p>
+  </li>
+  <li>
+    <p>UCB Scheme Webpage - <a href="https://people.eecs.berkeley.edu/~bh/61a-pages/Scheme/">https://people.eecs.berkeley.edu/~bh/61a-pages/Scheme/</a></p>
+  </li>
+  <li>
+    <p>Structure and Interpretation of Computer Programs 2nd ed. eBook - <a href="https://web.mit.edu/6.001/6.037/sicp.pdf">https://web.mit.edu/6.001/6.037/sicp.pdf</a></p>
+  </li>
+  <li>
+    <p>Erick Gallesio’s github repo - <a href="https://github.com/egallesio/STk">https://github.com/egallesio/STk</a></p>
+  </li>
+</ul>
+
+<h3 id="test-environments">Test Environments</h3>
+
+<ul>
+  <li>IBM ThinkCentre M92p running Linux Mint Debian Edition 5 (Elsie)</li>
+  <li>Virtualbox 7 running Linux Mint 21.1_64 (Vera)</li>
+  <li>Virtualbox 7 running Ubuntu-22.04.2_64 (Jammy Jellyfish)</li>
+  <li>Virtualbox 7 running MX-21.3_64 (Wildflower)</li>
+</ul>
+
+<h3 id="build-environment">Build Environment</h3>
+<ul>
+  <li>Ubuntu 16.04.1 LTS 64 bit (not eol before mid 2026) - VirtualBox instance</li>
+</ul>
+
+<h3 id="installation-using-the-debian-package">Installation using the debian package</h3>
+
+<p>The package requires that you have 32bit support in your environment which LMDE does. Other than this, it requires:</p>
+
+<ul>
+  <li>libsm6:i386 libx11-6:i386 along with their dependencies</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">sudo apt install libsm6:i386 libx11-6:i386</code></p>
+
+<ul>
+  <li><a href="/assets/files/scheme/stk_4.0.1-1_amd64.deb">stk_4.0.1-1_amd64.deb</a></li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">sudo dpkg -i stk_4.0.1-1_amd64.deb</code></p>
+
+<p>That should be all it takes, test it:</p>
+
+<p><code class="language-plaintext highlighter-rouge">stk-simply</code></p>
+
+<p>I usually install rlwrap so that I can get command history. If you want that then, install rlwrap:</p>
+
+<p><code class="language-plaintext highlighter-rouge">sudo apt install rlwrap</code></p>
+
+<p>Then add an alias or three to your .bashrc:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alias rlstk-simply='rlwrap stk-simply'
+alias rlstk-explorin='rlwrap stk-explorin'
+alias rlstk-grfx='rlwrap stk-grfx'
+</code></pre></div></div>
+
+<p>Then you can do stuff like this:</p>
+
+<p><img src="/assets/img/scheme/02.png" alt="two" /></p>
+
+<p>Yeah, I know. It’s not all about the graphics or turtles, but hey - still kind of cool that it works.</p>
+
+<h3 id="extras">Extras</h3>
+
+<p>Since UCB Scheme is based on Erick Gallesio’s STk, we can use the manual from STk for everything that’s not a UCB Scheme extension. Here’s the manual:</p>
+
+<p><a href="/assets/files/scheme/gallesio-1999-stk-4.0-manual.pdf">gallesio-1999-stk-4.0-manual.pdf</a></p>
+
+<p>The differences between Gallesio’s STk and the UCB Scheme environment are summed up in this document:</p>
+
+<p><a href="/assets/files/scheme/explorin-vs-simply.txt">explorin-vs-simply.txt</a></p>
+
+<p>And an FAQ is also available:
+<a href="/assets/files/scheme/faq.html">faq.html</a></p>
+
+<p>A quick test on my system:</p>
+
+<p><img src="/assets/img/scheme/03.png" alt="three" /></p>
+
+<h3 id="build-the-debian-package-from-the-rpm-distribution">Build the Debian Package from the RPM distribution</h3>
+
+<p>The first thing to do is to get the RPM. It is available here:</p>
+
+<p><a href="http://inst.eecs.berkeley.edu/~scheme/precompiled/Linux/STk-4.0.1-ucb1.3.6.i386.rpm">RPM distribution</a></p>
+
+<p>or locally, here:</p>
+
+<p><a href="/assets/files/scheme/STk-4.0.1-ucb1.3.6.i386.rpm">STk-4.0.1-ucb1.3.6.i386.rpm</a></p>
+
+<p>The second thing to do is to download the Ubuntu 16.0.1 LTS 64 bit server image:</p>
+
+<p><a href="https://old-releases.ubuntu.com/releases/16.04.6/ubuntu-16.04.1-server-amd64.iso">ubuntu-16.04.1-server-amd64.iso</a></p>
+
+<p>Create a new Virtual Box Instance and use Bridged Networking so your instance will get an IP address on your network. During installation, enable the SSH server.</p>
+
+<p>After the installation, get the IP address of the instance:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ifconfig
+192.168.254.15
+</code></pre></div></div>
+
+<p>From your host, scp the rpm file into the instance:</p>
+
+<p><code class="language-plaintext highlighter-rouge">scp STk-4.0.1-ucb1.3.6.i386.rpm your_user@instanceip:STk-4.0.1-ucb1.3.6.i386.rpm</code></p>
+
+<p>Then ssh into the instance:</p>
+
+<p><code class="language-plaintext highlighter-rouge">ssh 192.168.254.15</code></p>
+
+<p>Install some necessary applications and libraries:</p>
+
+<p><code class="language-plaintext highlighter-rouge">sudo apt install alien libsm6:i386 libx11-6:i386 libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1</code></p>
+
+<p>Create the debian package from the rpm:</p>
+
+<p><code class="language-plaintext highlighter-rouge">fakeroot alien --target=amd64 STk-4.0.1-ucb1.3.6.i386.rpm</code></p>
+
+<p>That’s all there is to converting rpm to a 64 bit friendly debian package. On the host, scp the file from the instance:</p>
+
+<p><code class="language-plaintext highlighter-rouge">scp your_user@instanceip:stk_4.0.1-1_amd64.deb ./stk_4.0.1-1_amd64.deb</code></p>
+
+<p>Now, you have a deb file that can be saved off and reused.</p>
+
+<h3 id="get-a-copy-of-the-manual-build-the-unmodified-source-code">Get a copy of the manual, build the unmodified source code</h3>
+
+<p>Gallesio’s STk is buildable, just realize that it isn’t suitable for following the course. I include these instructions for the sake of getting the manual and for completeness.</p>
+
+<p>Get the source code and checkout the appropriate version:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/sandboxes-git
+git clone https://github.com/egallesio/STk.git
+cd STk
+git checkout Version_4.0.1
+</code></pre></div></div>
+
+<p>Convert the manual to pdf:</p>
+
+<p><code class="language-plaintext highlighter-rouge">ps2pdf Doc/Reference/manual.ps ~/Desktop/gallesio-1999-stk-4.0-manual.pdf</code></p>
+
+<p>Build the source and optionally install it (don’t do this if you have the modified program installed):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure
+make
+sudo make install
+</code></pre></div></div>
+
+<p>Reach out to me if you find any issues or have suggestions.</p>
+
+<p>- will</p>
+
+<p><em>post last updated 2023-06-27 21:24:00 -0600</em></p>
+
+  </div><a class="u-url" href="/development/scheme/ucb-stk/2023/06/27/ucb-stk-for-harveys-cs61a.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

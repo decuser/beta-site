@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Research Unix Version 7 - 3.2 | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Research Unix Version 7 - 3.2" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This is an updated note that covers building a working v7 instance from tape files that will run in the OpenSImH emulator. First, the reader is led through the restoration of a pristine v7 instance from tape to disk. Next, the reader is led through adding a regular user and making the system multi-user capable. Then, the reader is shown how to make the system multi-session cable to allow multiple simultaneous sessions. Finally, the system is put to use with hello world, DMR style, and the learn system is enabled. The note explains each step of the process in detail." />
+<meta property="og:description" content="This is an updated note that covers building a working v7 instance from tape files that will run in the OpenSImH emulator. First, the reader is led through the restoration of a pristine v7 instance from tape to disk. Next, the reader is led through adding a regular user and making the system multi-user capable. Then, the reader is shown how to make the system multi-session cable to allow multiple simultaneous sessions. Finally, the system is put to use with hello world, DMR style, and the learn system is enabled. The note explains each step of the process in detail." />
+<link rel="canonical" href="http://localhost:4000/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2.html" />
+<meta property="og:url" content="http://localhost:4000/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-05-23T09:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Research Unix Version 7 - 3.2" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2024-05-23T09:00:00-05:00","datePublished":"2024-05-23T09:00:00-05:00","description":"This is an updated note that covers building a working v7 instance from tape files that will run in the OpenSImH emulator. First, the reader is led through the restoration of a pristine v7 instance from tape to disk. Next, the reader is led through adding a regular user and making the system multi-user capable. Then, the reader is shown how to make the system multi-session cable to allow multiple simultaneous sessions. Finally, the system is put to use with hello world, DMR style, and the learn system is enabled. The note explains each step of the process in detail.","headline":"Research Unix Version 7 - 3.2","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2.html"},"url":"http://localhost:4000/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Research Unix Version 7 - 3.2</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2024-05-23T09:00:00-05:00" itemprop="datePublished">
+        May 23, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This is an updated note that covers building a working v7 instance from tape files that will run in the OpenSImH emulator. First, the reader is led through the restoration of a pristine v7 instance from tape to disk. Next, the reader is led through adding a regular user and making the system multi-user capable. Then, the reader is shown how to make the system multi-session cable to allow multiple simultaneous sessions. Finally, the system is put to use with hello world, DMR style, and the learn system is enabled.</p>
+
+<p>The note explains each step of the process in detail.</p>
+
+<!--more-->
+
+<p>Last Updated May 23, 2024</p>
+
+<h3 id="changes-since-revision-31">Changes since revision 3.1</h3>
+
+<p>Revision 3.2 - minor revision:</p>
+
+<ul>
+  <li>Tape format issue fixed in mktape.pl and mktape.py, resulted in updated image on tuhs.</li>
+  <li>Updated note for Linux Mint 21.3 “Virginia” host and latest Open-SIMH</li>
+</ul>
+
+<p>Here’s the note, as a pdf:</p>
+
+<iframe allow="autoplay" height="480" src="https://drive.google.com/file/d/1eGrdZVc2R-hFfsbJ70PNbWBGNEXCLN1W/preview" width="640"></iframe>
+
+<p>Local copy here: <a href="/assets/pdf/unix/research-unix-7-pdp11-45-3.2.pdf">research-unix-7-pdp11-45-3.2.pdf</a>
+<!--more--></p>
+
+<p><em>post added 2024-05-23 08:00:00 -0600</em></p>
+
+  </div><a class="u-url" href="/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

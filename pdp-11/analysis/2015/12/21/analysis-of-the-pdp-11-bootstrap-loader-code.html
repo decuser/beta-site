@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Analysis of the PDP-11 bootstrap loader code | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Analysis of the PDP-11 bootstrap loader code" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This note describes, in detail, how the bootstrap loader code operates. While it is only 14 words, it is not trivial to understand. The bootstrap loader is self-modifying code The note is a work in progress. It begins by describing the first iteration where the loader loads a single byte from the tape reader. In this case the byte is octal 351, which is the first byte of the absolute loader and is the tape leader byte. Octal 351, when read by the bootstrap loader has the effect of causing the boot strap loader to overwrite a portion of itself that results in no change to its memory contents. Any other value, when read will cause the bootstrap loader to begin copying bytes into a memory location prior to the bootstrap loader itself and continuing to copy bytes until the bootstrap loader overwrites itself with the contents of the loaded program. Programs that are bootstrap loader programs contain a footer that restores they original bytes of the bootstrap loader except for the starting location." />
+<meta property="og:description" content="This note describes, in detail, how the bootstrap loader code operates. While it is only 14 words, it is not trivial to understand. The bootstrap loader is self-modifying code The note is a work in progress. It begins by describing the first iteration where the loader loads a single byte from the tape reader. In this case the byte is octal 351, which is the first byte of the absolute loader and is the tape leader byte. Octal 351, when read by the bootstrap loader has the effect of causing the boot strap loader to overwrite a portion of itself that results in no change to its memory contents. Any other value, when read will cause the bootstrap loader to begin copying bytes into a memory location prior to the bootstrap loader itself and continuing to copy bytes until the bootstrap loader overwrites itself with the contents of the loaded program. Programs that are bootstrap loader programs contain a footer that restores they original bytes of the bootstrap loader except for the starting location." />
+<link rel="canonical" href="http://localhost:4000/pdp-11/analysis/2015/12/21/analysis-of-the-pdp-11-bootstrap-loader-code.html" />
+<meta property="og:url" content="http://localhost:4000/pdp-11/analysis/2015/12/21/analysis-of-the-pdp-11-bootstrap-loader-code.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-12-21T16:34:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Analysis of the PDP-11 bootstrap loader code" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2015-12-21T16:34:00-06:00","datePublished":"2015-12-21T16:34:00-06:00","description":"This note describes, in detail, how the bootstrap loader code operates. While it is only 14 words, it is not trivial to understand. The bootstrap loader is self-modifying code The note is a work in progress. It begins by describing the first iteration where the loader loads a single byte from the tape reader. In this case the byte is octal 351, which is the first byte of the absolute loader and is the tape leader byte. Octal 351, when read by the bootstrap loader has the effect of causing the boot strap loader to overwrite a portion of itself that results in no change to its memory contents. Any other value, when read will cause the bootstrap loader to begin copying bytes into a memory location prior to the bootstrap loader itself and continuing to copy bytes until the bootstrap loader overwrites itself with the contents of the loaded program. Programs that are bootstrap loader programs contain a footer that restores they original bytes of the bootstrap loader except for the starting location.","headline":"Analysis of the PDP-11 bootstrap loader code","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/pdp-11/analysis/2015/12/21/analysis-of-the-pdp-11-bootstrap-loader-code.html"},"url":"http://localhost:4000/pdp-11/analysis/2015/12/21/analysis-of-the-pdp-11-bootstrap-loader-code.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Analysis of the PDP-11 bootstrap loader code</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2015-12-21T16:34:00-06:00" itemprop="datePublished">
+        Dec 21, 2015
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This note describes, in detail, how the bootstrap loader code operates. While it is only 14 words, it is not trivial to understand. The bootstrap loader is self-modifying code</p>
+
+<p>The note is a work in progress. It begins by describing the first iteration where the loader loads a single byte from the tape reader. In this case the byte is octal 351, which is the first byte of the absolute loader and is the tape leader byte. Octal 351, when read by the bootstrap loader has the effect of causing the boot strap loader to overwrite a portion of itself that results in no change to its memory contents. Any other value, when read will cause the bootstrap loader to begin copying bytes into a memory location prior to the bootstrap loader itself and continuing to copy bytes until the bootstrap loader overwrites itself with the contents of the loaded program. Programs that are bootstrap loader programs contain a footer that restores they original bytes of the bootstrap loader except for the starting location.</p>
+
+<!--more-->
+
+<p>The language I use below needs further refinement, but it should adequately explain what’s going on to the reader.</p>
+
+<p>Numbers are in octal unless otherwise specified. That is, 6 + 2 = 10. The program counter is normally incremented by 2 after the CPU reads each word. When an instruction has an operand or when both of its operands refer to register 7, the PC register, the PC itself is incremented for each operand that refers to it. This means that if the source operand uses the PC, PC is incremented 2 as the next word is decoded, and if the destination uses the PC, PC is incremented another 2 as the next word is decoded.</p>
+
+<p>To get started, this how the analysis will proceed, using a nonsense bit of code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1  10000  012703          MOV 201,R3
+ 2  10002  000201
+ 3  10004  012767          MOV (PC)+,PLACE
+ 4  10006  000033
+ 5  10010  000002
+ 6  10012  000000          HALT 
+ 7  10014  000000  PLACE:  .WORD 000000
+</code></pre></div></div>
+
+<p>Lines 1-2</p>
+
+<p>The PC starts at 10000 and the CPU reads in the instruction at location 10000.</p>
+
+<p>012703 decodes into:</p>
+
+<blockquote>
+  <p>01 is the double operand MOV instruction</p>
+
+  <p>27 specifies that the source operand is located immediately following the current PC.
+03 is the destination register, R3</p>
+
+  <p>000201 is the immediate source operand</p>
+</blockquote>
+
+<p>Therefore, lines 1-2 move the value 201 into R3.</p>
+
+<p>I will not describe the rest of the program above at this time. However, I will describe how the PC is incremented in additional detail using the above code. As the CPU reads the program from memory, it automatically increments the PC. When it reads a word, it increments the PC by 2, when it reads a byte, it increments it by 1. In the program above the process looks like this:</p>
+
+<blockquote>
+  <p>PC-&gt;10000 - The CPU starts with the PC set to 10000, the beginning of the program. It reads 012703 and decodes the instruction. The PC is incremented by 2.</p>
+
+  <p>PC-&gt;10002 - The CPU reads the source operand 000201 and puts it into the destination. The PC is incremented by 2.</p>
+
+  <p>PC-&gt;10004 - The CPU reads 012767 and decodes the instruction MOV (PC)+, PLACE. The PC is incremented by 2.</p>
+
+  <p>PC-&gt;10006 - The CPU reads the source operand 000033. The PC is incremented by 2.</p>
+
+  <p>PC-&gt;10010 - The CPU reads the PC relative offset 000002. The PC is incremented. The CPU adds the offset to the updated PC, and puts the source into the memory location that is found (10012 + 4 = 10014 aka PLACE:).</p>
+
+  <p>PC-&gt;10012 - The CPU reads 000000 and decodes the instruction HALT. The PC is incremented by 2. The CPU halts.</p>
+
+  <p>PC-&gt;10014</p>
+</blockquote>
+
+<p>In the following discussion, the PC is mentioned, but not described in this level of detail. Keep in mind that anytime an operand is relative to the PC, that the value of the PC will have already been incremented as the operand is read. So, any math will need to be performed against the new value.</p>
+
+<p>Let’s begin the analysis of the bootstrap loader.</p>
+
+<p>Here is the raw source of the bootstrap loader configured for an 8K word machine:</p>
+
+<p>``
+016701
+000026
+012702
+000352
+005211
+105711
+100376
+116162
+000002
+037400
+005267
+177756
+000765
+177550</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+Here are the bytes of the Absolute Loader, a very useful program that comes on paper tape that is useful for loading programs that are punched to tape in absolute loader format. This is the program that will serve as the source for the following analysis. It is the file being read from paper tape by the bootstrap loader:
+
+</code></pre></div></div>
+<p>od -b DEC-11-L2PC-PO.ptap
+0000000   351 351 351 075 000 000 306 021 246 051 305 021 305 145 112 000
+0000020   001 012 316 027 170 377 016 014 002 207 016 012 003 001 316 014
+0000040   001 002 116 020 000 012 315 011 303 212 374 002 315 011 367 011
+0000060   074 000 002 021 302 345 004 000 302 045 002 000 041 003 367 011
+0000100   054 000 204 143 001 021 315 011 004 004 300 213 353 003 000 000
+0000120   351 001 321 220 370 001 303 035 152 000 213 212 313 213 376 200
+0000140   303 234 002 000 300 140 303 105 000 377 302 012 207 000 267 025
+0000160   046 000 315 011 304 020 315 011 303 000 304 120 307 035 030 000
+0000200   367 011 352 377 315 011 300 213 342 002 204 014 002 206 000 000
+0000220   300 001 304 014 204 143 114 000 000 000 367 025 352 000 020 000
+0000240   367 025 365 001 034 000 167 000 132 377 301 035 026 000 302 025
+0000260   373 353 000 000 000 000 000
+0000267</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+Here is the source of the bootstrap loader configured for an 8K word machine, as it might appear in memory along with some helpful line numbers, labels, and assembly instructions:
+
+</code></pre></div></div>
+<p>1  037744  016701  START:       MOV CSR,R1
+ 2  037746  000026
+ 3  037750  012702  LOOP:        MOV (PC)+,R2
+ 4  037752  000352  PTR:         .WORD 352
+ 5  037754  005211               INC (R1)
+ 6  037756  105711  WAIT:        TSTB (R1)
+ 7  037760  100376               BPL WAIT
+ 8  037762  116162               MOVB 2(R1),37400(R2)
+ 9  037764  000002
+10  037766  037400
+11  037770  005267               INC PTR
+12  037772  177756
+13  037774  000765  BRNCH:       BR LOOP
+14  037776  177550  CSR:         .WORD 177550</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+This section of the analysis will iterate once through the main program loop, reading a single byte from the source tape, a 351, which is a leader byte, from the tape device.
+
+Lines 1-2
+
+Memory location 037744 is labeled START: and is where the bootstrap program is loaded into memory (in this example)
+016701 disassembles as follows:
+&gt; 01 is a double operand MOV instruction
+&gt; 
+&gt; 67 specifies that the source is given relative to the updated PC
+&gt;
+&gt; 01 is the destination register, R1
+&gt; 
+&gt; 000026 is the octal offset added to the PC to obtain the source address.
+&gt; 
+&gt; 037750 = 037776, which is the memory location labeled CSR: Memory location CSR: contains 177550, which is the location of the Paper Tape Reader(PTR) status register
+
+Therefore, lines 1-2 move the address of the PTR status register into R1
+
+Lines 3-4
+
+Memory location 037750 is labeled LOOP: and is the top of the program loop
+
+Memory location 037752 is labeled PTR: and contains the offset to the location where read bytes are to be loaded
+
+012702 disassembles as follows:
+
+&gt; 01 is a double operand MOV instruction
+&gt;
+&gt; 27 specifies that the source is given immediately following the current instruction
+&gt; 
+&gt; 02 is the destination register, R2
+&gt; 
+&gt; 000352 is the immediate operand being stored in R2
+
+Therefore, lines 3-4 move octal 000352 into R2
+
+Line 5
+
+005211 disassembles as follows:
+
+&gt; 0052 is the single operand INC instruction
+&gt; 
+&gt; 11 specifies the destination is located at the address contained in R1
+&gt; 
+&gt; R1 contains the address of the PTR status register
+
+Therefore, line 5 increments the PTR status register. This causes the PTR to begin reading bytes.
+
+Line 6
+
+Memory location 037756 is labeled WAIT: and is the top of a wait for data from the PTR loop
+
+105711 disassembles as follows:
+
+&gt; 1057 is the single operand TSTB instruction
+&gt;
+&gt; 11 specifies the destination is located at the address contained in R1
+&gt; 
+&gt; R1 contains the address of the PTR status register
+&gt; 
+&gt; TSTB tests the PTR status register low byte and sets the N(egative) or Z(ero) flags based on the contents of the PTR status register, it also clears V and C (overflow and carry) flags.
+&gt; 
+&gt; The PTR status register bit 0 is the read bit, already set by the previous operation.
+&gt; 
+&gt; The PTR status register bit 7 is the done bit, it will be set by the reader when it has transferred a byte from tape into the data register.
+
+Therefore, line 6 tests the contents of the PTR status register and sets the N flag when done is detected and data is ready to be transferred from the PTR data register.
+
+Line 7
+
+100376 disassembles as follows:
+
+&gt; 1000 specifies the BPL instruction
+&gt; 
+&gt; 376 specifies the offset to branch to
+
+This instruction requires additional explanation... The high 8 bits are the OP code, the low 8 bits are an offset. In this case, 376 is 11111110 in binary. This is a negative number. To convert it into a useable number, take the one's compliment and add one to the result. The one's complement can be obtained by switching all 1's for 0's and all 0's for 1's. The process is:
+
+</code></pre></div></div>
+<p>3   7   6 - original octal offset
+ 11 111 110 - binary equivalent
+ 00 000 001 - one’s complement
+          1 - add one
+———–
+ 00 000 010 - binary result
+         -2 - negative offset in octal</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The BPL instruction causes a branch to offset + new PC (PC+2) if the N flag's cleared.
+
+Therefore, line 7 branches to location 037760 - 2 = 037756 (which is memory location WAIT:, Line 6) if the N flag is cleared, otherwise, it continues to Line 8. The N flag is cleared when a byte has been read from the PTR into the PTR data register.
+
+Line 8-10
+
+116162 disassembles as follows:
+
+&gt; 11 is the double operand MOVB instruction
+&gt;
+&gt; 61 specifies that the address of the operand is obtained by adding the next word as an offset to  R1
+&gt; 
+&gt; 62 specifies that the address of the operand is obtained by adding the next word after the source word as an offset to R2
+&gt; 
+&gt; R1 contains the address of the PTR status register
+&gt; 
+&gt; R2 contains 000352
+&gt; 
+&gt; 000002 is the R1 offset, the source is located at 177550 + 2, which is the PTR data register
+&gt; 
+&gt; 037400 is the R2 offset, the destination is located at 037400+000352 = 037752, which is PTR:
+
+Therefore, lines 8-10 move a byte from the PTR data register into the memory location PTR:. In the case of the absolute loader, the first byte is 351. This is a byte representing the tape leader.
+
+Lines 11-12
+
+005267 disassembles as follows
+
+&gt; 0052 is the single operand INC instruction
+&gt; 
+&gt; 67 specifies The address of the destination operand is relative to the updated PC
+&gt; 177756 is the destination operand. It happens to be a negative number in two's complement representation. Adding it to the PC is accomplished as follows:
+
+</code></pre></div></div>
+<p>1 111 111 111 101 110 177756 (Offset)</p>
+<ul>
+  <li>
+    <h2 id="0-011-111-111-111-100-037774-updated-pc">0 011 111 111 111 100 037774 (Updated PC)</h2>
+    <p>0 011 111 111 101 010 037752
+```</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>037752 is the memory location labeled PTR:</p>
+</blockquote>
+
+<p>Therefore, lines 11-12 increment PTR, which in the case of the first iteration, contains the tape leader byte, 351, which after incrementation becomes 352 (the original contents of memory location PTR).</p>
+
+<p>Line 13</p>
+
+<p>000765 disassembles as follows</p>
+
+<blockquote>
+  <p>0001 is the unconditional BR instruction (high eight bits of the word)</p>
+
+  <p>365 is the offset, actually (2 * Offset), to branch to relative to the updated PC (low eight bits). That is, the high 8 bits are the OP code, the low 8 bits are an offset. In this case, the offset 365 is a negative offset represented in two’s complement. To add the offset to the updated PC, the offset byte is sign extended to 16 bits and multiplied by 2, shifting it left once, then it is added directly to the updated PC:</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  3   6   5 - original octal offset
+ 11 110 101 - binary equivalent
+ 00 001 010 - one's complement
+          1 - add one
+-----------
+ 00 001 011 - binary result
+     -1   3 - negative offset in octal
+
+ 1 111 111 111 101 010 - 365 sign extended and shifted left 
+ 0 011 111 111 111 110 - 037776, the updated PC
+ ---------------------
+ 0 011 111 111 101 000 - 037750
+</code></pre></div></div>
+
+<blockquote>
+  <p>037750 is the memory location labeled LOOP:</p>
+</blockquote>
+
+<p>Therefore line 13 branches unconditionally to the top of the loop, LOOP:.</p>
+
+<p>Line 14</p>
+
+<p>Line 14 is not executed. It contains the address of the PTR status register.</p>
+
+<p>After a single pass through the program, reading octal 351, the program has modified itself, but only to its original state (moved 351 into PTR and incremented back to 352). However, as soon as the program reads a byte other than 351, everything changes.</p>
+
+<p>The next byte read from the absolute boot loader tape is 351, then 351, then 075! When the PTR becomes 075 and is incremented after line 11, the code in memory, looks like this and branches to line 3 the top of the loop:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1  037744  016701  START:       MOV CSR,R1
+ 2  037746  000026
+ 3  037750  012702  LOOP:        MOV (PC)+,R2
+ 4  037752  000076  PTR:         .WORD 76
+ 5  037754  005211               INC (R1)
+ 6  037756  105711  WAIT:        TSTB (R1)
+ 7  037760  100376               BPL WAIT
+ 8  037762  116162               MOVB 2(R1),37400(R2)
+ 9  037764  000002
+10  037766  037400
+11  037770  005267               INC PTR
+12  037772  177756
+13  037774  000765  BRNCH:       BR LOOP
+14  037776  177550  CSR:         .WORD 177550
+</code></pre></div></div>
+
+<p>The following is a condensed analysis of the process that unfolds once a value other than 351 is read from the paper tape:</p>
+
+<blockquote>
+  <p>lines 3-4: the new displacement, 000076, is stored in R2</p>
+
+  <p>lines 5-7: wait loop until another data byte is read and available in the PTR data register</p>
+
+  <p>lines 8-10: store the read byte into the memory location referenced by 037400 + the new displacement, 000076</p>
+
+  <p>lines 11-12: increment the displacement to 000077, etc.</p>
+
+  <p>line 13: branch to line 3</p>
+</blockquote>
+
+<p>The program continues to load consecutive bytes into memory beginning with the incremented displacement (076) read from tape. The absolute loader consists of 166(10) or 246(8) bytes of data following the 075 byte. This is followed by an 8 byte footer that overlays the bootstrap loader and provides a new jump offset . Doing the math, this means that memory locations 037476-037744 are filled byte by byte from the bytes read from tape.</p>
+
+<p>The footer is read and processed in a rather interesting way. The first two instructions overlay the bootstrap loader:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>016701
+000026
+012702
+</code></pre></div></div>
+
+<p>But then the lower byte of the displacement is modified to become 373, is incremented and added to 037400, giving 037474, and becomes the target of the next byte, 353. This results in the bootstrap loader at this point appearing as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1  037744  016701  START:       MOV CSR,R1
+ 2  037746  000026
+ 3  037750  012702  LOOP:        MOV (PC)+,R2
+ 4  037752  000373  PTR:         .WORD 373
+ 5  037754  005211               INC (R1)
+ 6  037756  105711  WAIT:        TSTB (R1)
+ 7  037760  100376               BPL WAIT
+ 8  037762  116162               MOVB 2(R1),37400(R2)
+ 9  037764  000002
+10  037766  037400
+11  037770  005267               INC PTR
+12  037772  177756
+13  037774  000753  BRNCH:       BR LOOP
+14  037776  177550  CSR:         .WORD 177550
+</code></pre></div></div>
+
+<p>Line 13 is executed resulting in an unconditional branch to PC+2 + (2*Offset, 353):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  1 111 111 111 010 110 - 353 sign extended and shifted left
++ 0 011 111 111 111 110 - 037776 the updated PC
+ -----------------------
+  0 011 111 111 010 100 - 037724
+</code></pre></div></div>
+<p>The memory locations 037724-037742 (instruction just prior to the bootstrap loader contains the following, I’ve added line numbers and assembly to suit:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1  037724  012767  MOV 352,20(PC)
+ 2  037726  000352
+ 3  037730  000020
+ 4  037732  012767  MOV 765,34(PC)
+ 5  037734  000765
+ 6  037736  000034
+ 7  037740  000167  JMP 177532
+ 8  037742  177532
+</code></pre></div></div>
+
+<blockquote>
+  <p>Lines 1-3 move 352 into memory location 037732 + 20, 037752, which is labeled PTR: This restores PTR to its original value of 352.</p>
+
+  <p>Lines 4-6 move 765 into memory location 037740 + 34, 037774, which is the byte containing the BR offset. This restores the BR offset to its original value of 765.</p>
+</blockquote>
+
+<p>At this point, the bootstrap loader code has been fully restored.</p>
+
+<blockquote>
+  <p>Lines 7-8 jump the CPU to the location obtained by adding the updated PC to 177532. 177532 is a negative offset that will be added to 37744</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   1 111 111 101 011 010 - 177532
+ + 0 011 111 111 100 100 - 37744
+ -----------------------
+   0 011 111 100 111 110 - 37476
+</code></pre></div></div>
+
+<p>The contents of 37476 are:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ex 37476
+ 1  37476:    000000  HALT
+</code></pre></div></div>
+
+<p>The bootstrap loader stops and is ready to execute the instruction loaded at 37500, which is the first instrurction of the absolute loader.</p>
+
+<p>The analysis of the operation of the absolute loader is left for another day.</p>
+
+<p><em>post added 2022-11-30 12:29:00 -0600</em></p>
+
+  </div><a class="u-url" href="/pdp-11/analysis/2015/12/21/analysis-of-the-pdp-11-bootstrap-loader-code.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

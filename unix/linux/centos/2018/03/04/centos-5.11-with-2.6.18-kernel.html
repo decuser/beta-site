@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Installing Centos 5.11 with 2.6.18-kernel | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Installing Centos 5.11 with 2.6.18-kernel" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A note describing the process of installing Centos 5.11 with 2.6.18-kernel in order to be able to work along with Kroah-Hartman’s 2007 book, Linux Kernel in a Nutshell, in the modern era." />
+<meta property="og:description" content="A note describing the process of installing Centos 5.11 with 2.6.18-kernel in order to be able to work along with Kroah-Hartman’s 2007 book, Linux Kernel in a Nutshell, in the modern era." />
+<link rel="canonical" href="http://localhost:4000/unix/linux/centos/2018/03/04/centos-5.11-with-2.6.18-kernel.html" />
+<meta property="og:url" content="http://localhost:4000/unix/linux/centos/2018/03/04/centos-5.11-with-2.6.18-kernel.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-03-04T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Installing Centos 5.11 with 2.6.18-kernel" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2018-03-04T00:00:00-06:00","datePublished":"2018-03-04T00:00:00-06:00","description":"A note describing the process of installing Centos 5.11 with 2.6.18-kernel in order to be able to work along with Kroah-Hartman’s 2007 book, Linux Kernel in a Nutshell, in the modern era.","headline":"Installing Centos 5.11 with 2.6.18-kernel","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/unix/linux/centos/2018/03/04/centos-5.11-with-2.6.18-kernel.html"},"url":"http://localhost:4000/unix/linux/centos/2018/03/04/centos-5.11-with-2.6.18-kernel.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Installing Centos 5.11 with 2.6.18-kernel</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2018-03-04T00:00:00-06:00" itemprop="datePublished">
+        Mar 4, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>A note describing the process of installing Centos 5.11 with 2.6.18-kernel in order to be able to work along with Kroah-Hartman’s 2007 book, Linux Kernel in a Nutshell, in the modern era.
+<!--more--></p>
+
+<p>created 20180303.2024</p>
+
+<h2 id="overview">Overview</h2>
+
+<p>The purpose of installing this system is to have a system capable of working through Kroah-Hartman’s 2007 book, Linux Kernel in a Nutshell. In the book, the author describes the 2.6.18 kernel. The system described below is suitable for working with the 2.6.18 kernel as described in Kroah-Hartman.</p>
+
+<h2 id="system-information">System information</h2>
+
+<p>MacBook Pro (15-inch, Mid 2012):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Processor 2.6 GHz Intel Core i7 - 4 cores
+Memory 16 GB 1600 MHz DDR3
+Mac OS High Sierra 10.13.3
+Darwin giar 17.4.0 Darwin Kernel Version 17.4.0: Sun Dec 17 09:19:54 PST 2017; root:xnu-4570.41.2~1/RELEASE_X86_64 x86_64
+VirtualBox 5.2.8-121009
+</code></pre></div></div>
+
+<p>Guest OS:</p>
+
+<p><code class="language-plaintext highlighter-rouge">Centos 5.11 32 bit</code></p>
+
+<h2 id="references">References</h2>
+
+<p>Kroah-Hartman, G. (2007). Linux Kernel in a Nutshell. Sebastopol, CA: O’Reilly Media, Inc.</p>
+
+<h2 id="resources">Resources</h2>
+
+<p>I need the kernel source (2.6.18): <a href="https://web.archive.org/web/20080613161831/http://wiki.centos.org:80/HowTos/I_need_the_Kernel_Source">https://web.archive.org/web/20080613161831/http://wiki.centos.org:80/HowTos/I_need_the_Kernel_Source</a></p>
+
+<p>How To Compile A Kernel - The CentOS Way: <a href="https://www.howtoforge.com/kernel_compilation_centos">https://www.howtoforge.com/kernel_compilation_centos</a></p>
+
+<p>I need to build a custom kernel (2.6.18): <a href="https://web.archive.org/web/20080613161831/http://wiki.centos.org:80/HowTos/Custom_Kernel">https://web.archive.org/web/20080613161831/http://wiki.centos.org:80/HowTos/Custom_Kernel</a></p>
+
+<p>Kernel/Configuration: <a href="https://web.archive.org/web/20190121022143/https://wiki.gentoo.org/wiki/Kernel/Configuration">https://web.archive.org/web/20190121022143/https://wiki.gentoo.org/wiki/Kernel/Configuration</a></p>
+
+<h2 id="download-and-verify-media-move-to-storage">Download and verify media, move to storage</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir ~/kroah-hartman
+cd ~/kroah-hartman
+
+curl -O https://ftp.iij.ad.jp/pub/linux/centos-vault/5.11/isos/i386/CentOS-5.11-i386-bin-DVD-1of2.iso
+curl -O https://ftp.iij.ad.jp/pub/linux/centos-vault/5.11/isos/i386/sha256sum.txt.asc
+curl -O https://ftp.iij.ad.jp/pub/linux/centos-vault/RPM-GPG-KEY-CentOS-5
+gpg --import RPM-GPG-KEY-CentOS-5
+
+gpg --verify sha256sum.txt.asc
+...
+gpg: Good signature from "CentOS-5 Key (CentOS 5 Official Signing Key) &lt;centos-5-key@centos.org&gt;" [expired]
+...
+
+cat sha256sum.txt.asc
+...
+4e67b34accc12ff6176b7ccbb3eeadcdd042f06d360d9cd940e0d77373724930  CentOS-5.11-i386-bin-1of8.iso
+...
+
+openssl sha256 CentOS-5.11-i386-bin-DVD-1of2.iso
+SHA256(CentOS-5.11-i386-bin-1of8.iso)= 4e67b34accc12ff6176b7ccbb3eeadcdd042f06d360d9cd940e0d77373724930
+
+mkdir -p ~/_workarea/_CD_DVD/_iso/centos/5.11
+mv ./* ~/_workarea/_CD_DVD/_iso/centos/5.11/
+cd
+</code></pre></div></div>
+
+<h2 id="create-a-centos-instance-in-virtual-box">Create a Centos Instance in Virtual Box</h2>
+
+<h3 id="create-a-new-virtualbox-vm-instance">Create a New VirtualBox VM Instance</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Name: ﻿centos511
+Version: Red Hat (32-bit)
+Memory: 4096MB
+HDD: 20GB
+System-Motherboard-Extended Features-Enable I/O APIC
+System-Processor-Processors 4
+Storage Devices
+  Remove Controller: SATA
+  Add Existing Hard Disk to Controller:IDE
+Add iso to Empty CD
+Network Advanced - Port Forwarding - SSH 3335 22
+</code></pre></div></div>
+
+<h3 id="install-in-the-vm">Install in the VM</h3>
+
+<p>Boot VM</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Press Enter to Install or upgrade an existing system
+Press Enter twice to Test the media
+Press Enter to accept success :)
+Reattach the iso (it has been ejected)
+Press Enter to continue
+Press Tab to select Continue and Press Enter
+Click Next in the Graphic Installer to begin the Graphical Installation Process
+Click Next to accept English as the Installer Language
+Click Next to accept US English as the keyboard mapping
+Click Yes to initialize sda
+Click Next to allow partitioning
+Click Yes to remove all partitions
+Enter centos511.sentech.home as the Hostname and then click Next
+Choose America/Chicago and Click Next
+Enter and confirm a root password and click Next
+Deselect Gnome and Select Sever, click Customize now, and Click Next
+Deselect all packages in all categories except for the Base Package Click Next
+Click Next to begin the install
+Click Reboot
+Eject the iso and halt
+</code></pre></div></div>
+
+<p>snapshot installed in vbox</p>
+
+<h3 id="create-a-user-with-wheel-privileges">Create a user with wheel privileges</h3>
+
+<p>start VM</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Pass on Setup screen
+
+adduser -m -G wheel wsenn
+passwd wsenn
+visudo
+uncomment wheel login
+
+halt
+</code></pre></div></div>
+
+<p>snapshot baseline</p>
+
+<h3 id="make-vm-headless-and-prep-for-ssh-from-host">Make VM headless and prep for ssh from host</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list vms
+...
+"centos511" {someuuid}
+...
+
+VBoxManage modifyvm "centos511" --defaultfrontend headless
+</code></pre></div></div>
+
+<p>start VM</p>
+
+<p>from host</p>
+
+<p><code class="language-plaintext highlighter-rouge">ssh-copy-id localhost -p 3335</code></p>
+
+<h3 id="update-centos">Update Centos</h3>
+
+<p>start VM</p>
+
+<p><code class="language-plaintext highlighter-rouge">ssh localhost -p 3335</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uname -a
+Linux centos69.sentech.home 2.6.32-696.el6.i686 #1 SMP Tue Mar 21 18:53:30 UTC 2017 i686 i686 i386 GNU/Linux
+
+sudo -s
+cat &gt; /etc/yum.repos.d/CentOS-Base.repo &lt;&lt;EOF
+
+# CentOS-Base.repo
+#
+# The mirror system uses the connecting IP address of the client and the
+# update status of each mirror to pick mirrors that are updated to and
+# geographically close to the client.  You should use this for CentOS updates
+# unless you are manually picking other mirrors.
+#
+# If the mirrorlist= does not work for you, as a fall back you can try the 
+# remarked out baseurl= line instead.
+#
+#
+
+[base]
+name=CentOS-$releasever - Base
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=os
+#baseurl=http://mirror.centos.org/centos/$releasever/os/$basearch/
+baseurl=http://vault.centos.org/5.11/os/i386/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5
+
+#released updates 
+[updates]
+name=CentOS-$releasever - Updates
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=updates
+#baseurl=http://mirror.centos.org/centos/$releasever/updates/$basearch/
+baseurl=http://vault.centos.org/5.11/updates/i386/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5
+
+#additional packages that may be useful
+[extras]
+name=CentOS-$releasever - Extras
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=extras
+#baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
+baseurl=http://vault.centos.org/5.11/extras/i386/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5
+
+#additional packages that extend functionality of existing packages
+[centosplus]
+name=CentOS-$releasever - Plus
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=centosplus
+#baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/
+baseurl=http://vault.centos.org/5.11/centosplus/i386/
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5
+
+#contrib - packages by Centos Users
+[contrib]
+name=CentOS-$releasever - Contrib
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=contrib
+#baseurl=http://mirror.centos.org/centos/$releasever/contrib/$basearch/
+baseurl=http://vault.centos.org/5.11/contrib/i386/
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5
+EOF
+
+exit
+
+sudo yum update
+
+1 install, 43 upgrade, 83MB
+
+sudo halt
+</code></pre></div></div>
+
+<p>snapshot updated</p>
+
+<h3 id="install-the-developer-tools">Install the developer tools</h3>
+
+<p>Start the VM back up</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uname -a
+Linux centos511.sentech.home 2.6.18-419.el5PAE #1 SMP Fri Feb 24 22:09:08 UTC 2017 i686 i686 i386 GNU/Linux
+
+sudo yum groupinstall 'Development Tools'
+
+111 install, 92MB
+
+sudo yum install audit-libs-devel binutils-devel elfutils-devel elfutils-libelf-devel ncurses-devel newt-devel python-devel xmlto zlib-devel
+
+33 install, 71MB
+
+sudo halt
+</code></pre></div></div>
+
+<p>snapshot devtools</p>
+
+<p>start VM</p>
+
+<p>find the current source https://ftp.iij.ad.jp/pub/linux/centos-vault/5.11/updates/SRPMS/</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+echo '%_topdir %(echo $HOME)/rpmbuild' &gt; ~/.rpmmacros
+
+wget https://ftp.iij.ad.jp/pub/linux/centos-vault/5.11/updates/SRPMS/kernel-2.6.18-419.el5.src.rpm
+rpm -ivh kernel-2.6.18-419.el5.src.rpm
+
+This can take a few minutes depending on the download speed
+
+cd ~/rpmbuild/SPECS
+rpmbuild -bp --target=$(uname -m) kernel.spec
+ls ~/rpmbuild/BUILD/kernel*/linux*/ 
+
+sudo halt
+</code></pre></div></div>
+
+<p>snapshot centos-kernel-sources</p>
+
+<h3 id="install-and-build-the-2618-stock-kernel">Install and Build the 2.6.18 Stock Kernel</h3>
+
+<p>start the vm</p>
+
+<p>login as wsenn</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --keyserver pgp.surfnet.nl --recv-keys C4790F9D
+
+mkdir ~/Downloads
+cd ~/Downloads
+wget http://cdn.kernel.org/pub/linux/kernel/v2.6/linux-2.6.18.tar.xz
+wget http://cdn.kernel.org/pub/linux/kernel/v2.6/linux-2.6.18.tar.sign
+
+mkdir ~/linux
+cd ~/linux
+cp ~/Downloads/linux-* .
+unxz linux-2.6.18.tar.xz
+
+gpg --verify linux-2.6.18.tar.sign linux-2.6.18.tar
+...
+gpg: Good signature from "Linux Kernel Archives Verification Key (One-off resigning of old releases) &lt;ftpadmin@kernel.org&gt;"
+...
+
+tar xvf linux-2.6.18.tar 
+cd linux-2.6.18
+make clean &amp;&amp; make mrproper
+
+cp ~/rpmbuild/SOURCES/kernel-2.6.18-i686-PAE.config .
+make oldconfig
+</code></pre></div></div>
+
+<p>take the 9 or so defaults (keep hitting enter)</p>
+
+<p><code class="language-plaintext highlighter-rouge">time make -j8</code></p>
+
+<p>Results on MacBook:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>real	4m40.994s
+user	14m32.233s
+sys	2m43.542s
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo make modules_install
+sudo make install
+
+ignoring:
+WARNING: No module ahci found for kernel 2.6.18, continuing anyway
+WARNING: No module ata_piix found for kernel 2.6.18, continuing anyway
+WARNING: No module ahci found for kernel 2.6.18, continuing anyway
+
+sudo reboot (make sure you're seeing the console as you will need to select the kernel to boot from - click Show in VirtualBox while booting)
+
+uname -a
+Linux centos511.sentech.home 2.6.18 #1 SMP Sun Mar 4 19:17:33 CST 2018 i686 i686 i386 GNU/Linux
+
+sudo vi /boot/grub/menu.lst
+change to
+default=0
+
+sudo halt
+</code></pre></div></div>
+
+<p>snapshot running-2.6.18</p>
+
+<p>Celebrate - you are ready to begin kernel hackery.</p>
+
+<p>Export and save an appliance</p>
+
+<p><em>post added 2022-12-01 16:55:00 -0600</em></p>
+
+  </div><a class="u-url" href="/unix/linux/centos/2018/03/04/centos-5.11-with-2.6.18-kernel.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

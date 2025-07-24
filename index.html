@@ -1,3 +1,236 @@
-<html>
- <body><h1>Beta site html</h1></body>
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>decuser’s blog | decuser’s technical explorations and adventures in retro-computing, unix, and programming.</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="decuser’s blog" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="decuser’s technical explorations and adventures in retro-computing, unix, and programming." />
+<meta property="og:description" content="decuser’s technical explorations and adventures in retro-computing, unix, and programming." />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="website" />
+<link rel="next" href="http://localhost:4000/page2" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="decuser’s blog" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Person","name":"decuser"},"description":"decuser’s technical explorations and adventures in retro-computing, unix, and programming.","headline":"decuser’s blog","name":"decuser’s blog","url":"http://localhost:4000/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="home"><script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+
+<h1 class="page-heading"></h1><p><img src="/assets/img/banner.png" alt="A Repository of Mostly Techie Notes" /></p>
+
+<h1 id="welcome-to-decusers-blog">Welcome to decuser’s blog</h1>
+<p>Topics on this blog include computing, retro-computing, operating systems, math, and whatever other technical subjects I happen to be exploring that I find interesting enough to take and share notes about.</p>
+<!-- Html Elements for Search -->
+<h2 class="post-list-heading">Posts</h2>
+<div id="search-container">
+<input type="text" id="search-input" placeholder="search...">
+<ul id="results-container"></ul>
+</div>
+
+<!-- Script pointing to search-script.js -->
+<script src="/assets/js/simple-jekyll-search.min.js" type="text/javascript"></script>
+
+<!-- Configuration -->
+<script>
+SimpleJekyllSearch({
+  searchInput: document.getElementById('search-input'),
+  resultsContainer: document.getElementById('results-container'),
+  json: '/search.json'
+})
+</script>
+
+
+
+
+  <ul class="post-list"><li>
+        <span class="post-meta">Aug 16, 2024</span>
+        <h3>
+          <a class="post-link" href="/unix/2024/08/16/thunderbird-hangs-indexing.html">
+            Fix for Thunderbird hangs while indexing messages
+          </a>
+        </h3><p>This note describes a method for fixing Thunderbird when it hangs while indexing.</p>
+
+<p>I’m posting this in case it’s useful to folks and for my own reference. It took me a quite a while to figure it out.</p>
+
+<p>So you have been using Thunderbird for your email for a while, on Windows, Linux, Mac, FreeBSD, and so on, for let’s say a couple of decades. If you copy your profile around much, you are bound to hit an indexing issue where Thunderbird is unable to index your archives. You open up Activity Manager and it helpfully reports:</p>
+
+<p>Indexing 32 of 14243 messages in Archives/2002-2020/2016</p>
+
+<p>Read on for the fix.</p>
+
+</li><li>
+        <span class="post-meta">May 23, 2024</span>
+        <h3>
+          <a class="post-link" href="/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2.html">
+            Research Unix Version 7 - 3.2
+          </a>
+        </h3><p>This is an updated note that covers building a working v7 instance from tape files that will run in the OpenSImH emulator. First, the reader is led through the restoration of a pristine v7 instance from tape to disk. Next, the reader is led through adding a regular user and making the system multi-user capable. Then, the reader is shown how to make the system multi-session cable to allow multiple simultaneous sessions. Finally, the system is put to use with hello world, DMR style, and the learn system is enabled.</p>
+
+<p>The note explains each step of the process in detail.</p>
+
+</li><li>
+        <span class="post-meta">Dec 19, 2023</span>
+        <h3>
+          <a class="post-link" href="/geometry/2023/12/19/wills-geometry.html">
+            Will&#39;s Geometry - A Setting Out.
+          </a>
+        </h3><p>This is a note where I begin to develop my own geometry based on the example of Euclid, but with an eye towards addressing its shortcomings - what hubris?! But seriously, I’m pretty sure my geometry will pale in comparison. The purpose of the exploration is not to show off, but to learn more about the world and in this regard, will be interesting and educational.</p>
+
+</li><li>
+        <span class="post-meta">Dec 19, 2023</span>
+        <h3>
+          <a class="post-link" href="/geometry/2023/12/19/geometry-explorations.html">
+            Geometry Explorations
+          </a>
+        </h3><p>This note sets up a series of related notes pertaining to my explorations in Geometry and by extension, Maths.</p>
+
+<p>The explorations are my work in trying to make sense of the world through math. They are presented here, in part, to motivate me to express my thoughts in a more organized fashion than I might otherwise, and in part to share in the hopes that some small few might benefit or wish to chat about things.</p>
+
+<p>So, enjoy and if you do, feel free to email me about it.</p>
+
+</li><li>
+        <span class="post-meta">Jul 31, 2023</span>
+        <h3>
+          <a class="post-link" href="/lisp/2023/07/31/maclisp.html">
+            MACLISP in ITS running on an emulated PDP-10
+          </a>
+        </h3><p>This is a longer note that describes the process of getting ITS (Incompatible Timesharing System) up and running in order to run MACLISP. ITS is quite a large system and it has many different programming languages and programs available. In this note, we will only be using lisp and emacs, but future notes will explore logo, and perhaps other languages found in the distribution.</p>
+
+<p><img src="/assets/img/lisp/Terminal_006.png" alt="one" /></p>
+
+</li><li>
+        <span class="post-meta">Jul 31, 2023</span>
+        <h3>
+          <a class="post-link" href="/lisp/2023/07/31/franz-lisp.html">
+            Franz LISP Opus 32 in 3BSD running on an emulated VAX 780
+          </a>
+        </h3><p>This note describes how to set up and run Franz LISP Opus 32 running on 3BSD running on an emulated VAX 780. This version of Franz LISP is Opus 32 and it is a LISP 1.5 derived LISP from 1979.</p>
+
+<p><img src="/assets/img/lisp/Terminal_004.png" alt="one" /></p>
+
+</li><li>
+        <span class="post-meta">Jul 30, 2023</span>
+        <h3>
+          <a class="post-link" href="/lisp/2023/07/30/pdp-1-lisp.html">
+            pdp1-lisp running on an emulated PDP-1
+          </a>
+        </h3><p>This note describes how to set up and run PDP-1 lisp. It’s a pretty brief walkthrough. If you run into any issues, let me know.</p>
+
+<p><img src="/assets/img/lisp/Terminal_003.png" alt="one" /></p>
+
+</li><li>
+        <span class="post-meta">Jul 24, 2023</span>
+        <h3>
+          <a class="post-link" href="/lisp/2023/07/24/pike-lisp-1.5-in-go.html">
+            Rob Pike&#39;s LISP 1.5 in Go running on Debian 12
+          </a>
+        </h3><p>This note describes how to set up and run Rob Pike’s LISP 1.5 in Go.</p>
+
+<p>LISP 1.5 was the first LISP that was made generally available. Rob Pike implemented a minimalist version of the EVALQUOTE function described on page 13 of the LISP 1.5 Programmer’s Manual <a href="https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf">https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf</a> or grab a <a href="/assets/files/lisp/LISP%201.5%20Programmers%20Manual.pdf">local copy</a></p>
+
+<p><img src="/assets/img/lisp/Terminal_002.png" alt="one" /></p>
+
+</li><li>
+        <span class="post-meta">Jul 24, 2023</span>
+        <h3>
+          <a class="post-link" href="/lisp/2023/07/24/lisp-1.5.html">
+            LISP 1.5 running on an emulated IBM 7094
+          </a>
+        </h3><p>This note describes how to set up and run the oldest available ancestor of all extant LISPS and Schemes.</p>
+
+<p>LISP 1.5 was the first LISP that was made generally available. It is available to run on the OpenSIMH IBM 7094 emulator.</p>
+
+<p><img src="/assets/img/lisp/Terminal_001.png" alt="one" /></p>
+
+</li><li>
+        <span class="post-meta">Jul 24, 2023</span>
+        <h3>
+          <a class="post-link" href="/lisp/2023/07/24/lisp-explorations.html">
+            Schemes, LISPs, and Lambda
+          </a>
+        </h3><p>This note sets up a series of related notes pertaining to my explorations in LISP and Scheme. I began to be interested in functional programming a few years ago and started looking around to find resources to learn it… in my limited spare time. After finding some resources, I would study it, set it aside as too esoteric, pick it up again thinking - this is it, I’m going to master this one way or another, only to set it aside as frustratingly difficult to understand and lacking in applicability. Lately though, I have found some standout resources and worked through enough of them to begin to actually get my mind wrapped around functional programming. Below you will find a brief, informal annotated bibliography of sorts and an explanation of what’s coming in the further explorations into implementations.</p>
+
+</li></ul>
+
+    
+      <div class="pager">
+        <ul class="pagination">
+          <li><div class="pager-edge">•</div></li>
+          <li><div class="current-page">1</div></li>
+          <li><a href="/page2" class="next-page">2</a></li>
+        </ul>
+      </div></div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
 </html>

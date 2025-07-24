@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>dircmp.py - a plan to improve and extend | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="dircmp.py - a plan to improve and extend" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="dircmp.py A plan to improve and extend This note pertains to dircmp.py a program that I wrote to give me information about two directories for the purpose of deciding what to keep and what to remove and to learn about python. The note is a draft note and as such it’s not very refined and it may lack in many ways, but I thought it might be interesting to put it out there and let anyone see it. Email me if you have comments or suggestions." />
+<meta property="og:description" content="dircmp.py A plan to improve and extend This note pertains to dircmp.py a program that I wrote to give me information about two directories for the purpose of deciding what to keep and what to remove and to learn about python. The note is a draft note and as such it’s not very refined and it may lack in many ways, but I thought it might be interesting to put it out there and let anyone see it. Email me if you have comments or suggestions." />
+<link rel="canonical" href="http://localhost:4000/unix/python/2022/12/15/dircmp.py-improvements.html" />
+<meta property="og:url" content="http://localhost:4000/unix/python/2022/12/15/dircmp.py-improvements.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-12-15T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="dircmp.py - a plan to improve and extend" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2022-12-15T00:00:00-06:00","datePublished":"2022-12-15T00:00:00-06:00","description":"dircmp.py A plan to improve and extend This note pertains to dircmp.py a program that I wrote to give me information about two directories for the purpose of deciding what to keep and what to remove and to learn about python. The note is a draft note and as such it’s not very refined and it may lack in many ways, but I thought it might be interesting to put it out there and let anyone see it. Email me if you have comments or suggestions.","headline":"dircmp.py - a plan to improve and extend","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/unix/python/2022/12/15/dircmp.py-improvements.html"},"url":"http://localhost:4000/unix/python/2022/12/15/dircmp.py-improvements.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">dircmp.py - a plan to improve and extend</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2022-12-15T00:00:00-06:00" itemprop="datePublished">
+        Dec 15, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="dircmppy">dircmp.py</h2>
+
+<h3 id="a-plan-to-improve-and-extend">A plan to improve and extend</h3>
+
+<p>This note pertains to <a href="https://github.com/decuser/decuser_python_playground/blob/master/dircmp/dircmp.py">dircmp.py</a> a program that I wrote to give me information about two directories for the purpose of deciding what to keep and what to remove and to learn about python. The note is a draft note and as such it’s not very refined and it may lack in many ways, but I thought it might be interesting to put it out there and let anyone see it. Email me if you have comments or suggestions.</p>
+
+<!--more-->
+
+<h4 id="caveats">Caveats</h4>
+
+<p>The comparisons here are between simple folders and files (including hidden files). By simple, I don’t mean small - I use the program to compare very large directories. However, the tool was developed for comparing directories containing user files and not as a system maintenance tool. I haven’t done much investigating of hard / soft symlinks or exotic setups.</p>
+
+<h4 id="random-observation">Random Observation</h4>
+
+<p>When originally creating the program, I had the thought that git’s organization would provide an ideal filesystem for keeping changes and being able to see those changes easily. Just keep file contents in blobs, their digests, names, and locations elsewhere. Files with identical contents would share the blob and digests, but the names and locations could differ. When saving a new file, do a digest, check the registry, link to the blob, etc. Sure, it’d be slow, but integral. A little above my paygrade, but percolating in the back of my mind.</p>
+
+<h4 id="features-under-consideration">Features under consideration</h4>
+
+<ul>
+  <li>Synchronization Planning</li>
+  <li>Synchronization Execution with Undo and potentially segregation</li>
+</ul>
+
+<h4 id="other-potential-enhancements">Other potential enhancements</h4>
+
+<ul>
+  <li>Historical comparisons (save results and use for future compares)</li>
+</ul>
+
+<h4 id="future-research">Future research</h4>
+
+<ul>
+  <li>symlinks and exotic setups :)</li>
+</ul>
+
+<h4 id="background">Background</h4>
+<p>Currently, the program does a great job of identifying differences and matches between two directory trees. However, it does not do a good job of providing the user with plans to synchronize those trees or the ability to synchronize directories.</p>
+
+<p>When I started this project, my goal was to identify, not address, so the program met its objectives. Now, I want to have the program generate plans to synchronize and perform the synchroniztion.</p>
+
+<h4 id="current-functionality">Current functionality</h4>
+
+<p>Looking at the program as a whole and as a black box, it takes a directory or pair of directories and compiles a set of results…</p>
+
+<h5 id="results">Results</h5>
+
+<p>Pair Results Report</p>
+
+<ul>
+  <li>duplicate files found in either directory</li>
+  <li>exact matches found in both directories</li>
+  <li>files that only exist in one of the directories</li>
+  <li>files that have the same names but different digests</li>
+  <li>files that have different names but same digest</li>
+</ul>
+
+<p>Single Results Report</p>
+
+<ul>
+  <li>duplicate files found in directory</li>
+</ul>
+
+<h5 id="method-of-operation">Method of Operation</h5>
+
+<p>The comparisons are done using a calculated digest for every file that exists within the scope of the comparison, either a single level, or recursive.</p>
+
+<h5 id="options">Options</h5>
+
+<p>The program supports the following options for controlling its behavior:</p>
+
+<ul>
+  <li>-h, –help - show a help message and exit</li>
+  <li>-b, –brief - Brief mode - suppress file lists</li>
+  <li>-a, –all - Include hidden files in comparisons</li>
+  <li>-r, –recurse - Recurse subdirectories</li>
+  <li>-f, –fast - Perform shallow digests (super fast, but necessarily less accurate)</li>
+  <li>-d, –debug - Debug mode</li>
+  <li>-c, –compact - Compact mode</li>
+  <li>-s, –single - Single directory mode</li>
+  <li>-v, –version - show program’s version number and exit</li>
+</ul>
+
+<h4 id="discussion">Discussion</h4>
+
+<p>All in all, it works great. I’ve used it a lot. It’s fast and accurate. However, in using it, it has become apparent that what I really want it to do is tell me how to get two directories to synchronize.</p>
+
+<p>I have used rsync (prolly best of breed) and tried many, many other programs to quickly and easily sync directories, and I haven’t liked any of them, in the end. Usually, I wind up losing files that I don’t want to lose, sometimes through unintentional misuse of the tool, especially with rsync’s arcane syntax, but usually through an inability to figure out what the tool actually does (not how it does what it does, but what the results are) and thinking two directories are synced after running the tool only to find out later that they weren’t … not exactly.</p>
+
+<p>At least with dirsync.py as it exists today, I know exactly what it is doing. The results are detailed and precise. It lives to tell me, in detail, what differences exist between two directories. With this information in hand, it is possible to determine a finite plan to synchronize them.</p>
+
+<p>Interestingly, synchronization can be accomplished with several distinct outcomes, as follows.</p>
+
+<h4 id="synchronize-how">Synchronize how?</h4>
+
+<p>In the following discussions, I will use left and right to differentiate the two directories being discussed and will only discuss synchronizing two directories.</p>
+
+<h5 id="one-way-synchronizations">One Way Synchronizations</h5>
+
+<ul>
+  <li>Left to Right - <em>right directory is made to exactly match the left directory</em></li>
+  <li>Right to Left - <em>left directory is made to exactly match the right directory</em></li>
+</ul>
+
+<p>Conflicts arising in one way synchronizations are resolved by order definition - files and directories from one side are chosen whenever there is a mismatch.</p>
+
+<h5 id="two-way-sychronizations">Two Way Sychronizations</h5>
+
+<p>Whenever two way synchronizations are performed, there is a likelihood of conflicts and it is important to consider strategies to resolve those conflicts. This is where synchronization gets tricky.</p>
+
+<p>Here are the possible strategies</p>
+
+<ul>
+  <li>Preserve None - <em>remove conflicts from left and right (neither win)</em></li>
+  <li>Preserve Left - <em>merge left into right (left wins)</em></li>
+  <li>Preserve Right - <em>merge right into left (right wins)</em></li>
+  <li>Preserve Both (versioning) <em>merge both ways (both win) and create versions when there is a conflict</em></li>
+</ul>
+
+<h5 id="thoughts-before-diving-into-the-details">Thoughts before diving into the details</h5>
+
+<p>I think that inline with providing undo, it may be useful to preserve conflicts for the user… as in, when there’s a conflict, move the loser (one side, or both) into a separate area (preserving prior location information) for the user to decide what to do with. Given a robust enough functionality, this may be moot, but I remember doing this sorta thing before and it being useful.</p>
+
+<h4 id="rough-sketch-strategy">Rough sketch strategy</h4>
+
+<ul>
+  <li>Analyze directories to determine what needs to change</li>
+  <li>Report status</li>
+  <li>Stage changes</li>
+  <li>Make changes (as economically and safely as possible)</li>
+  <li>Stage a modification</li>
+  <li>Save recovery information</li>
+  <li>Make the modification</li>
+  <li>Report changes</li>
+</ul>
+
+<h4 id="thoughts-related-to-the-economics">Thoughts related to the economics</h4>
+
+<p>The expenses in this program are the costs of computing digests, comparing those digests, and copying files. Deletions are cheap, as are moves. So, the program should only compute digests as requested. When fast mode is active, the algorithm only reads a portion of the file, rather than the entirety, so this must be taken into account. Comparisons of the digest are mandatory. Copying files is expensive and should be minimized.</p>
+
+<p>Interestingly, when I started looking at this part of the code, I figured out that my fast digest approach probably needs to be improved. My premise, when I wrote it was that big files tend not to change in small ways over time - movies, images, and such. So, files over 10MB were considered candidates for an optimization of the digest process… This has proved to be a good intuition, but there are certainly some exceptions that could cause problems with the simple approach currently in the code (read the file size in bytes, read the first 1MB and the last 1MB and use these for the digest). I remember coming up with a strategy more along the lines of 100MB being the threshold and taking 100MB of random samples from the file. I don’t remember why I changed it, but it was prolly just a matter of it taking too long and/or being somewhat more complicated to implement for the time I set aside to do the work… either way, the current code is quite basic, but fast… and it’s worked fine because the only large files that I’ve used it on have been normal user files that simply don’t change much in the middle. Still, this is definitely an area to optimize. The easiest example of a file that would be problematic that I can think of is a VM drive file… When in doubt, don’t use fast mode :).</p>
+
+<h4 id="stuff-to-think-about">Stuff to think about</h4>
+
+<ul>
+  <li>Fast digest - what’s a better approach that’s still fast (sampling is slow, but is it necessary)?</li>
+  <li>I seem to remember counting being challenging - does the program count correctly or does it need a fix?</li>
+  <li>Symlinks are weird, but are they a problem?</li>
+  <li>How to develop a changeset - linear, in a single pass, what?</li>
+  <li>How to handle the undo functionality</li>
+  <li>What to do about destructive changes - save the to be destroyed file somewhere</li>
+  <li>How to handle duplicate versioning - naming, save somewhere</li>
+  <li>Given past experience, what to do about voluminous reporting - definitely need better delineation of sections (very hard to differentiate in terminal)</li>
+  <li>Tkinter? I dunno, I prefer something like avalonia, but that’s .net, still should this have a ui?</li>
+  <li>Order to do the coding - left to right and right to left first, then merges, which preservation strategies in what order?</li>
+</ul>
+
+<p>The playground has the latest code and branches <a href="https://github.com/decuser/decuser_python_playground">https://github.com/decuser/decuser_python_playground</a></p>
+
+<p><em>post last updated 2022-12-15 17:53:00 -0600</em></p>
+
+  </div><a class="u-url" href="/unix/python/2022/12/15/dircmp.py-improvements.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

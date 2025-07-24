@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Setting up Slackware 15 on T430 for X Window Programming | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Setting up Slackware 15 on T430 for X Window Programming" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The note walks through the process of installing and configuring a working Slackware 15 64 instance with the packages mirrored locally for ease of access and eliminating the need to be online as much. When the system is up and running it provides xdm services to nearby hosts (those on the local network). This makes running and testing x window clients simpler and more interesting. You may notice that the note references other environments that you may not have or want to use (MacOS Mojave and FreeBSD 13.1). Just ignore those references as they are not strictly required. I chose Slackware 15 64 as the environment after trying out various flavors of Debian, Arch, Kwort and others. While these worked ok, they did not provide much of a clean, vanilla x experience. Slackware, on the other hand, provided a sane, simple, and understandable x environment that was pretty vanilla :). It feels really good to get back to Slackware and its simplicity. I don’t have a gazillion processes running doing who knows what, the laptop sleeps without crazy interventions, and stuff works well. That said, Slackware is not for the faint of heart. You should be somewhat familiar with Linux and it’s command line interface and be willing to do your own research before jumping into it." />
+<meta property="og:description" content="The note walks through the process of installing and configuring a working Slackware 15 64 instance with the packages mirrored locally for ease of access and eliminating the need to be online as much. When the system is up and running it provides xdm services to nearby hosts (those on the local network). This makes running and testing x window clients simpler and more interesting. You may notice that the note references other environments that you may not have or want to use (MacOS Mojave and FreeBSD 13.1). Just ignore those references as they are not strictly required. I chose Slackware 15 64 as the environment after trying out various flavors of Debian, Arch, Kwort and others. While these worked ok, they did not provide much of a clean, vanilla x experience. Slackware, on the other hand, provided a sane, simple, and understandable x environment that was pretty vanilla :). It feels really good to get back to Slackware and its simplicity. I don’t have a gazillion processes running doing who knows what, the laptop sleeps without crazy interventions, and stuff works well. That said, Slackware is not for the faint of heart. You should be somewhat familiar with Linux and it’s command line interface and be willing to do your own research before jumping into it." />
+<link rel="canonical" href="http://localhost:4000/development/x-windows/slackware15/2023/02/22/slackware-15-t430-x-windows.html" />
+<meta property="og:url" content="http://localhost:4000/development/x-windows/slackware15/2023/02/22/slackware-15-t430-x-windows.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-02-22T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Setting up Slackware 15 on T430 for X Window Programming" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2023-02-22T00:00:00-06:00","datePublished":"2023-02-22T00:00:00-06:00","description":"The note walks through the process of installing and configuring a working Slackware 15 64 instance with the packages mirrored locally for ease of access and eliminating the need to be online as much. When the system is up and running it provides xdm services to nearby hosts (those on the local network). This makes running and testing x window clients simpler and more interesting. You may notice that the note references other environments that you may not have or want to use (MacOS Mojave and FreeBSD 13.1). Just ignore those references as they are not strictly required. I chose Slackware 15 64 as the environment after trying out various flavors of Debian, Arch, Kwort and others. While these worked ok, they did not provide much of a clean, vanilla x experience. Slackware, on the other hand, provided a sane, simple, and understandable x environment that was pretty vanilla :). It feels really good to get back to Slackware and its simplicity. I don’t have a gazillion processes running doing who knows what, the laptop sleeps without crazy interventions, and stuff works well. That said, Slackware is not for the faint of heart. You should be somewhat familiar with Linux and it’s command line interface and be willing to do your own research before jumping into it.","headline":"Setting up Slackware 15 on T430 for X Window Programming","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/development/x-windows/slackware15/2023/02/22/slackware-15-t430-x-windows.html"},"url":"http://localhost:4000/development/x-windows/slackware15/2023/02/22/slackware-15-t430-x-windows.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Setting up Slackware 15 on T430 for X Window Programming</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2023-02-22T00:00:00-06:00" itemprop="datePublished">
+        Feb 22, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The note walks through the process of installing and configuring a working Slackware 15 64 instance with the packages mirrored locally for ease of access and eliminating the need to be online as much. When the system is up and running it provides xdm services to nearby hosts (those on the local network). This makes running and testing x window clients simpler and more interesting. You may notice that the note references other environments that you may not have or want to use (MacOS Mojave and FreeBSD 13.1). Just ignore those references as they are not strictly required.</p>
+
+<p>I chose Slackware 15 64 as the environment after trying out various flavors of Debian, Arch, Kwort and others. While these worked ok, they did not provide much of a clean, vanilla x experience. Slackware, on the other hand, provided a sane, simple, and understandable x environment that was pretty vanilla :). It feels really good to get back to Slackware and its simplicity. I don’t have a gazillion processes running doing who knows what, the laptop sleeps without crazy interventions, and stuff works well. That said, Slackware is not for the faint of heart. You should be somewhat familiar with Linux and it’s command line interface and be willing to do your own research before jumping into it.</p>
+
+<p><img src="/assets/img/t430/02.png" alt="two" /></p>
+
+<!--more-->
+
+<h2 id="scenario">Scenario</h2>
+
+<p>The system being exercised here is a Lenovo Thinkpad T430 running Slackware 15 64 in a heterogeneous network of machines running FreeBSD 13.1, TrueNAS Core 13.0-U3.1, MacOS Mojave 10.14.6, Windows 10, Debian 11.6 Bullseye, and others. The goals are:</p>
+
+<ul>
+  <li>Get X, twm, and xdm running on the T430.</li>
+  <li>Have the T430 provide xdm login capability to the Mac</li>
+  <li>Have the T430 display clients on the Mac using <code class="language-plaintext highlighter-rouge">-display</code> option</li>
+</ul>
+
+<h2 id="requirements">Requirements</h2>
+
+<p>Other than the mentioned downloads, the only hard requirement is that XQuartz be installed on the Mac and not currently running when starting X with the <code class="language-plaintext highlighter-rouge">-query</code> option. Having a FreeBSD 13.1 memstick around just makes sense, but isn’t absolutely required.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li>Slackware website - <a href="http://www.slackware.com">http://www.slackware.com</a></li>
+  <li>Slackware Download Mirrors - <a href="https://mirrors.slackware.com/">https://mirrors.slackware.com</a></li>
+  <li>Slackware Documentation - <a href="https://docs.slackware.com">https://docs.slackware.com</a></li>
+  <li>Linux Question Slackware Forum - <a href="https://www.linuxquestions.org/questions/slackware-14/">https://www.linuxquestions.org/questions/slackware-14</a></li>
+</ul>
+
+<p>Note: The documentation seems to be in a constant state of not-up-to-date-ness. To my eye, it looks like there was some kind of turf battle early days, now it looks like no one really maintains it. Contrast this with FreeBSD’s Handbook, or Arch’s wiki, and it pales by comparison. Which is sad, since Slackware, even moreso than FreeBSD is bounded and contained and doesn’t try to be everything to everyone or provide 100 different ways of doing one thing.</p>
+
+<h2 id="getting-ready">Getting Ready</h2>
+
+<h3 id="download-the-iso-and-verify-it">Download the ISO and verify it</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p ~/_workarea/_CD_DVD/iso/slackware-15.0
+cd ~/_workarea/_CD_DVD/iso/slackware-15.0
+aria2c https://mirrors.slackware.com/slackware/slackware-iso/slackware64-15.0-iso/slackware64-15.0-install-dvd.iso
+aria2c https://mirrors.slackware.com/slackware/slackware-iso/slackware64-15.0-iso/slackware64-15.0-install-dvd.iso.asc
+aria2c http://slackware.com/gpg-key
+gpg --import gpg-key
+gpg --verify slackware64-15.0-install-dvd.iso.asc 
+</code></pre></div></div>
+
+<h3 id="burn-the-iso-using-balena-etcher">Burn the ISO using balena etcher</h3>
+
+<h3 id="clean-up-the-efi-list">Clean up the EFI List</h3>
+
+<p>This is an optional step.</p>
+
+<p>I do it because I get tired of seeing old boot entries lying around. Unfortunately, the Slackware live installer doesn’t provide the needed tool <code class="language-plaintext highlighter-rouge">efibootmgr</code> in the default install mode. Send me an email, if you know how to do this from the installer without jumping through hoops. In the meantime, I just boot to a FreeBSD 13.1 memstick image I have laying around.</p>
+
+<h3 id="boot-the-t430-using-the-freebsd-131-memstick-on-usb">Boot the T430 using the FreeBSD 13.1 memstick on USB</h3>
+
+<ul>
+  <li>Press F12, select USB</li>
+  <li>Press 2 single user mode</li>
+  <li>Press enter to execute the default shell</li>
+  <li>List out the boot entries using <code class="language-plaintext highlighter-rouge">efibootmgr</code></li>
+  <li>Delete any unwanted entries using <code class="language-plaintext highlighter-rouge">efibootmgr -B -b 00XX</code> where 00XX represents the entry to delete</li>
+  <li>Reboot and insert the Slackware USB</li>
+</ul>
+
+<h3 id="boot-the-slackware-usb">Boot the Slackware USB</h3>
+
+<ul>
+  <li>Press F12, select USB</li>
+  <li>Press Enter to Select Slackware 15.0 huge.s kernel</li>
+</ul>
+
+<h2 id="installation">Installation</h2>
+
+<h3 id="choose-keymap-login-as-root-prepare-drives">Choose keymap, login as root, prepare drives</h3>
+
+<ul>
+  <li>Press Enter to leave US as keymap</li>
+  <li>Login as root with no password</li>
+  <li>
+    <p>Zap existing partition info (I use gdisk’s expert zap function to do this on my two drives)</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gdisk /dev/sda
+gdisk /dev/sdb
+x, z
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Partition target disk (I put Slackware onto my ssd <em>/dev/sdb</em>. Just use <code class="language-plaintext highlighter-rouge">fdisk /dev/sdb</code></p>
+
+    <ul>
+      <li>Create a new 1G EFI partition and mark it active</li>
+      <li>Create a new 16G Swap partition</li>
+      <li>Use the rest as a Linux partition</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="run-setup-as-root">Run setup as root</h3>
+
+<p><code class="language-plaintext highlighter-rouge">setup</code></p>
+
+<ul>
+  <li>Choose configure swap - <em>/dev/sdb2</em> (with no bad block check)</li>
+  <li>Configure / - <em>/dev/sdb3</em> as ext4 on <em>/</em> (quick, no bad block check)</li>
+  <li>Configure EFI - <em>/dev/sdb1</em> as the EFI partition</li>
+  <li>Select install from a Slackware USB stick - let it detect your USB</li>
+  <li>Unselect emacs, kde, and xfce (This system hearts <code class="language-plaintext highlighter-rouge">vi</code> :) and kde and xfce aren’t needed - we’ll use twm)</li>
+  <li>Choose terse mode - lots of interesting output to ignore or read</li>
+</ul>
+
+<p>This will take a bit…</p>
+
+<ul>
+  <li>Skip making usb stick</li>
+  <li>Skip lilo and move on to elilo</li>
+  <li>install elilo - let it install a boot menu item</li>
+  <li>Choose install imps2</li>
+  <li>Choose yes to gpm</li>
+  <li>Configure network
+    <ul>
+      <li>host - <em>astra</em></li>
+      <li>domain - <em>sentech.home</em></li>
+      <li>Answer no to vlan</li>
+      <li>Answer yes to network manager</li>
+    </ul>
+  </li>
+  <li>Choose default services
+    <ul>
+      <li>atd</li>
+      <li>crond</li>
+      <li>fuse</li>
+      <li>messagebus</li>
+      <li>syslog</li>
+      <li>sshd</li>
+    </ul>
+  </li>
+  <li>Choose NO to trying out fonts</li>
+  <li>Set TZ info
+    <ul>
+      <li>utc</li>
+      <li>us-central</li>
+    </ul>
+  </li>
+  <li>Choose vim</li>
+  <li>Choose xinitrc.twm</li>
+  <li>Set a root password</li>
+  <li>reboot</li>
+</ul>
+
+<h2 id="first-boot">First boot</h2>
+
+<ul>
+  <li>
+    <p>Configure visudo to allow wheel users to execute without password - nuts, right? Don’t do this without considering the ramifications.</p>
+
+    <ul>
+      <li>login as root</li>
+      <li>run <code class="language-plaintext highlighter-rouge">visudo</code></li>
+      <li>uncomment wheel with no password line</li>
+    </ul>
+  </li>
+  <li>
+    <p>Add a wheel user</p>
+
+    <ul>
+      <li>run <code class="language-plaintext highlighter-rouge">adduser</code> enter details, add user to <em>wheel</em> group, and enter and confirm password</li>
+      <li>logout and back in as the user</li>
+    </ul>
+  </li>
+  <li>
+    <p>Set up wifi - xref <a href="https://www.makeuseof.com/connect-to-wifi-with-nmcli">https://www.makeuseof.com/connect-to-wifi-with-nmcli</a></p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -i
+nmcli --ask dev wifi con SSID
+
+# disable ipv6 nonsense, or be prepared for 5 second lag on lookups
+nmcli con mod SSID ipv6.dns-options single-request
+nmcli dev reapply wlan0
+ping yahoo.com
+
+sudo -i ip addr
+192.168.254.21
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Test twm with <code class="language-plaintext highlighter-rouge">startx</code></p>
+  </li>
+  <li>
+    <p>Test ssh with <code class="language-plaintext highlighter-rouge">ssh astra</code> from remote host</p>
+  </li>
+  <li>
+    <p>Git rid of bracketed paste (who thought bracketed paste was a good idea?)</p>
+
+    <p>As both user and root</p>
+
+    <p><code class="language-plaintext highlighter-rouge">echo 'set enable-bracketed-paste off' &gt;&gt; ~/.inputrc</code></p>
+  </li>
+  <li>
+    <p>Setup a basic vimrc</p>
+
+    <p>As both user and root</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi ~/.vimrc
+set ts=4
+set ruler
+syntax off
+set conceallevel=0
+"filetype plugin indent on
+"map q &lt;Nop&gt;
+set mouse-=a
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Update hosts file with <code class="language-plaintext highlighter-rouge">sudo vi /etc/hosts</code></p>
+
+    <p><code class="language-plaintext highlighter-rouge">... list of ips and hosts</code></p>
+  </li>
+  <li>
+    <p>Configure graphical logon (xdm)</p>
+
+    <ul>
+      <li>
+        <p>Slackware goes down the list in rc.4 to choose the display manager - gdm, kdm, sddm, and xdm, to enable/disable the ones you don’t want to use, either remove them or their execute permissions, e.g. <code class="language-plaintext highlighter-rouge">sudo chmod a-x /usr/bin/sddm</code></p>
+      </li>
+      <li>
+        <p>edit inittab to start in graphical mode</p>
+      </li>
+    </ul>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo vi /etc/inittab
+# 3 - console, 4 - graphical
+id:4:initdefault
+</code></pre></div>    </div>
+
+    <ul>
+      <li>test runlevel 4 before rebooting using <code class="language-plaintext highlighter-rouge">sudo -i init 4</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>Set up local mirror of Slackware 15 64 Repo (~11GB)</p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -i
+
+vi /root/slackmirror
+#!/bin/sh
+TARGET=/
+MIRROR=rsync://slackware.uk
+rsync -4 -rlpt --delete -P -H $MIRROR/slackware/slackware64-15.0 $TARGET
+
+chmod u+x ~/slackmirror
+~/slackmirror
+</code></pre></div></div>
+
+<p>It will take a bit to download the repo. Have coffee. Rerun whenever you like, or when there’s a security issue - <a href="http://www.slackware.com/security">http://www.slackware.com/security</a></p>
+
+<ul>
+  <li>Add the local mirror</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/slackpkg/mirrors
+file://slackware64-15.0
+</code></pre></div></div>
+
+<ul>
+  <li>Create a blacklist of packages not to include in updates</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/slackpkg/blacklist 
+# append
+e/
+kde/
+xfce/
+kernel-generic.*
+kernel-huge.*
+kernel-modules.*
+kernel-source
+</code></pre></div></div>
+
+<ul>
+  <li>Update the system from the mirror</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># get the gpg key for slackware
+slackpkg update gpg
+
+# update the package list
+slackpkg update
+
+# check for new packages
+slackpkg install-new
+
+# upgrade the packages
+slackpkg upgrade-all
+</code></pre></div></div>
+
+<p>Let it overwrite the configuration files unless you’ve already customized them…</p>
+
+<ul>
+  <li>Upgrade the kernel - xref <a href="http://www.slackware.com/security">Slackware Security Advisories</a></li>
+</ul>
+
+<p>As of Feb 22, 2022, the available kernel is linux-5.15.94, if it’s been awhile, it will change. Use the latest, if you like. To see what’s been mirrored just <code class="language-plaintext highlighter-rouge">ls -ld /slackware64-15.0/patches/packages/linux-*</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># backup the existing kernel
+cp /boot/efi/efi/Slackware/vmlinuz-huge-5.15.80 /boot/efi/efi/Slackware/vmlinuz-lkw
+
+cd /slackware64-15.0/patches/packages/linux-5.15.94/
+
+# check sigs
+for i in *.asc; do gpg --verify $i; done
+
+# upgrade the kernel
+upgradepkg kernel-*.txz
+
+# generate initrd
+geninitrd
+
+# check symlinks - they should point to 5.15.94 images.
+ls -l /boot
+
+
+# copy images from /boot /boot/efi/efi/Slackware
+cp /boot/initrd.gz /boot/efi/efi/Slackware/
+cp /boot/vmlinuz /boot/efi/efi/Slackware/
+cp /boot/vmlinuz-generic /boot/efi/efi/Slackware/
+
+# edit elilo.conf
+vi /boot/efi/efi/Slackware/elilo.conf
+prompt
+timeout=30
+default=generic
+
+# default linux kernel
+image=vmlinuz
+		root=/dev/sdb3
+        label=vmlinuz
+        read-only
+        append="vga=normal ro"
+    description="Default Linux Kernel"
+
+# generic linux kernel
+image=vmlinuz-generic
+  initrd=initrd.gz
+  root=/dev/sdb3
+  label=generic
+  read-only
+  append="vga=normal ro"
+  description="Generic Linux Kernel"
+
+# last known working linux kernel
+image=vmlinuz-lkw
+  root=/dev/sdb3
+  label=lkw
+  read-only
+  append="vga=normal ro"
+  description="Last Known Working Linux Kernel"
+</code></pre></div></div>
+
+<ul>
+  <li>reboot</li>
+</ul>
+
+<h2 id="second-boot">Second boot</h2>
+
+<ul>
+  <li>
+    <p>Get rid of any leftover cruft using <code class="language-plaintext highlighter-rouge">slackpkg clean-system</code></p>
+  </li>
+  <li>
+    <p>Serve up XDM to remote clients</p>
+
+    <ul>
+      <li>Start a tail of xdm log using <code class="language-plaintext highlighter-rouge">tail -f /var/log/xdm.log</code></li>
+      <li>Configure XDM for remote queries
+        <ul>
+          <li>Copy xinitrc as initial   .xsession
+ <code class="language-plaintext highlighter-rouge">cp /etc/X11/xinit/xinitrc ~/.xsession</code></li>
+          <li>Edit the bits after the xmodmap</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># set a black background, fix middle button issue 
+#   so CTL-Button 2 brings up Xterm VT Options menu
+xsetroot -bitmap /usr/include/X11/bitmaps/black
+xinput set-prop 'TPPS/2 IBM TrackPoint' 'libinput Scroll Method Enabled' 0 0 0
+
+# start some useful programs
+/usr/bin/twm &amp;
+/usr/bin/xclock -geometry 100x100-1+1 &amp;
+xterm -g 96x24-0-0 &amp;
+xterm -g 80x32-140+0 &amp;
+exec /usr/bin/xterm -g 80x58+0+0 -name login
+</code></pre></div></div>
+
+<ul>
+  <li>Alternatively, create minimal .xsession as user</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi ~/.xsession
+#!/bin/sh
+xterm &amp;
+twm
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Give execute permission to the .xsession file using <code class="language-plaintext highlighter-rouge">chmod u+x .xsession</code></p>
+  </li>
+  <li>
+    <p>Modify the Xaccess file to allow any host to query</p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/X11/xdm/Xaccess 
+add * as last line
+*
+</code></pre></div></div>
+<ul>
+  <li>Modify the xdm-config file to allow querying</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/X11/xdm/xdm-config
+!DisplayManager.requestPort:	0
+!DisplayManager.*.authName:      MIT-MAGIC-COOKIE-1
+</code></pre></div></div>
+
+<ul>
+  <li>Modify sshd_config to allow X11Forwarding</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo vi /etc/ssh/sshd_config
+X11Forwarding yes
+
+sudo /etc/rc.d/rc.sshd restart
+</code></pre></div></div>
+
+<ul>
+  <li>Enter runlevel 3 and reenter runlevel 4 for changes to take effect</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -i init 3
+
+... wait a sec for it to enter the runlevel
+
+sudo -i init 4
+</code></pre></div></div>
+
+<p>If you get respawn issues, just <code class="language-plaintext highlighter-rouge">reboot</code>.</p>
+
+<ul>
+  <li>Test x from remote x windows server</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh -Y astra
+xeyes
+</code></pre></div></div>
+
+<ul>
+  <li>Test xdm</li>
+</ul>
+
+<p>Stop any running instances of XQuartz, then set some sane preferences</p>
+
+<ul>
+  <li>Input-&gt;Option keys send Alt_L and Alt_R - lets your alt key be meta</li>
+  <li>Ouput-&gt;Full-screen mode (needed for xdm and twm to treat your mac like an X display, otherwise, windows look and act like mac windows)</li>
+  <li>Output-&gt;Auto-show menu bar in full-screen mode - just makes it easier to enter and exit the X window environment</li>
+  <li>Pasteboard - check everything, it helps with cutting and pasting between X windows and Mac Windows</li>
+  <li>Windows-&gt;Focus on New Windows - why not?</li>
+  <li>Security-&gt;Authenticate connections - required for network clients</li>
+  <li>Security-&gt;Allow connections from network clients - otherwise -display from astra won’t work</li>
+</ul>
+
+<p>Fire up X on the mac using <code class="language-plaintext highlighter-rouge">X -query astra</code> from nebula. Switch X to full screen by pressing <em>Command-A</em> after clicking on the XQuartz icon in the dock.</p>
+
+<p><img src="/assets/img/t430/02.png" alt="two" /></p>
+
+<p>Note: if you see: xdm error (pid 1559): Cannot convert Internet address 192.168.254.25 to host name, it means you don’t have a hosts entry for the ip, add it, if it just returns - make sure you actually typed X -query astra :)</p>
+
+<h2 id="bonus-information">Bonus information</h2>
+
+<p>xref - <a href="https://unix.stackexchange.com/questions/736030/how-can-i-display-xeyes-on-a-remote-host-without-using-ssh">https://unix.stackexchange.com/questions/736030/how-can-i-display-xeyes-on-a-remote-host-without-using-ssh</a></p>
+
+<p>This section describes how to use <code class="language-plaintext highlighter-rouge">-display</code> to get an xclient running on the Slackware machine to display on a remote system (a mac), that is get <code class="language-plaintext highlighter-rouge">xeyes -display nebula</code> working from astra. To display on nebula, the MacOS Mojave machine, from astra, the Slackware 15 machine, requires a handful of steps:</p>
+
+<ul>
+  <li>In XQuartz preferences, uncheck Ouput-&gt;Full-screen mode (we actually want windows, this time)</li>
+  <li>Restart XQuartz</li>
+  <li>Obtain the MIT-MAGIC-COOKIE-1 from nebula</li>
+  <li>Add it to astra’s xauth list</li>
+  <li>Run the client from astra and it will display on nebula’s screen</li>
+</ul>
+
+<p>Here are the details:</p>
+
+<p>To see how X was started, run <code class="language-plaintext highlighter-rouge">ps aux | grep X</code>:</p>
+
+<p><code class="language-plaintext highlighter-rouge">user            96691   0.0  0.0  4279568   5012   ??  S    12:39PM   0:00.01 /opt/X11/bin/Xquartz :0 -nolisten tcp -iglx -auth /Users/user/.serverauth.96532</code></p>
+
+<p>The key point to note, is the <strong>-nolisten tcp</strong> and <strong>-auth</strong> options. These indicate respectively, that the X server isn’t listening on TCP and that connections to the X server require authentication.</p>
+
+<p>Changing the preferences in XQuartz to allow network connections and restarting it result in the following change:</p>
+
+<p><code class="language-plaintext highlighter-rouge">user            97993   0.0  0.0  4279568   5004   ??  S     2:08PM   0:00.01 /opt/X11/bin/Xquartz :0 -listen tcp -iglx -auth /Users/user/.serverauth.97835</code></p>
+
+<p>Now, XQuartz is listening on TCP, as indicated by <code class="language-plaintext highlighter-rouge">-listen tcp</code></p>
+
+<p>To obtain the magic auth cookie from nebula, on nebula, or via remote login, run <code class="language-plaintext highlighter-rouge">xauth list</code> and find the correct cookie:</p>
+
+<p><code class="language-plaintext highlighter-rouge">nebula:0  MIT-MAGIC-COOKIE-1  240800a1f435f70d92f8f8c706eeb547</code></p>
+
+<p>On astra, add the cookie to the xauth list, using:</p>
+
+<p><code class="language-plaintext highlighter-rouge">xauth add nebula:0 . 240800a1f435f70d92f8f8c706eeb547</code></p>
+
+<p>If all went well, you should now be able to run xeyes from astra:</p>
+
+<p><code class="language-plaintext highlighter-rouge">xeyes -display nebula:0</code></p>
+
+<p><img src="/assets/img/t430/01.png" alt="one" /></p>
+
+<p>Things to watch out for:</p>
+
+<ul>
+  <li>XQuartz needs to be running :)</li>
+  <li>The cookie needs to be up to date. It will change.</li>
+  <li>There is a dot in the xauth add command that is required.</li>
+</ul>
+
+<p>Link to high res image of xdm login on the mac being served up by slackware xdm:</p>
+
+<ul>
+  <li><a href="/assets/img/t430/02-big.png">two</a></li>
+</ul>
+
+<p>Reach out to me if you find any issues or have suggestions.</p>
+
+<p>- will</p>
+
+<p><em>post last updated 2023-02-22 16:20:00 -0600</em></p>
+
+  </div><a class="u-url" href="/development/x-windows/slackware15/2023/02/22/slackware-15-t430-x-windows.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

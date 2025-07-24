@@ -1,0 +1,1643 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-07-23T21:36:04-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">decuser’s blog</title><subtitle>decuser&apos;s technical explorations and adventures in retro-computing, unix, and programming.</subtitle><author><name>decuser</name><email>will.senn@gmail.com</email></author><entry><title type="html">Fix for Thunderbird hangs while indexing messages</title><link href="http://localhost:4000/unix/2024/08/16/thunderbird-hangs-indexing.html" rel="alternate" type="text/html" title="Fix for Thunderbird hangs while indexing messages" /><published>2024-08-16T06:05:00-05:00</published><updated>2024-08-16T06:05:00-05:00</updated><id>http://localhost:4000/unix/2024/08/16/thunderbird-hangs-indexing</id><content type="html" xml:base="http://localhost:4000/unix/2024/08/16/thunderbird-hangs-indexing.html">&lt;p&gt;This note describes a method for fixing Thunderbird when it hangs while indexing.&lt;/p&gt;
+
+&lt;p&gt;I’m posting this in case it’s useful to folks and for my own reference. It took me a quite a while to figure it out.&lt;/p&gt;
+
+&lt;p&gt;So you have been using Thunderbird for your email for a while, on Windows, Linux, Mac, FreeBSD, and so on, for let’s say a couple of decades. If you copy your profile around much, you are bound to hit an indexing issue where Thunderbird is unable to index your archives. You open up Activity Manager and it helpfully reports:&lt;/p&gt;
+
+&lt;p&gt;Indexing 32 of 14243 messages in Archives/2002-2020/2016&lt;/p&gt;
+
+&lt;p&gt;Read on for the fix.
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;You watch the Activity Manager for a while, mesmerized perhaps by it’s stolid refusal to progress or go away. Then you fire up your favorite search engine and start looking for answers. If you’re lucky, this page pops up, otherwise you read drivel like “try again”, “delete your index and rebuild it”, or even reinstall.&lt;/p&gt;
+
+&lt;p&gt;If you’re on linux, or another unix that has similar functionality, you can do this!&lt;/p&gt;
+
+&lt;p&gt;In a terminal:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;strace  thunderbird
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In thunderbird:
+open Tools-&amp;gt;Activity Manager&lt;/p&gt;
+
+&lt;p&gt;When it gets to the place where it hangs, in the terminal, press CTRL-C to end the session. Capture the output from the terminal window into a text editor and search from the bottom up for the directory it’s complaining about. In the above example, look for the last occurance of 2016/. The trailing slash is important to include in your search to find the correct information.&lt;/p&gt;
+
+&lt;p&gt;In my strace output, the last occurance(s) are:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;access(&quot;/home/wsenn/Thunderbird/Mail/Local Folders-maildir/Archives.sbd/2002-2020.sbd/2016/cur&quot;, F_OK) = 0
+openat(AT_FDCWD, &quot;/home/wsenn/Thunderbird/Mail/Local Folders-maildir/Archives.sbd/2002-2020.sbd/2016/cur/1723773452464.eml&quot;, O_RDONLY) = 147
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is likely (so far, it’s always, but time may tell if there are exceptions) the file that’s breaking the indexing. Move it off somewhere to review:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p ~/Desktop/2016
+mv &quot;/home/wsenn/Thunderbird/Mail/Local Folders-maildir/Archives.sbd/2002-2020.sbd/2016/cur/1723773452464.eml&quot; ~/Desktop/2016/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Restart thunderbird without strace and pull up activity manager to see if it continues. If so, rinse and repeat as needed.&lt;/p&gt;
+
+&lt;p&gt;– will&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post added 2024-08-16 10:27:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="unix" /><summary type="html">This note describes a method for fixing Thunderbird when it hangs while indexing. I’m posting this in case it’s useful to folks and for my own reference. It took me a quite a while to figure it out. So you have been using Thunderbird for your email for a while, on Windows, Linux, Mac, FreeBSD, and so on, for let’s say a couple of decades. If you copy your profile around much, you are bound to hit an indexing issue where Thunderbird is unable to index your archives. You open up Activity Manager and it helpfully reports: Indexing 32 of 14243 messages in Archives/2002-2020/2016 Read on for the fix.</summary></entry><entry><title type="html">Research Unix Version 7 - 3.2</title><link href="http://localhost:4000/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2.html" rel="alternate" type="text/html" title="Research Unix Version 7 - 3.2" /><published>2024-05-23T09:00:00-05:00</published><updated>2024-05-23T09:00:00-05:00</updated><id>http://localhost:4000/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2</id><content type="html" xml:base="http://localhost:4000/unix/research-unix/v7/2024/05/23/research-unix-v7-3.2.html">&lt;p&gt;This is an updated note that covers building a working v7 instance from tape files that will run in the OpenSImH emulator. First, the reader is led through the restoration of a pristine v7 instance from tape to disk. Next, the reader is led through adding a regular user and making the system multi-user capable. Then, the reader is shown how to make the system multi-session cable to allow multiple simultaneous sessions. Finally, the system is put to use with hello world, DMR style, and the learn system is enabled.&lt;/p&gt;
+
+&lt;p&gt;The note explains each step of the process in detail.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;Last Updated May 23, 2024&lt;/p&gt;
+
+&lt;h3 id=&quot;changes-since-revision-31&quot;&gt;Changes since revision 3.1&lt;/h3&gt;
+
+&lt;p&gt;Revision 3.2 - minor revision:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Tape format issue fixed in mktape.pl and mktape.py, resulted in updated image on tuhs.&lt;/li&gt;
+  &lt;li&gt;Updated note for Linux Mint 21.3 “Virginia” host and latest Open-SIMH&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here’s the note, as a pdf:&lt;/p&gt;
+
+&lt;iframe allow=&quot;autoplay&quot; height=&quot;480&quot; src=&quot;https://drive.google.com/file/d/1eGrdZVc2R-hFfsbJ70PNbWBGNEXCLN1W/preview&quot; width=&quot;640&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Local copy here: &lt;a href=&quot;/assets/pdf/unix/research-unix-7-pdp11-45-3.2.pdf&quot;&gt;research-unix-7-pdp11-45-3.2.pdf&lt;/a&gt;
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post added 2024-05-23 08:00:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="unix" /><category term="research-unix" /><category term="v7" /><summary type="html">This is an updated note that covers building a working v7 instance from tape files that will run in the OpenSImH emulator. First, the reader is led through the restoration of a pristine v7 instance from tape to disk. Next, the reader is led through adding a regular user and making the system multi-user capable. Then, the reader is shown how to make the system multi-session cable to allow multiple simultaneous sessions. Finally, the system is put to use with hello world, DMR style, and the learn system is enabled. The note explains each step of the process in detail.</summary></entry><entry><title type="html">Will’s Geometry - A Setting Out.</title><link href="http://localhost:4000/geometry/2023/12/19/wills-geometry.html" rel="alternate" type="text/html" title="Will’s Geometry - A Setting Out." /><published>2023-12-19T06:05:00-06:00</published><updated>2023-12-19T06:05:00-06:00</updated><id>http://localhost:4000/geometry/2023/12/19/wills-geometry</id><content type="html" xml:base="http://localhost:4000/geometry/2023/12/19/wills-geometry.html">&lt;p&gt;This is a note where I begin to develop my own geometry based on the example of Euclid, but with an eye towards addressing its shortcomings - what hubris?! But seriously, I’m pretty sure my geometry will pale in comparison. The purpose of the exploration is not to show off, but to learn more about the world and in this regard, will be interesting and educational.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;Gotta start somewhere!&lt;/p&gt;
+
+&lt;p&gt;Start from first principles - the evidents.&lt;/p&gt;
+
+&lt;p&gt;Shapes exist and are perceived. That is, we see and describe the world around us in abstract terms and shapes are abstract. As we abstract away details and try to describe things that exist, we highlight some things / aspects of things, and disregard others. We strive to arrive at useful ways of referring to groups of / sets of objects. Geometry, which started as a way of measuring land, has evolved into an ever-abstracting study of shape. What is shape? Wow, so hard to establish the bare necessities. Maybe a shape is a collection of points? What is a collection and what is a point?&lt;/p&gt;
+
+&lt;p&gt;Let’s just say (posit) that a collection is just what it sounds like, one or more than one of something, or nothing at all (for convenience, later). In this case, a collection of points. A point being the idea of the smallest thing (or not thing), imaginable. We represent this idea generally with a dot drawn on a page. Keep in mind that a point is an idea and doesn’t have width, height, or any physical measure, whereas the dot does.&lt;/p&gt;
+
+&lt;p&gt;Maybe think of the dot as a graph (physical representative) of the point and imagine zooming in on the dot, imagine it never changing in appearance, whereas the area around it expands, endlessly.&lt;/p&gt;
+
+&lt;p&gt;We have our first postulates:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a point is an idea that can be represented by a dot. It has no measure.&lt;/li&gt;
+  &lt;li&gt;a collection (set) is a collection of zero or more points.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;What can we do with our postulates? Not much, at this “point” :). We can put points into a collection and take them out again. We can imagine that our collection, thus created, refers to different points. But, if a point has no measure, or other attribute, how can two be different?&lt;/p&gt;
+
+&lt;p&gt;Now we can posit something new about points, relationship. Points can be different. If they are different, they cannot be the same point :). This is an intuition related to the nature of information - any difference that makes a difference to a knowing subject. But again, how are they different? We are in desperate need of a property or aspect of points with which to differentiate them. Naming them provides one basis - we can call our points by name. Let’s say A is one of our imaginary points and B is another - difference! But, that’s of limited utility in the context of shapes, so we look for another. How about location. Wow! That “maps” to our intuition pretty well, points are located. What this means will be expanded on, but for now, just know that location simply means that point A is not in the same place as B, there is difference. In space, this would mean that points A and B do not occupy the same space, and that’s reasonable and seems consistent with reality, but in this case we are only suggesting that A and B are different and that difference is location.&lt;/p&gt;
+
+&lt;p&gt;This brings us to our next postulate:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;location - objects (in our world, there are collections and points only) have difference.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Location is tricky to describe, but I mean that points are located (have difference) somewhere, even if its only in our mental world. We will represent our idea by referring to the idea of physical space, in the real world, that is the 3 dimensions we normally consider space.&lt;/p&gt;
+
+&lt;p&gt;How are points related locationally (is that even a word)? Suppose that points can be next to each other. Indeed, if two points exist (even in the mind), in order for them to be different, by definition (see above), they have different locations and one is next to the other (if is isn’t clear, then here they are so defined, as being next to each other).&lt;/p&gt;
+
+&lt;p&gt;The hard part comes when we add a third point. Where are the points in relation to each other. If points have no measure, then why can’t they all be next to each other? If they are all next to each other, then they can’t not be next to each other, right? But, we know this isn’t how the real world works, things can be between each other… ick, so hard to explain betweeness. Why? Well, if a point has no measure, then it can’t be put between two points. Unless, perhaps, we establish the idea that there is order on the universe. Let’s do that. The universe is ordered, so mote it be. If that’s the case, then we have another postulate:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;order - the universe has order&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That is, one thing can be said to be ordered (precede, or follow) with respect to another. Order is imposed, so, without knowing the established order, one can only detect it and not know what the origin or orientation of that order is in its entirety.&lt;/p&gt;
+
+&lt;p&gt;Now, betweeness becomes evident as the established order of three objects (points). We say, determine, decree, demand, etc. that a point is between two others. This may sound silly and needlessly complex, but it is what it is and betweeness is our next postulate:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;betweeness - the property of a point that indicates it precedes a particular point and follows another particular point&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now we can speak about dimensionality. We can define dimensions thusly, a single dimension exists when a point is brought into existence. Another, the second dimension, when three points are realized. Why three and not two, well, I’m not sure, with two points we can speak about the relationship between the points, A is not B, B is not A, A exists, B exists, A and B exist, but that’s pretty much it. In order to go further, we really need at least 3 points (this is an exploration of the mind, not definitive). With three points, we can say much, much more. We can say is everything we can say about two, plus some more.&lt;/p&gt;
+
+&lt;p&gt;Let’s say that A and B and C are points in our universe. A is next to B and B is next to C, but C is not next to A. Then, B is between A and C.&lt;/p&gt;
+
+&lt;p&gt;Here’s a thought exercise to be integrated into the discussion as it is determined where it should go…&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Think of a light filled universe.
+
+Bring a point, A, into existence. If the point had measure, and the light had a source, this would change the universe in a measurable way, as it stands this is not the case. It just is.
+
+Bring another point B, into existence. No change... or is there? There is difference, but not measurable.
+
+Bring a third point C, into existence, such that we say B is between A and C. Again, difference, but not measurable. Why not? Because points have no measure!
+
+But when we bring our points into the real world, and of necessity given them measure, voila! There&apos;s going to be measurable differences. But, very local. Perspective is hinted at here - we need it in order to appreciate our new universe. If we were to place our consciousness at a point and look, as it were, around, what would we &quot;see&quot;. If we were at A, we would see B, if we were at C, we could also see B, but from A, we could not see C and from C we could not see A. Wow!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;But, for now, we’re sticking with betweeness being nothing more than established by fiat and being definitional in nature. B is between A and C because I say it is and beyond establishing order between A, B, C, has no material effect on anything.&lt;/p&gt;
+
+&lt;p&gt;Ah, but let’s give another name to that order of points and introduce another postulate:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;line - a line is an ordered set of points&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But, it’s tricky again, the line may be a set of points, but surely, we can’t refer to a line by it’s points, that’s nuts. So, we’ll say that a line can be named by any two points, belonging to the set, where the set established the order. Line AB therefore is part of ABC. As is AC and BC.&lt;/p&gt;
+
+&lt;p&gt;Let’s say that the order we write the points matches their ordering, this means AB is not the same ordering as BA, and ABC means that B is between A and C, with A preceding and C following.&lt;/p&gt;
+
+&lt;p&gt;To recap what we have so far:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;point&lt;/li&gt;
+  &lt;li&gt;collection&lt;/li&gt;
+  &lt;li&gt;location (difference)&lt;/li&gt;
+  &lt;li&gt;order&lt;/li&gt;
+  &lt;li&gt;betweeness&lt;/li&gt;
+  &lt;li&gt;line&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The point is fairly standard to think about in this way, collection or set is what we would expect, location is a bit different :),, order is meta, betweeness is necessary, but I’m no geometry expert, so I could be naive on this. Line is way different from what it is usually described as, but this is because I’m working through it from the ground up.&lt;/p&gt;
+
+&lt;p&gt;… enough for today. Too many gaps, too many doubts, need to consider for a bit :).&lt;/p&gt;
+
+&lt;p&gt;– will&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post edited 2023-12-19 13:58:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="GEOMETRY" /><summary type="html">This is a note where I begin to develop my own geometry based on the example of Euclid, but with an eye towards addressing its shortcomings - what hubris?! But seriously, I’m pretty sure my geometry will pale in comparison. The purpose of the exploration is not to show off, but to learn more about the world and in this regard, will be interesting and educational.</summary></entry><entry><title type="html">Geometry Explorations</title><link href="http://localhost:4000/geometry/2023/12/19/geometry-explorations.html" rel="alternate" type="text/html" title="Geometry Explorations" /><published>2023-12-19T05:05:00-06:00</published><updated>2023-12-19T05:05:00-06:00</updated><id>http://localhost:4000/geometry/2023/12/19/geometry-explorations</id><content type="html" xml:base="http://localhost:4000/geometry/2023/12/19/geometry-explorations.html">&lt;p&gt;This note sets up a series of related notes pertaining to my explorations in Geometry and by extension, Maths.&lt;/p&gt;
+
+&lt;p&gt;The explorations are my work in trying to make sense of the world through math. They are presented here, in part, to motivate me to express my thoughts in a more organized fashion than I might otherwise, and in part to share in the hopes that some small few might benefit or wish to chat about things.&lt;/p&gt;
+
+&lt;p&gt;So, enjoy and if you do, feel free to email me about it.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;The notes to come are not mathematical treatises, they are mostly me trying to figure stuff out. I expect they will be superseded with more intelligible writings as I learn more, but they are not definitive. They are more like a journal where I lay out my thoughts of the moment.&lt;/p&gt;
+
+&lt;p&gt;I have always found math confusing and so much of it lacking comprehensibility or cohesion. When I came across Geometry, as part of my personal remediation plan doing Saxon Math, begun about 7 years ago. I was stunned to find something that actually made sense, was coherent and cohesive. It turns out that Euclid, writer of the Elements of Geometry, established by example, one of the greatest models of thought that the world has ever known. I dug in to his subject, Geometry, and I dug in hard. I worked through propositions referenced by Saxon, in the Elements. I was mesmerized, but not at first. At first, it seemed incredibly difficult to understand, but after many, many hours of work and contemplation, it clicked and I got it… even if I couldn’t apply it in novel circumstances without great difficulty on the drop of a dime. But, I felt like I could see where it was coming from and where it was going. Thank you Euclid and thank you John Saxon for introducing me to the subject in such an accessible way.&lt;/p&gt;
+
+&lt;p&gt;Before I dive into the explorations, I feel compelled to defend Euclid, who while appreciated by many, is mocked unfairly at times by folks. Euclid’s postulates are not complete. He made some assumptions that people eventually decided were unwarranted. He didn’t prove every case of every postulate. Other geometries are possible and valid. So what? Euclid wrote a work of mathematics that lives as the finest example of mathematics ever written (to date). He didn’t write a book on how to write axiomatically, or how to write with rigor. If he had, things would have been quite different. Rather, he showed the world, by example, how to write a book with axioms and rigor, that would stand as the eminent example of how to do so, for the better part of two and a half millennia.&lt;/p&gt;
+
+&lt;p&gt;I find it amusing and bemusing that folks spend vast amounts of time and energy learning Euclid’s work, only to turn around and smugly criticize its flaws. To my mind they are like children who want to show their independence from their parents - meanwhile, everyone can see by looking that they are their parent’s children. In a similar vein, modernists from David Hilbert to Bertrand Russell, while widely criticizing Euclid, so clearly resemble their forbear, that it beggars belief. Its shocking to me that they wouldn’t simply correct the flaws inherent in his work (as an exemplar of a mindset) and extend it, without bad-mouthing it. These geniuses, and geniuses they so clearly are, have not, with all there labor achieved a work as influential as the work attributed to Euclid.&lt;/p&gt;
+
+&lt;p&gt;Anyway, enough ranting, off to explore :).&lt;/p&gt;
+
+&lt;p&gt;– will&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post added 2023-12-19 12:27:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="GEOMETRY" /><summary type="html">This note sets up a series of related notes pertaining to my explorations in Geometry and by extension, Maths. The explorations are my work in trying to make sense of the world through math. They are presented here, in part, to motivate me to express my thoughts in a more organized fashion than I might otherwise, and in part to share in the hopes that some small few might benefit or wish to chat about things. So, enjoy and if you do, feel free to email me about it.</summary></entry><entry><title type="html">MACLISP in ITS running on an emulated PDP-10</title><link href="http://localhost:4000/lisp/2023/07/31/maclisp.html" rel="alternate" type="text/html" title="MACLISP in ITS running on an emulated PDP-10" /><published>2023-07-31T10:03:00-05:00</published><updated>2023-07-31T10:03:00-05:00</updated><id>http://localhost:4000/lisp/2023/07/31/maclisp</id><content type="html" xml:base="http://localhost:4000/lisp/2023/07/31/maclisp.html">&lt;p&gt;This is a longer note that describes the process of getting ITS (Incompatible Timesharing System) up and running in order to run MACLISP. ITS is quite a large system and it has many different programming languages and programs available. In this note, we will only be using lisp and emacs, but future notes will explore logo, and perhaps other languages found in the distribution.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_006.png&quot; alt=&quot;one&quot; /&gt;&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;The ITS operating system github repo&lt;/strong&gt; &lt;a href=&quot;https://github.com/PDP-10/its&quot;&gt;https://github.com/PDP-10/its&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;The MACLISP manual&lt;/strong&gt; &lt;a href=&quot;http://www.maclisp.info/pitmanual&quot;&gt;http://www.maclisp.info/pitmanual&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;OpenSIMH&lt;/strong&gt; &lt;a href=&quot;https://opensimh.org/&quot;&gt;https://opensimh.org/&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Linux - I’m running Debian 12 (bookworm)&lt;/li&gt;
+  &lt;li&gt;A build environement (make, cc, and ld) - build-essential package on debian systems&lt;/li&gt;
+  &lt;li&gt;OpenSIMH - any reasonably recent version should work&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Install some dependencies&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The pdp10-ka emulator requires - git, c compiler, make, expect, curses, autoconf, sdl2, sdl2-image, sdl2-net, gtk3. You will also need telnet and some network dependencies. Generally, whenever something complains about a missing dependency, google it and then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo apt install whatever&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;My own incanation was:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt install -y bridge-utils build-essential expect gawk git libgtk-3-dev libpcap-dev libpcre3-dev ncurses-base ncurses-bin libncurses5-dev libpcap-dev libsdl2-2.0-0 libsdl2-dev libsdl2-image-dev libsdl2-net-dev make net-tools telnet uml-utilities
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create a Workarea&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p ~/workarea/retro/its/{dist,work}
+cd ~/workarea/retro/its/dist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Clone the ITS repository&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/PDP-10/its.git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Download a working system&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This will just take a few minutes. The repo can also be completely built from source, but that takes a long time (an hour or more).&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd its
+make download EMULATOR=pdp10-ka
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;prepare-the-sytem-to-be-run&quot;&gt;Prepare the sytem to be run&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Backup the original run file, so we can edit it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp out/pdp10-ka/run out/pdp10-ka/run.original
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Edit the run file for no network to start&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi out/pdp10-ka/run
+# comment out lines dealing with imp
+# set imp enabled
+# set imp mac=e2:6c:84:1d:34:a3
+# set imp ip=192.168.2.101/24
+# set imp gw=172.31.1.100
+# set imp host=10.3.0.6
+# at imp tap:tap0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create a back up of the untested baseline&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is a good starting point. If you run into problems, you can revert to this baseline without having to redownload stuff.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd ..
+tar cvjf untested-baseline.tar.bz2 its/build/pdp10-ka its/start its/out its/tools/sims/BIN/pdp10-ka
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Unpack the basline into work&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd ../work
+tar xvf ../dist/untested-baseline.tar.bz2
+cd its
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;run-its-the-first-time&quot;&gt;Run ITS the first time&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Start the simulator&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./start
+KA-10 simulator V4.0-0 Current        git commit id: 48186c90
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-22&amp;gt; at -u tk 10000 speed=300
+%SIM-INFO: Listening on port 10000
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-25&amp;gt; at -u dpk 10002 speed=4800
+%SIM-INFO: Listening on port 10002
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-26&amp;gt; at -u dpk line=11,10019 speed=4800
+%SIM-INFO: Line 11 Listening on port 10019
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-27&amp;gt; at -u dpk line=15,10020 speed=4800
+%SIM-INFO: Line 15 Listening on port 10020
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-29&amp;gt; at -u mty 10003 speed=50000
+%SIM-INFO: Listening on port 10003
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-30&amp;gt; at -u mty line=9,10018 speed=9600
+%SIM-INFO: Line 9 Listening on port 10018
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-31&amp;gt; at -u mty line=8,10017 speed=9600
+%SIM-INFO: Line 8 Listening on port 10017
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-32&amp;gt; at -u mty line=7,10016;notelnet speed=50000
+%SIM-INFO: Line 7 Listening on port 10016
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-33&amp;gt; at -u mty line=6,10015 speed=9600
+%SIM-INFO: Line 6 Listening on port 10015
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-35&amp;gt; at ten11 10011
+%SIM-INFO: Listening on port 10011
+/home/wsenn/workarea/retro/its/work/its/out/pdp10-ka/run-37&amp;gt; at auxcpu 10006
+%SIM-INFO: Listening on port 10006
+
+ DSKDMP
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If all went well, nothing failed and you ITS prints DSKDMP in the terminal window.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Start ITS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;When DSKDMP is displayed, you can start ITS by typing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;its&amp;lt;CR&amp;gt;&amp;lt;ESC&amp;gt;g&lt;/code&gt; and it will start working. Ignore the NET message. We haven’t provided a working network, and won’t in this note. It isn’t needed.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DSKDMP
+its
+$G
+SALVAGER.317
+
+
+IT IS NOW  3:25:48 PM EDT, MONDAY, JUL 31, 2023
+
+KA ITS 1651 IN OPERATION AT 15:25:48
+KA ITS 1651 SYSTEM JOB USING THIS CONSOLE.
+TV 11 WENT DOWN -- 15:25:48
+ LOGIN  TARAKA 0 15:25:49
+TOP LEVEL INTERRUPT 200 DETACHED JOB # 4, USR:TARAKA CNAVRL 15:25:50
+NET: TIMED OUT TRYING TO COME UP  15:25:58
+IT IS NOW  3:26:17 PM EDT, MONDAY, JUL 31, 2023
+ LOGIN  .BATCH 0 15:26:50
+ LOGIN  GUNNER 0 15:27:50
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;login-to-its-over-telnet-locally&quot;&gt;Login to ITS over telnet (locally)&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Determine the port&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;After the time is displayed, you can connect via telnet or login at the console itself. Let’s connect via telnet. Look up above to where the dpk is attached:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...&amp;gt; at -u dpk 10002 speed=4800
+%SIM-INFO: Listening on port 10002
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Connect to the ITS sever using telnet&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That’s our telnet port, fire up telnet and connect:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ telnet localhost 10002
+Trying ::1...
+Connected to localhost.
+Escape character is &apos;^]&apos;.
+
+
+Connected to the KA-10 simulator DPK device, line 0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Initiate a session&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To begin a session with ITS, press &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C-z&lt;/code&gt;, that is press and hold Ctrl and z at the same time. In this note anytime you see C-char, this is a control chord and works this way. If you see M-char, it means press Esc, let it go, then press the char. The ordinary Meta-char chord where you press Alt and char at the same time doesn’t seem to work. Alternatively and in the output a control chord may appear as ^char.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;^Z
+KA ITS.1651. DDT.1548.
+TTY 21
+You&apos;re all alone, Fair share = 99%
+Welcome to ITS!
+
+For brief information, type ?
+For a list of colon commands, type :? and press Enter.
+For the full info system, type :INFO and Enter.
+
+Happy hacking!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Actually login to ITS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And it’s ready for you to login. The system is not secure, which is a good thing. Sorta like when you live somewhere where you don’t have to lock the doors - hint, move outta the city… but still, lock the doors :).&lt;/p&gt;
+
+&lt;p&gt;So, to login we will use a : command, that is a command that begins with a colon. The command to login is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:login loginname&lt;/code&gt;. Initials were in vogue back when, so I will use my initials:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;:login wds
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The system will respond with:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;KA: WDS; WDS MAIL - NON-EXISTENT DIRECTORY&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;No worries, even though it complains about a non-existent directory, it’ll log you in anyway.&lt;/p&gt;
+
+&lt;h2 id=&quot;first-steps&quot;&gt;First Steps&lt;/h2&gt;
+
+&lt;p&gt;In this section we will set the terminal type, create a user directory and log out and back in so that ITS knows about the directory going forward. Otherwise, ITS will occasionally refuse to acknowledge the existence of the directory, usually at inopportune moments like when you are trying to save a ledit session.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Set the terminal type&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We need to tell ITS about our terminal (it may think we’re a line printer terminal ATM). The command needed here is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:tctyp AAA&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;:tctyp AAA
+:KILL
+*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create the user directory&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is  a little tricky and a lot weird, but what we are going to do is type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;C-r&amp;gt;wds; ..new. (udir).&amp;lt;CR&amp;gt;&lt;/code&gt; where &lt;CR&gt; is an actual carriage return. This will create a new directory named `wds`:&lt;/CR&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;^R wds; ..new. (udir).
+DSK: WDS; ..NEW. (UDIR) - FILE NOT FOUND
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ignore the FILE NOT FOUND error, it created the directory. To see this, change into the directory and type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C-f&lt;/code&gt; to see the files, or just type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:listf wds;&amp;lt;CR&amp;gt;&lt;/code&gt;. I’ll stop saying &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;CR&amp;gt;&lt;/code&gt; after : commands from this point forward, just know you need to end : commands with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;CR&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;:cwd wds
+^F
+KA   WDS
+FREE BLOCKS #2=784 #3=1523 #0=568 #1=1541
+*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create a file in the directory to keep the salvager happy&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Apparently, there is a salvager that will get rid of empty directories. Let’s create a file in the directory. Let’s use emacs (this is a VERY early version, but should be quite familiar to any current emacs user). This version is a set of macros running in TECO, after RMS renamed it to EMACS, but before it became a standalone editor:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;:emacs --read-- --me--
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Yup, that’s exactly as typed, files have two names (somebody smarter than me knows why, just trust me for now). This file is called “–read–” and “–me–”. For me it’s easier to just think of it as a name and extension separated by a space instead of a ., but ymmv.&lt;/p&gt;
+
+&lt;p&gt;The screen should clear and emacs should fire up in all it’s ancient glory:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_005.png&quot; alt=&quot;two&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s enter &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;This file is to prevent directory salvage.&lt;/code&gt;, Then type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C-x C-s&lt;/code&gt; to save and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C-x C-c&lt;/code&gt; to exit emacs. See, familiar, and easy right (says the :wq vi guy)? Then to list the file in the directory, type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C-f&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*^F
+KA   WDS
+FREE BLOCKS #2=784 #3=1523 #0=568 #1=1540
+  2   --READ --ME-- 1 ! 7/31/2023 15:57:23
+*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;yay? I think so, and hopefully, you feel the same way.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Logout and back in again&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s quickly logout and back in to get ITS to recognize our user directory properly:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;:logout
+KA ITS 1651  Console 21 Free. 16:32:00
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and back in with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C-z&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;^Z
+KA ITS.1651. DDT.1548.
+TTY 21
+You&apos;re all alone, Fair share = 99%
+Welcome to ITS!
+
+For brief information, type ?
+For a list of colon commands, type :? and press Enter.
+For the full info system, type :INFO and Enter.
+
+Happy hacking!
+:login wds
+
+To see system messages, do &quot;:MSGS&amp;lt;CR&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and set the terminal type:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tctyp AAA
+:KILL
+*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;program-in-maclisp&quot;&gt;Program in MACLISP&lt;/h2&gt;
+
+&lt;p&gt;Let’s create some lisp and run MACLISP. This example uses emacs initially to create a lisp source file, then we run lisp standalone, load the file we created and use it’s function in our interpreter session. Then we will use ledit, a special mode of MACLISP using emacs from MACLISP on a special buffer.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Use emacs to create the file &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;addtwo lisp&lt;/code&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;:EMACS addtwo lisp
+
+(defun addtwo (x y)
+    (+ x y))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you’ve been cutting and pasting as you followed along with the note, you might find that doesn’t work so great with emacs, so be careful. You may need to do it a line at a time. Anyway, enter the text, then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C-x C-s&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C-x C-c&lt;/code&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Run MACLISP&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*:LISP
+LISP 2156
+Alloc? n
+*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We’re in! Let’s load our lisp file:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(LOAD &quot;addtwo lisp&quot;)
+T
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Lisp responds T if it was able to load. Let’s use it in our session:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(addtwo 5 3)
+10
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Sure 5+3 is 8, right? Ha, it’s base 8 (octal). Yes, you can change it, but it is running on a dec vm, so base 8 is just, right, right?&lt;/p&gt;
+
+&lt;p&gt;That’s it for this first session, let’s quit:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(quit)
+:KILL  EMACS0$J
+*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_006.png&quot; alt=&quot;one&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;yay again!&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Use LEDIT in MACLISP&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s use ledit now. Start lisp up again, and invoke (ledit) straightaway:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*:LISP
+LISP 2156
+Alloc? n
+*
+(ledit)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As soon as you type the closing parenthesis, emacs ledit will start up and your cursor will be top-left. The status line will display: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EMACS LEDIT (LISP)  Main:   *&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_007.png&quot; alt=&quot;three&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In ledit, let’s create the timestwo function:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(defun timestwo (x y)
+  (* x y))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This time, we will use some ledit magic and not treat it as a normal emacs session. To push the defined funtion to the environment, press &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M-z&lt;/code&gt; (&lt;ESC&gt; let go, then &apos;z&apos;), then to exit ledit and return to lisp, type `C-x z`.&lt;/ESC&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;;Reading from LEDIT
+TIMESTWO
+;Edit Completed
+
+*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s try it out in our lisp environment:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(timestwo 5 2)
+12
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Nice, and correct!&lt;/p&gt;
+
+&lt;p&gt;We can still load the existing lisp file and use it too:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(load &quot;addtwo lisp&quot;)
+(addtwo (timestwo 2 3) (timestwo 3 7))
+33
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Cool.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Exit LISP&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s exit lisp:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(quit)
+:KILL  LEDIT$J
+*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_008.png&quot; alt=&quot;four&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;shutdown-the-system&quot;&gt;Shutdown the system&lt;/h2&gt;
+
+&lt;p&gt;To bring the system down, we will first logout out of our user account with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:logout&lt;/code&gt;. Then we will &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:login&lt;/code&gt; with no user and proceed with a normal shutdown (if you don’t logout of the user account first, the shutdown will take 5 minutes).&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Logout of the user account&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* :logout
+
+KA ITS 1651  Console 21 Free. 16:42:56
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Login as an unnamed user&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;^Z
+KA ITS.1651. DDT.1548.
+TTY 21
+You&apos;re all alone, Fair share = 99%
+Welcome to ITS!
+
+For brief information, type ?
+For a list of colon commands, type :? and press Enter.
+For the full info system, type :INFO and Enter.
+
+Happy hacking!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Initiate the shutdown&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;First we initiate lock with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:lock&lt;/code&gt;, then initiate the shutdown with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5down&lt;/code&gt;, we will answer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Y&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;byeC-c&lt;/code&gt;, to the prompts:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;:lock
+(Please Log In)
+ LOCK.156
+_5down
+DO YOU REALLY WANT THE SYSTEM TO GO DOWN?
+Y
+___002 LOCK   SYS    DOWN   MAIL   WRITE
+
+PLEASE ENTER A BRIEF MESSAGE TO USERS, ENDED BY ^C
+bye^C
+
+KA ITS 1651 NOT IN OPERATION 16:45:23
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Since we are running in a telnet session, we can just end it. To exit telnet, press &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^]&lt;/code&gt; and at the telnet&amp;gt; prompt, type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;q&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;^]
+telnet&amp;gt; q
+Connection closed.
+$
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can close the terminal and switch to the other terminal with our console session. You will see some console messages that are new and the last few should look like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SHUTDOWN COMPLETE
+PI LEVEL 7 BUGDDT.  TYPE &amp;lt;ALTMODE&amp;gt;P TO CONTINUE.
+YOU ARE NOW IN DDT.
+BUGPC/   CAI COFFI4+1   $Q-2/   JRST COFFI7
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;At this point ITS is shut down. To exit, we will type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^\&lt;/code&gt; to suspend the emulator and return to the sim&amp;gt; prompt, then type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;q&lt;/code&gt; to exit the sim:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;^\
+Simulation stopped, PC: 773121 (CONSO 120,40)
+sim&amp;gt; q
+Goodbye
+$
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;back-up-the-working-system&quot;&gt;Back up the working system&lt;/h2&gt;
+
+&lt;p&gt;It is a really good idea to back up the tested working system. This way, you can always get back to what worked with minimal fuss:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd ../../dist
+tar cvjf tested-working.tar.bz2 its/build/pdp10-ka its/start its/out its/tools/sims/BIN/pdp10-ka
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s it for now. In another note, I will walk through setting up networking and using LOGO in ITS with a graphical terminal and turtle.&lt;/p&gt;
+
+&lt;p&gt;Let me know if you run into any issues.&lt;/p&gt;
+
+&lt;p&gt;Later, Will&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post added 2023-07-31 18:07:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="LISP" /><summary type="html">This is a longer note that describes the process of getting ITS (Incompatible Timesharing System) up and running in order to run MACLISP. ITS is quite a large system and it has many different programming languages and programs available. In this note, we will only be using lisp and emacs, but future notes will explore logo, and perhaps other languages found in the distribution.</summary></entry><entry><title type="html">Franz LISP Opus 32 in 3BSD running on an emulated VAX 780</title><link href="http://localhost:4000/lisp/2023/07/31/franz-lisp.html" rel="alternate" type="text/html" title="Franz LISP Opus 32 in 3BSD running on an emulated VAX 780" /><published>2023-07-31T08:03:00-05:00</published><updated>2023-07-31T08:03:00-05:00</updated><id>http://localhost:4000/lisp/2023/07/31/franz-lisp</id><content type="html" xml:base="http://localhost:4000/lisp/2023/07/31/franz-lisp.html">&lt;p&gt;This note describes how to set up and run Franz LISP Opus 32 running on 3BSD running on an emulated VAX 780. This version of Franz LISP is Opus 32 and it is a LISP 1.5 derived LISP from 1979.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_004.png&quot; alt=&quot;one&quot; /&gt;&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;p&gt;Wikipedia notes:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In computer programming, Franz Lisp is a discontinued Lisp programming language system written at the University of California, Berkeley (UC Berkeley, UCB) by Professor Richard Fateman and several students, based largely on Maclisp and distributed with the Berkeley Software Distribution (BSD) for the Digital Equipment Corporation (DEC) VAX minicomputer. Piggybacking on the popularity of the BSD package, Franz Lisp was probably the most widely distributed and used Lisp system of the 1970s and 1980s.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The name is a pun on the composer and pianist Franz Liszt.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;3BSD Tape File&lt;/strong&gt; &lt;a href=&quot;https://sourceforge.net/projects/bsd42/files/Install%20tapes/3%20BSD/&quot;&gt;https://sourceforge.net/projects/bsd42/files/Install%20tapes/3%20BSD/&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Franz Lisp Manual - Opus 38.69 from 1982&lt;/strong&gt; &lt;a href=&quot;https://www.softwarepreservation.org/projects/LISP/franz/Franz_Lisp_July_1983.pdf&quot;&gt;https://www.softwarepreservation.org/projects/LISP/franz/Franz_Lisp_July_1983.pdf&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is the earliest manual I could find. When you’re online in 3BSD, there is documentation for the Franz LISP Opus 32, in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr/doc/lisp&lt;/code&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Gunkies 3BSD Page&lt;/strong&gt; &lt;a href=&quot;https://gunkies.org/wiki/3BSD&quot;&gt;https://gunkies.org/wiki/3BSD&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;An invaluable resource for getting things up an running with a minimum of fuss.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;OpenSIMH&lt;/strong&gt; &lt;a href=&quot;https://opensimh.org/&quot;&gt;https://opensimh.org/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The simulator I’m using.&lt;/p&gt;
+
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Linux - I’m running Debian 12 (bookworm)&lt;/li&gt;
+  &lt;li&gt;A build environement (make, cc, and ld) - build-essential package on debian systems&lt;/li&gt;
+  &lt;li&gt;OpenSIMH - any reasonably recent version should work&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;overview&quot;&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;Much of this note is based on the Gunkies 3BSD page. Specifically, tboot.ini, dboot.ini, uudecode, and the 3BSD boot block are from that page &lt;a href=&quot;https://gunkies.org/wiki/3BSD&quot;&gt;https://gunkies.org/wiki/3BSD&lt;/a&gt;. This note is just organized differently and getting 3BSD running here, is specifically for running Franz LISP.&lt;/p&gt;
+
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create a workarea&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p ~/workarea/retro/franz/{dist,work}
+cd ~/workarea/retro/franz/dist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Download 3BSD and a bootblock&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://decuser.github.io/assets/files/lisp/3bsd.tap.bz2
+wget https://decuser.github.io/assets/files/lisp/boot3bsd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Verify you have the right files&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;shasum *
+f8b59d933896678f04e9a0b0284466563d650c24  3bsd.tap.bz2
+482464bbd3ceb8ec9f02036ad06dbe5a181572e2  boot3bsd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Unpack the tape file and copy the bootblock into work&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd ../work
+bzcat ../dist/3bsd.tap.bz2 &amp;gt; 3bsd.tap
+cp ../dist/boot3bsd .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create an ini file for booting from tape&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cat &amp;lt;&amp;lt;EOF &amp;gt;tboot.ini
+set tto 7b
+set rq dis
+set lpt dis
+set rl dis
+set hk dis
+set rq dis
+set rqb dis
+set rqc dis
+set rqd dis
+set ry dis
+set ts dis
+set tq dis
+set dz lines=8
+set rp0 rp06
+at rp0 rp06.disk
+set tu0 te16
+at tu0 3bsd.tap
+D 50000 20009FDE
+D 50004 D0512001
+D 50008 3204A101
+D 5000C C113C08F
+D 50010 A1D40424
+D 50014 008FD00C
+D 50018 C1800000
+D 5001C 8F320800
+D 50020 10A1FE00
+D 50024 00C139D0
+D 50028 04c1d004
+D 5002C 07e15004
+D 50030 0000f750
+go 50000
+go 0
+EOF
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;build-the-system&quot;&gt;Build the system&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Boot to tape&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vax780 tboot.ini
+/home/wsenn/workarea/retro/franz/work/tboot.ini-15&amp;gt; at rp0 rp06.disk
+%SIM-INFO: RP0: Creating new file: rp06.disk
+/home/wsenn/workarea/retro/franz/work/tboot.ini-17&amp;gt; at tu0 3bsd.tap
+%SIM-INFO: TU0: Tape Image &apos;3bsd.tap&apos; scanned as SIMH format
+
+HALT instruction, PC: 00050033 (HALT)
+=
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Restore Unix&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=&lt;/code&gt; is the tape’s minimal OS prompt. From here we will make a new filesystem on the rp06 and restor unix from the tape to the disk.&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;=mkfs
+file sys size: 7942
+file system: hp(0,0)
+isize = 5072
+m/n = 3 500
+=restor
+Tape? ht(1,1)
+Disk? hp(0,0)
+Last chance before scribbling on disk. 
+End of tape
+=
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Press enter after &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Last chance before scribbling on disk.&lt;/code&gt; to continue.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Restore &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Boot Unix, make a new fileystem for /usr, and restore it from tape.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;=boot
+
+Boot
+: hp(0,0)vmunix
+61856+61008+70120 start 0x4B4
+VM/UNIX (Berkeley Version 2.7) 2/10/80 
+real mem  = 8323072
+avail mem = 8062976
+ERASE IS CONTROL-H!!!
+# /etc/mkfs /dev/rrp0g 145673
+isize = 65488
+m/n = 3 500
+# /etc/mount /dev/rp0g /usr
+# cd /usr
+# cp /dev/rmt5 /dev/null
+# cp /dev/rmt5 /dev/null
+# tar xbf 20 /dev/rmt1
+# 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The restore can take a couple of minutes, be patient. The two lines:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# cp /dev/rmt5 /dev/null
+# cp /dev/rmt5 /dev/null
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Are just a way to get the tape device to fast forward to the tape file we want.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cleanly shut unix down&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;First we will sync and unmount any mounted devices, then we will sync our system. This is the “normal” way to shut down the unix environment in simh&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# sync
+# sync
+# sync
+# cd /
+# /etc/umount /dev/rp0g
+# sync
+# sync
+# sync
+# ^E
+Simulation stopped, PC: 8000085F (BLBC 80010FA0,8000085F)
+sim&amp;gt; q
+Goodbye
+$
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Backup the baseline system&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tar cvzf rp06-baseline.tar.gz rp06.disk&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;boot-the-system-and-run-franz-lisp&quot;&gt;Boot the system and run Franz LISP&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create a disk boot ini&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cat &amp;lt;&amp;lt;EOF &amp;gt;dboot.ini
+set tto 7b
+set rq dis
+set lpt dis
+set rl dis
+set hk dis
+set rq dis
+set rqb dis
+set rqc dis
+set rqd dis
+set ry dis
+set ts dis
+set tq dis
+set dz lines=8
+set rp0 rp06
+at rp0 rp06.disk
+set tu0 te16
+load -o boot3bsd 0
+go 2
+EOF
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Boot to disk&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ vax780 dboot.ini
+
+VAX 11/780 simulator Open SIMH V4.1-0 Current        simh git commit id: cf47a20f
+
+Boot
+: 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;At the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:&lt;/code&gt; prompt, provide the location of the kernel, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hp(0,0)vmunix&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;: hp(0,0)vmunix
+61856+61008+70120 start 0x4B4
+VM/UNIX (Berkeley Version 2.7) 2/10/80 
+real mem  = 8323072
+avail mem = 8062976
+ERASE IS CONTROL-H!!!
+# 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Change the root password. It needs to be at least 6 characters long.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# passwd root
+New password:
+Retype new password:
+# 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To go into multi-user mode, press &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^d&lt;/code&gt;. this will allow you to login. Login as root with the new password.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#^D
+Sat Aug 30 06:40:18 PDT 1980
+entering rc
+clearing mtab
+mounting /usr on /dev/rp0g
+preserving Ex temps and clearing /tmp
+starting update
+starting cron
+leaving rc
+
+
+Virtual VAX/UNIX (Ernie Co-vax)
+
+login: root
+Password:
+
+Welcome to Virtual Vax/UNIX.
+ERASE IS CONTROL-H!!!
+#
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Run Franz LISP Opus 32&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Run Franz in all of its 1979 glory! Type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(exit)&lt;/code&gt; at the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-&amp;gt;&lt;/code&gt; prompt when you are ready to leave the lisp environment.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# lisp
+Franz Lisp, Opus 32
+-&amp;gt; (+ 4 4)
+8
+-&amp;gt; (car (cdr &apos;(Hi there)))
+there
+-&amp;gt;(exit)
+#
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Celebrate by backing up the working instance&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# sync
+# sync
+# sync
+# ^E
+Simulation stopped, PC: 8000085F (BLBC 80010FA0,8000085F)
+sim&amp;gt; q
+Goodbye
+$ tar cvzf rp06-working.tar.gz rp06.disk
+rp06.disk
+$ 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, anytime you want to run franz lisp, just reenter the directory with your dboot.ini and rp06.disk and type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vax780 dboot.ini&lt;/code&gt;, boot the unix kernel, hit ^d at the prompt, and login as root with your new password!&lt;/p&gt;
+
+&lt;p&gt;Here’s a typical session:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_004.png&quot; alt=&quot;one&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-the-bootblock-from-uuencoded-sources&quot;&gt;Creating the bootblock from uuencoded sources&lt;/h2&gt;
+
+&lt;p&gt;boot3bsd, the bootblock was created from Gunkies uuencoded source &lt;a href=&quot;http://gunkies.org/wiki/3BSD_bootsector&quot;&gt;http://gunkies.org/wiki/3BSD_bootsector&lt;/a&gt;, using Gunkies uudecode program &lt;a href=&quot;http://gunkies.org/wiki/Uudecode&quot;&gt;http://gunkies.org/wiki/Uudecode&lt;/a&gt;. Here is the process I followed to create the bootblock:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Download uudecode source from above and save it as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;uudecode.c&lt;/code&gt;`.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Download uuencoded bootblock from above and save it as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;boot3bsd.uu&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Compile uudecode and use it to unencode the bootblock.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cc -o uudecode uudecode.c
+./uudecode boot3bsd.uu
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Ignore the warnings, they’re irrevant to this process.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Confirm the result&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;shasum boot3bsd
+482464bbd3ceb8ec9f02036ad06dbe5a181572e2  boot3bsd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s it.&lt;/p&gt;
+
+&lt;p&gt;Later - Will&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post added 2023-07-31 11:55:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="LISP" /><summary type="html">This note describes how to set up and run Franz LISP Opus 32 running on 3BSD running on an emulated VAX 780. This version of Franz LISP is Opus 32 and it is a LISP 1.5 derived LISP from 1979.</summary></entry><entry><title type="html">pdp1-lisp running on an emulated PDP-1</title><link href="http://localhost:4000/lisp/2023/07/30/pdp-1-lisp.html" rel="alternate" type="text/html" title="pdp1-lisp running on an emulated PDP-1" /><published>2023-07-30T13:38:00-05:00</published><updated>2023-07-30T13:38:00-05:00</updated><id>http://localhost:4000/lisp/2023/07/30/pdp-1-lisp</id><content type="html" xml:base="http://localhost:4000/lisp/2023/07/30/pdp-1-lisp.html">&lt;p&gt;This note describes how to set up and run PDP-1 lisp. It’s a pretty brief walkthrough. If you run into any issues, let me know.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_003.png&quot; alt=&quot;one&quot; /&gt;&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;p&gt;PDP-1 LISP is a LISP 1.5 dialect created at BBN by L. Peter Deutsch. It was released as a DECUS tape in 1964, it currently runs on the Open SimH PDP-1 emulator.&lt;/p&gt;
+
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;The LISP Implementation for the PDP-1 Computer&lt;/strong&gt;
+&lt;a href=&quot;https://www.computerhistory.org/pdp-1/_media/pdf/DEC.pdp_1.1964.102650371.pdf&quot;&gt;https://www.computerhistory.org/pdp-1/_media/pdf/DEC.pdp_1.1964.102650371.pdf&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;OpenSIMH&lt;/strong&gt; &lt;a href=&quot;https://opensimh.org/&quot;&gt;https://opensimh.org/&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Trailing-edge Software Kits&lt;/strong&gt; &lt;a href=&quot;http://simh.trailing-edge.com/software.html&quot;&gt;http://simh.trailing-edge.com/software.html&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Linux - I’m running Debian 12 (bookworm)&lt;/li&gt;
+  &lt;li&gt;A build environement (make, cc, and ld) - build-essential package on debian systems&lt;/li&gt;
+  &lt;li&gt;OpenSIMH - any reasonably recent version should work&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create a workarea&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p ~/workarea/retro/pdp-1-lisp
+cd ~/workarea/retro/pdp-1-lisp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Download the pdp-1 lisp software kit and upack it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://simh.trailing-edge.com/kits/lispswre.zip
+unzip lispswre.zip
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;compile-the-macro-assembler&quot;&gt;Compile the macro assembler&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cc macro1.c -o macro1&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;assemble-the-lisp-interpreter&quot;&gt;Assemble the lisp interpreter&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./macro lisp.mac&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;create-an-ini-file-for-the-pdp-1-emulator&quot;&gt;Create an ini file for the PDP-1 emulator&lt;/h2&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cat &amp;lt;&amp;lt;EOF &amp;gt;run.ini
+set cpu mdv
+load lisp.rim
+d extm_init 1
+run
+
+d tw 7777
+c
+
+d tw 400
+c
+
+d ss 2
+save lisp.sav
+
+echo READY
+c
+EOF
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;run-the-emulator-and-load-the-lisp-binary&quot;&gt;Run the emulator and load the lisp binary&lt;/h2&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pdp1 run.ini
+
+PDP-1 simulator Open SIMH V4.1-0 Current        simh git commit id: cf47a20f
+
+HALT instruction, PC: 002353 (CLA LAT CLI)
+
+HALT instruction, PC: 002357 (CLA LAT)
+
+HALT instruction, PC: 000005 (STF6)
+READY
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The system is ready to act as a repl, but it’s funny, you have to end a lisp form with a space in order for the interpreter to process it! So, if you want to add two numbers, you would use
+(plus 2 2) , with a trailing space - as in, (plus 2 2)&lt;SPACE&gt;, replacing &lt;SPACE&gt; with the actual space character &apos; &apos;.&lt;/SPACE&gt;&lt;/SPACE&gt;&lt;/p&gt;
+
+&lt;p&gt;The system will reply with the evaluation:&lt;/p&gt;
+
+&lt;p&gt;a&lt;/p&gt;
+
+&lt;p&gt;To end the simulation, type CTL-e, then at the sim&amp;gt; prompt type q to exit.&lt;/p&gt;
+
+&lt;p&gt;A full session would look like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_003.png&quot; alt=&quot;one&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you encounter an interpreter error, during your session, the system will halt after displaying the error message, but can often be continued, by typing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;c&lt;/code&gt; at the sim&amp;gt; prompt.&lt;/p&gt;
+
+&lt;p&gt;This is similar to modern lisps that dump you into a debugger where you can look around and then restart the interpreter, only the debugger, in this case, is simh.&lt;/p&gt;
+
+&lt;p&gt;Later - Will&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post added 2023-07-30 20:02:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="LISP" /><summary type="html">This note describes how to set up and run PDP-1 lisp. It’s a pretty brief walkthrough. If you run into any issues, let me know.</summary></entry><entry><title type="html">Rob Pike’s LISP 1.5 in Go running on Debian 12</title><link href="http://localhost:4000/lisp/2023/07/24/pike-lisp-1.5-in-go.html" rel="alternate" type="text/html" title="Rob Pike’s LISP 1.5 in Go running on Debian 12" /><published>2023-07-24T14:35:00-05:00</published><updated>2023-07-24T14:35:00-05:00</updated><id>http://localhost:4000/lisp/2023/07/24/pike-lisp-1.5-in-go</id><content type="html" xml:base="http://localhost:4000/lisp/2023/07/24/pike-lisp-1.5-in-go.html">&lt;p&gt;This note describes how to set up and run Rob Pike’s LISP 1.5 in Go.&lt;/p&gt;
+
+&lt;p&gt;LISP 1.5 was the first LISP that was made generally available. Rob Pike implemented a minimalist version of the EVALQUOTE function described on page 13 of the LISP 1.5 Programmer’s Manual &lt;a href=&quot;https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf&quot;&gt;https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf&lt;/a&gt; or grab a &lt;a href=&quot;/assets/files/lisp/LISP%201.5%20Programmers%20Manual.pdf&quot;&gt;local copy&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_002.png&quot; alt=&quot;one&quot; /&gt;&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;LISP 1.5 Programmer’s Manual&lt;/strong&gt; &lt;a href=&quot;https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf&quot;&gt;https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf&lt;/a&gt; or grab a &lt;a href=&quot;/assets/files/lisp/LISP%201.5%20Programmers%20Manual.pdf&quot;&gt;local copy&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;LISP 1.5 Primer&lt;/strong&gt; &lt;a href=&quot;https://www.softwarepreservation.org/projects/LISP/book/Weismann_LISP1.5_Primer_1967.pdf&quot;&gt;https://www.softwarepreservation.org/projects/LISP/book/Weismann_LISP1.5_Primer_1967.pdf&lt;/a&gt; or grab a &lt;a href=&quot;/assets/files/lisp/Weismann_LISP1.5_Primer_1967.pdf&quot;&gt;local copy&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Linux - I’m running Debian 12 (bookworm)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Get Go&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd ~/Downloads
+wget https://go.dev/dl/go1.20.6.linux-amd64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Install Go&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo rm -rf /usr/local/go &amp;amp;&amp;amp; sudo tar -C /usr/local -xzf go1.20.6.linux-amd64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Add it to the path (logout and back in after making change)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi ~/.bashrc
+export PATH=$PATH:/usr/local/go/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create a work area&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p ~/workarea/go/pike
+cd ~/workarea/go/pike
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Clone Rob Pike’s repo&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/robpike/lisp.git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Initialize the module&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd lisp/
+go mod init
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Should result in:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;go: creating new go.mod: module robpike.io/lisp
+go: to add module requirements and sums:
+	go mod tidy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Tidy the module&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;go mod tidy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Good news is no news.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Build the module&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;go build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Again, good news is no news.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Run the lisp&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./lisp lib.lisp
+(fac gcd ack equal not negate mapcar length opN member union intersection)
+&amp;gt; (add 1 3)
+4
+&amp;gt;
+^D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Tool around and try things out. Pretty amazing work.&lt;/p&gt;
+
+&lt;p&gt;Later - Will&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post added 2023-07-24 19:28:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="LISP" /><summary type="html">This note describes how to set up and run Rob Pike’s LISP 1.5 in Go. LISP 1.5 was the first LISP that was made generally available. Rob Pike implemented a minimalist version of the EVALQUOTE function described on page 13 of the LISP 1.5 Programmer’s Manual https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf or grab a local copy</summary></entry><entry><title type="html">LISP 1.5 running on an emulated IBM 7094</title><link href="http://localhost:4000/lisp/2023/07/24/lisp-1.5.html" rel="alternate" type="text/html" title="LISP 1.5 running on an emulated IBM 7094" /><published>2023-07-24T13:23:00-05:00</published><updated>2023-07-24T13:23:00-05:00</updated><id>http://localhost:4000/lisp/2023/07/24/lisp-1.5</id><content type="html" xml:base="http://localhost:4000/lisp/2023/07/24/lisp-1.5.html">&lt;p&gt;This note describes how to set up and run the oldest available ancestor of all extant LISPS and Schemes.&lt;/p&gt;
+
+&lt;p&gt;LISP 1.5 was the first LISP that was made generally available. It is available to run on the OpenSIMH IBM 7094 emulator.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/lisp/Terminal_001.png&quot; alt=&quot;one&quot; /&gt;&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;LISP 1.5 Programmer’s Manual&lt;/strong&gt; &lt;a href=&quot;https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf&quot;&gt;https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf&lt;/a&gt; or grab a &lt;a href=&quot;/assets/files/lisp/LISP%201.5%20Programmers%20Manual.pdf&quot;&gt;local copy&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;LISP 1.5 Primer&lt;/strong&gt; &lt;a href=&quot;https://www.softwarepreservation.org/projects/LISP/book/Weismann_LISP1.5_Primer_1967.pdf&quot;&gt;https://www.softwarepreservation.org/projects/LISP/book/Weismann_LISP1.5_Primer_1967.pdf&lt;/a&gt; or grab a &lt;a href=&quot;/assets/files/lisp/Weismann_LISP1.5_Primer_1967.pdf&quot;&gt;local copy&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;OpenSIMH&lt;/strong&gt; &lt;a href=&quot;https://opensimh.org/&quot;&gt;https://opensimh.org/&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;LISP 1.5 2023 tarball&lt;/strong&gt; &lt;a href=&quot;/assets/files/lisp/lisp15.2023.tar.gz&quot;&gt;lisp15.2023.tar.gz&lt;/a&gt; - note, this is a slightly modified version of Andre Luvisi’s tarball.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Linux - I’m running Debian 12 (bookworm)&lt;/li&gt;
+  &lt;li&gt;A build environement (make, cc, and ld) - build-essential package on debian systems&lt;/li&gt;
+  &lt;li&gt;OpenSIMH - any reasonably recent version should work&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create a workarea&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p ~/workarea/retro/lisp-1.5/{dist,work}
+cd ~/workarea/retro/lisp-1.5/dist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Download the tarball&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://decuser.github.io/assets/files/lisp/lisp15.2023.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;build-the-system&quot;&gt;Build the System&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Unpack the tarball and the utils tarball inside it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd ../work
+tar xvzf ../dist/lisp15.2023.tar.gz
+cd lisp15
+tar xvf utils-1.1.8.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Build the utils and copy txt2bcd to a directory on the path (critically important)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd utils
+make
+cp ./txt2bcd ~/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Test txt2bcd&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;txt2bcd
+Usage: txt2bcd infile [outfile] [reclen, default 80 [blklen, default 84]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Clean up from utilts build&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd ..
+rm -fr utils
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Actually build the system&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;make realclean; make
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A successful build will result in a sysboot.tp in the current directory and a transcript similar to this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rm -f sys.log scratch/*
+(cd build; make clean)
+make[1]: Entering directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build&apos;
+(cd boottape; make clean)
+make[2]: Entering directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape&apos;
+rm -f syscore.tp sys.log scratch/*
+make[2]: Leaving directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape&apos;
+make[1]: Leaving directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build&apos;
+rm -f sysboot.tp
+(cd build; make realclean)
+make[1]: Entering directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build&apos;
+(cd boottape; make clean)
+make[2]: Entering directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape&apos;
+rm -f syscore.tp sys.log scratch/*
+make[2]: Leaving directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape&apos;
+rm -f sysboot.tp boottape/lisp.obj
+make[1]: Leaving directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build&apos;
+(cd build; make sysboot.tp)
+make[1]: Entering directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build&apos;
+asm7090/asm7090 -o boottape/lisp.obj chist/lisp.job
+(cd boottape; make)
+make[2]: Entering directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape&apos;
+i7094 lispimg.ini library.txt
+
+IBM 7094 simulator Open SIMH V4.1-0 Current        simh git commit id: cf47a20f
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-13&amp;gt; at mta1 -r scratch/lisp.job.mt
+%SIM-INFO: MTA1: unit is read only
+%SIM-INFO: MTA1: Tape Image &apos;scratch/lisp.job.mt&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-14&amp;gt; at mta2 scratch/systap.tp
+%SIM-INFO: MTA2: creating new file
+%SIM-INFO: MTA2: Tape Image &apos;scratch/systap.tp&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-15&amp;gt; at mta3 syscore.tp
+%SIM-INFO: MTA3: creating new file
+%SIM-INFO: MTA3: Tape Image &apos;syscore.tp&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-16&amp;gt; at mta4 scratch/syspot.tp
+%SIM-INFO: MTA4: creating new file
+%SIM-INFO: MTA4: Tape Image &apos;scratch/syspot.tp&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-17&amp;gt; at mta5 scratch/sysppt.tp
+%SIM-INFO: MTA5: creating new file
+%SIM-INFO: MTA5: Tape Image &apos;scratch/sysppt.tp&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-19&amp;gt; at cdr scratch/corrcards
+%SIM-INFO: CDR: creating new file
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-20&amp;gt; at cdp scratch/lispout.whatever
+%SIM-INFO: CDP: creating new file
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape/lispimg.ini-21&amp;gt; at lpt sys.log
+%SIM-INFO: LPT: creating new file
+
+HALT instruction, PC: 10524 (TRA 10523)
+Goodbye
+make[2]: Leaving directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build/boottape&apos;
+cp boottape/syscore.tp sysboot.tp
+make[1]: Leaving directory &apos;/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/build&apos;
+cp build/sysboot.tp sysboot.tp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;run-the-system&quot;&gt;Run the system&lt;/h2&gt;
+
+&lt;p&gt;If you successfully built the system, you should be ready to run LISP 1.5. A few words are in order… Running LISP 1.5, so far as I can tell, consists of running the simulator against a tape image of a lisp source file. So, you type LISP 1.5 compatible code into a file and then invoke the emulator against that file. It processes your source and outputs the result.&lt;/p&gt;
+
+&lt;p&gt;The tarball includes three source files that are in the correct format to be run in LISP 1.5:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;factorial.txt - test code that will calculate the factorial of a number, in this case 10, which should result in 3,628,800.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;funarg.txt - a function argument test&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;propcal.txt - test the Wang algorithm for propositional calculus&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To run them, invoke the emulator and provide the ini file to initialize the emulator and the text file with the source, for example, to run the factorial program type:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;i7094 lisptape.ini factorial.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A successful run will generate a sys.log file and the output will resemble:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;IBM 7094 simulator Open SIMH V4.1-0 Current        simh git commit id: cf47a20f
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-12&amp;gt; at mta1 -r scratch/lisp.job.mt
+%SIM-INFO: MTA1: unit is read only
+%SIM-INFO: MTA1: Tape Image &apos;scratch/lisp.job.mt&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-13&amp;gt; at mta2 -r sysboot.tp
+%SIM-INFO: MTA2: unit is read only
+%SIM-INFO: MTA2: Tape Image &apos;sysboot.tp&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-14&amp;gt; at mta3 scratch/syscore.tp
+%SIM-INFO: MTA3: Tape Image &apos;scratch/syscore.tp&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-15&amp;gt; at mta4 scratch/syspot.tp
+%SIM-INFO: MTA4: Tape Image &apos;scratch/syspot.tp&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-16&amp;gt; at mta5 scratch/sysppt.tp
+%SIM-INFO: MTA5: Tape Image &apos;scratch/sysppt.tp&apos; scanned as SIMH format
+/home/wsenn/workarea/retro/lisp-1.5/work/lisp15/lisptape.ini-20&amp;gt; at lpt sys.log
+%SIM-INFO: LPT: creating new file
+
+HALT instruction, PC: 10524 (TRA 10523)
+Goodbye
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The results will be in the file sys.log:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cat sys.log
+             TEST  FACTORIAL
+
+
+
+  THE TIME ( 0/ 0  000.0) HAS COME, THE WALRUS SAID, TO TALK OF MANY THI
+NGS .....   -LEWIS CARROLL-
+ EVALQUOTE OPERATOR AS OF 1 MARCH 1961.    INPUT LISTS NOW BEING READ.
+
+
+  THE TIME ( 0/ 0  000.0) HAS COME, THE WALRUS SAID, TO TALK OF MANY THI
+NGS .....   -LEWIS CARROLL-
+  FUNCTION   EVALQUOTE   HAS BEEN ENTERED, ARGUMENTS..
+ DEFINE
+
+ (((FACTORIAL (LAMBDA (X) (COND ((EQUAL X 0) 1) (T (TIMES X (FACTORIAL (
+SUB1 X)))))))))
+
+ END OF EVALQUOTE, VALUE IS ..
+ *TRUE*
+
+  FUNCTION   EVALQUOTE   HAS BEEN ENTERED, ARGUMENTS..
+ FACTORIAL
+
+ (10)
+
+
+ END OF EVALQUOTE, VALUE IS ..
+ 3628800
+
+
+
+  THE TIME ( 0/ 0  000.0) HAS COME, THE WALRUS SAID, TO TALK OF MANY THI
+NGS .....   -LEWIS CARROLL-
+ END OF EVALQUOTE OPERATOR
+             FIN      END OF LISP RUN
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;This was an interesting exploration. I enjoyed getting it up and running with a minimum of fuss. I didn’t appreciate the fact that it was effectively a job submission environment and not an interactive system.&lt;/p&gt;
+
+&lt;p&gt;Something to note is the use of evaluquote as the top-level, not eval…&lt;/p&gt;
+
+&lt;p&gt;In the next exploration, I will investigate a system that is much more modern, yet directly descended from LISP 1.5. Rob Pike’s LISP 1.5 interpreter in Go. A minimal implementation of 1.5’s evalquote from pg. 13 of the Programming LISP 1.5 text.&lt;/p&gt;
+
+&lt;h3 id=&quot;afterthoughts&quot;&gt;Afterthoughts&lt;/h3&gt;
+
+&lt;p&gt;Andre Luvisi’s original work exists (for now) in Archive.org’s repository of crawled pages:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Luvisi’s LISP 1.5 tarball&lt;/strong&gt; &lt;a href=&quot;https://web.archive.org/web/20211202101850/http://web.sonoma.edu/users/l/luvisi/lisp/lisp15.tar.gz&quot;&gt;https://web.archive.org/web/20211202101850/http://web.sonoma.edu/users/l/luvisi/lisp/lisp15.tar.gz&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It won’t build because of duplicate names (fin and fon are defined in multiple files), but the fix is easy, just change line 19 of prsf2.c to read:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;static char fin[300], fon[300];
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and it should work the same way as described above.&lt;/p&gt;
+
+&lt;p&gt;Later - Will&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post added 2023-07-24 19:28:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="LISP" /><summary type="html">This note describes how to set up and run the oldest available ancestor of all extant LISPS and Schemes. LISP 1.5 was the first LISP that was made generally available. It is available to run on the OpenSIMH IBM 7094 emulator.</summary></entry><entry><title type="html">Schemes, LISPs, and Lambda</title><link href="http://localhost:4000/lisp/2023/07/24/lisp-explorations.html" rel="alternate" type="text/html" title="Schemes, LISPs, and Lambda" /><published>2023-07-24T13:05:00-05:00</published><updated>2023-07-24T13:05:00-05:00</updated><id>http://localhost:4000/lisp/2023/07/24/lisp-explorations</id><content type="html" xml:base="http://localhost:4000/lisp/2023/07/24/lisp-explorations.html">&lt;p&gt;This note sets up a series of related notes pertaining to my explorations in LISP and Scheme. I began to be interested in functional programming a few years ago and started looking around to find resources to learn it… in my limited spare time. After finding some resources, I would study it, set it aside as too esoteric, pick it up again thinking - this is it, I’m going to master this one way or another, only to set it aside as frustratingly difficult to understand and lacking in applicability. Lately though, I have found some standout resources and worked through enough of them to begin to actually get my mind wrapped around functional programming. Below you will find a brief, informal annotated bibliography of sorts and an explanation of what’s coming in the further explorations into implementations.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;select-functional-programming-bibliography&quot;&gt;Select Functional Programming Bibliography&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;An Introduction to Functional Programming Through Lambda Calculus&lt;/strong&gt;, by Greg Michaelson, Dover, 2011 (reprint of Addison-Wesley 1989 edition).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This text describes functional programming as it is realized in Church’s Lambda Calculus. In order to “run” the programs, you need a language capable of working with lambda notation such as Standard ML (SML) &lt;a href=&quot;https://www.smlnj.org/&quot;&gt;https://www.smlnj.org/&lt;/a&gt;. This is a very well articulated work that walks the reader through a series of discussions and exercises to illustrate the general nature of functional programming as a paradigm.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Common LISP: An Interactive Approach&lt;/strong&gt;, by Stuart C. Shapiro, Computer Science Press, 1992.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This book is a very easy read that teaches programming in common lisp using a set of question and answer dialogs between the author and reader. It starts off with an assumption that the reader knows nothing much more than how to start common lisp and takes the reader on a tour of the most important language features. If you want to put common lisp to use in solving problems, this is a fantastic book. It isn’t really focused on teaching functional programming although its examples are functional in nature. Probably great if you are a learn by example reader.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;LISP: A Gentle Introduction to Symbolic Computation&lt;/strong&gt;, by David S. Touretzky, Harper &amp;amp; Row Publishers, 1984.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is a book targeting readers without prior programming experience. Its claims are modest, but it over delivers. The author clearly explains the basics of LISP and covers the language essentials quite completely.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;The Little Schemer&lt;/strong&gt;, 4th ed., by Daniel P. Friedman and Matthias Felleisen, MIT Press, 1996.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is an interesting text that could come across as cutesy and turn off the more serious minded reader. However, I enjoyed it. At first, I was annoyed that the premise being explored was not stated explicitly and up front, but after reading it more carefully, I decided that the approach was solid. Several key concepts are revealed to the reader through simple (seeming) here is some information, based on what you “know”, what is the answer? here is the answer and why it is correct style dialogs that heavily leverage progressive disclosure. When you reflect on a section, you realize that you have learned an important piece of the language.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Scheme and the Art of Programming&lt;/strong&gt;, by George Springer and Daniel P. Friedman, MIT Press, 1989.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Daniel P. Friedman was a gifted explainer. This book is a very good explanation of how sheme works and how to put it to use. It is more traditionally presented than the Little Schemer and goes into considerably more depth.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Simply Scheme: Introducing Computer Science&lt;/strong&gt;, 2nd ed., by Brian Harvey and Matthew Wright, MIT Press 1999.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Harvey’s book is one of my favorites. In it, the author teaches a number of Big Ideas, progressively. He starts off very simple and builds up to much more sophisticated constructions. The author chooses to use his own language, built on top of scheme and this is jarring, at first. But, if you spend any time with Scheme, you realize that all schemes are languages built on top of scheme’s foundation and that this use of it is completely in line with scheme’s vibe. Once you get past the language is not quite canonical scheme bit, it’s actually genius how he abstracts the teaching of scheme away from the language itself and gets into the big ideas of computation as realized by the language.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Structure and Interpretation of Computer Programs&lt;/strong&gt;, 2nd ed., by Harold Abelson, Gerald Jay Sussman, with Julie Sussman, MIT Press, 1996.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is a great book particularly when it is married to the author’s video lectures from 1986 &lt;a href=&quot;https://www.youtube.com/watch?v=2Op3QLzMgSY&quot;&gt;https://www.youtube.com/watch?v=2Op3QLzMgSY&lt;/a&gt; Combined, this is top 10 CS course material. The lesson that sticks with me the most is how they distilled language down to providing three capabilities:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Primitives&lt;/li&gt;
+  &lt;li&gt;Means of combinations&lt;/li&gt;
+  &lt;li&gt;Means of abstraction&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Just a great book, all around, but difficult in many ways. Which leads me to the point of all this discussion . Which is to say that reading books is one thing, working through them 20-30 years later, is quite another. I am a hands on learner. I get much more out of typing in programs and dealing with the errors that arise, than I do out of just reading page after page of description.&lt;/p&gt;
+
+&lt;p&gt;All of the books above are available today, most are available as pdfs.&lt;/p&gt;
+
+&lt;h2 id=&quot;exploring-implementations&quot;&gt;Exploring Implementations&lt;/h2&gt;
+
+&lt;p&gt;One cannot help but notice that the list of books above are Scheme or LISP books with the sole exception of the Lambda Calculus book. The question that immediately arises is, which Scheme or which LISP? As it turns out, this question is a tricky one. After having tried out every version of scheme and lisp I could get my hands on, I have come to the conclusion that Scheme and LISP are idealizations of Lambda Calculus facilitating languages - there is no true Scheme or LISP.&lt;/p&gt;
+
+&lt;p&gt;There are so many variations, it is flat out ridiculous. That said, each of the books above used historically extant versions. Unfortunately, the authors of these books were not good about specificity. They usually claimed that their code would work with pretty much any reasonably complete (as of then) environment and gave appendices with their customizations that you could “port” to your environment. The good news is that folks have used these books over the decades and give us some hints as to current workable environments.&lt;/p&gt;
+
+&lt;p&gt;I started exploring the environments with the intention of setting up specific environments for my work in these books, but after a bit, the exploration of environments became an interest in itself. Where did the Schemes and LISPS come from, what did those environments look like and how did they function?&lt;/p&gt;
+
+&lt;p&gt;There’ll be a lot less talk in the environment explorations and they will be set up as howtos.&lt;/p&gt;
+
+&lt;p&gt;Thx - Will&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;post added 2023-07-24 19:28:00 -0600&lt;/em&gt;&lt;/p&gt;</content><author><name>decuser</name><email>will.senn@gmail.com</email></author><category term="LISP" /><summary type="html">This note sets up a series of related notes pertaining to my explorations in LISP and Scheme. I began to be interested in functional programming a few years ago and started looking around to find resources to learn it… in my limited spare time. After finding some resources, I would study it, set it aside as too esoteric, pick it up again thinking - this is it, I’m going to master this one way or another, only to set it aside as frustratingly difficult to understand and lacking in applicability. Lately though, I have found some standout resources and worked through enough of them to begin to actually get my mind wrapped around functional programming. Below you will find a brief, informal annotated bibliography of sorts and an explanation of what’s coming in the further explorations into implementations.</summary></entry></feed>

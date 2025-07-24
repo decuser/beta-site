@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Installing and running DragonFly BSD 6.4 | decuser’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Installing and running DragonFly BSD 6.4" />
+<meta name="author" content="decuser" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This note is about installing and running DragonFly BSD 6.4 DragonFly BSD from https://dragonflybsd.org is a BSD :). As such, it is a rock and the userland is sane. It was forked from FreeBSD long ago and is renowned for its HAMMER FS. I started the exploration with the intention of learning more about HAMMER and have enjoyed the journey." />
+<meta property="og:description" content="This note is about installing and running DragonFly BSD 6.4 DragonFly BSD from https://dragonflybsd.org is a BSD :). As such, it is a rock and the userland is sane. It was forked from FreeBSD long ago and is renowned for its HAMMER FS. I started the exploration with the intention of learning more about HAMMER and have enjoyed the journey." />
+<link rel="canonical" href="http://localhost:4000/operating-systems/bsd/dragonfly-bsd/2023/01/16/dragonfly.html" />
+<meta property="og:url" content="http://localhost:4000/operating-systems/bsd/dragonfly-bsd/2023/01/16/dragonfly.html" />
+<meta property="og:site_name" content="decuser’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-01-16T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Installing and running DragonFly BSD 6.4" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"decuser"},"dateModified":"2023-01-16T00:00:00-06:00","datePublished":"2023-01-16T00:00:00-06:00","description":"This note is about installing and running DragonFly BSD 6.4 DragonFly BSD from https://dragonflybsd.org is a BSD :). As such, it is a rock and the userland is sane. It was forked from FreeBSD long ago and is renowned for its HAMMER FS. I started the exploration with the intention of learning more about HAMMER and have enjoyed the journey.","headline":"Installing and running DragonFly BSD 6.4","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/operating-systems/bsd/dragonfly-bsd/2023/01/16/dragonfly.html"},"url":"http://localhost:4000/operating-systems/bsd/dragonfly-bsd/2023/01/16/dragonfly.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="decuser&apos;s blog" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">decuser&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">about</a><a class="page-link" href="/chrono/">all posts</a><a class="page-link" href="/genode/">genode</a><a class="page-link" href="/geometry/">geometry</a><a class="page-link" href="/lisp/">lisp</a><a class="page-link" href="/m-100/">m-100</a><a class="page-link" href="/pal-1/">pal-1</a><a class="page-link" href="/unix/">unix</a><a class="page-link" href="/x-win/">x-win</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="/assets/mermaid-9.3.0/mermaid.js"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Installing and running DragonFly BSD 6.4</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2023-01-16T00:00:00-06:00" itemprop="datePublished">
+        Jan 16, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This note is about installing and running DragonFly BSD 6.4</p>
+
+<p><img src="/assets/img/dragonfly/01.jpeg" alt="one" /></p>
+
+<p>DragonFly BSD from <a href="https://dragonflybsd.org">https://dragonflybsd.org</a> is a BSD :). As such, it is a rock and the userland is sane. It was forked from FreeBSD long ago and is renowned for its HAMMER FS. I started the exploration with the intention of learning more about HAMMER and have enjoyed the journey.</p>
+
+<!--more-->
+
+<p>Link to high res image:</p>
+
+<ul>
+  <li><a href="/assets/img/dragonfly/01-big.jpeg">dragonfly-running on metal</a></li>
+</ul>
+
+<p>I like DragonFly BSD, but there is a bit of a learning curve, even for someone used to FreeBSD… I say this as someone who has been using FreeBSD for more than a decade and while there is some overlap, it’s still pretty different. Maybe if I had used an earlier version of FreeBSD it would seem more familiar, but I started with 8.</p>
+
+<h3 id="requirements">Requirements</h3>
+
+<hr />
+
+<ul>
+  <li>A machine to run it on - I put it on my Dell Optiplex 755, Core 2 Quad  CPU   Q9550  @ 2.83GHz w/8GB RAM, and a 240 GB SSD</li>
+  <li>DragonFly BSD 6.4 USB image from <a href="https://www.dragonflybsd.org/download/">https://www.dragonflybsd.org/download/</a></li>
+</ul>
+
+<h3 id="resources">Resources</h3>
+
+<hr />
+
+<ul>
+  <li>DragonFly BSD Handbook <a href="https://www.dragonflybsd.org/docs/handbook/">https://www.dragonflybsd.org/docs/handbook/</a></li>
+  <li>Mailing List and IRC <a href="https://www.dragonflybsd.org/mailinglists/">https://www.dragonflybsd.org/mailinglists/</a></li>
+  <li>DragonFly Digest <a href="https://www.dragonflydigest.com/">https://www.dragonflydigest.com/</a></li>
+</ul>
+
+<h3 id="getting-started">Getting started</h3>
+
+<hr />
+
+<h4 id="create-a-workarea-on-your-existing-system">Create a workarea on your existing system</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p ~/Downloads/dragonfly
+cd ~/Downloads/dragonfly/
+</code></pre></div></div>
+
+<h4 id="download-the-image-decompress-it-and-verify-it">Download the image, decompress it, and verify it</h4>
+
+<p>Note that md5’s of the releases are available at <a href="http://avalon.dragonflybsd.org/iso-images/md5.txt">http://avalon.dragonflybsd.org/iso-images/md5.txt</a></p>
+
+<p>MD5 (dfly-x86_64-6.4.0_REL.img) = b3b23e1a18292c46643f8df435e4ab68</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aria2c https://mirror-master.dragonflybsd.org/iso-images/dfly-x86_64-6.4.0_REL.img.bz2
+bzip2 -d dfly-x86_64-6.4.0_REL.img.bz2
+md5 dfly-x86_64-6.4.0_REL.img
+MD5 (dfly-x86_64-6.4.0_REL.img) = b3b23e1a18292c46643f8df435e4ab68
+</code></pre></div></div>
+<h4 id="burn-it-to-usb---i-use-balena-etcher">Burn it to USB - I use Balena Etcher</h4>
+
+<h3 id="installing-dragonfly-bsd">Installing DragonFly BSD</h3>
+
+<hr />
+
+<h4 id="boot-to-the-usb-stick">Boot to the USB stick</h4>
+
+<h4 id="dragonfly-boot-menu">DragonFly Boot Menu</h4>
+
+<p>The DragonFly Boot Menu will appear after a few seconds.</p>
+
+<ul>
+  <li>Choose <code class="language-plaintext highlighter-rouge">1. Boot DragonFly [kernel]</code></li>
+</ul>
+
+<p>The bootup process takes a minute or so… be patient.</p>
+
+<h4 id="running-the-dragonfly-bsd-installer">Running the DragonFly BSD Installer</h4>
+
+<hr />
+
+<ul>
+  <li>login as <code class="language-plaintext highlighter-rouge">installer</code> with no password</li>
+</ul>
+
+<p>The installer will begin  and display its dialogs:</p>
+
+<h5 id="welcome-screen-and-staring-the-installation">Welcome screen and staring the installation</h5>
+
+<ul>
+  <li>Welcome to DragonFly BSD</li>
+</ul>
+
+<p>A brief description of Dragonfly BSD is presented.</p>
+
+<ul>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Install DragonFly BSD</code></p>
+  </li>
+  <li>
+    <p>Begin Installation</p>
+  </li>
+</ul>
+
+<p>The installer describes what it’s about to do.</p>
+
+<ul>
+  <li>Again, choose <code class="language-plaintext highlighter-rouge">Install DragonFly BSD</code></li>
+</ul>
+
+<h5 id="disk-setup">Disk Setup</h5>
+
+<ul>
+  <li>
+    <p>UEFI or legacy BIOS</p>
+  </li>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Legacy BIOS</code> (or UEFI, if you have it)</p>
+  </li>
+  <li>
+    <p>Select Disk - a list of disks is presented.</p>
+  </li>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">da0: 244198MB</code></p>
+  </li>
+  <li>
+    <p>How Much Disk? - asks you how much of the disk (all of it, or just part of it).</p>
+  </li>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Use Entire Disk</code></p>
+  </li>
+  <li>
+    <p>Are you absolutely sure?</p>
+  </li>
+  <li>
+    <p>Acknowledge by choosing <code class="language-plaintext highlighter-rouge">OK</code></p>
+  </li>
+  <li>
+    <p>Information</p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The disk
+da0: 244198MB
+was formatted.
+</code></pre></div></div>
+<ul>
+  <li>Acknowledge by choosing <code class="language-plaintext highlighter-rouge">OK</code></li>
+</ul>
+
+<h5 id="file-system-setup">File System Setup</h5>
+
+<ul>
+  <li>Select file system</li>
+  <li>Choose <code class="language-plaintext highlighter-rouge">Use HAMMER2</code> as recommended.</li>
+  <li>Create Subpartitions</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/boot 1024M
+swap 16G
+/ 166G
+/build *
+</code></pre></div></div>
+<ul>
+  <li>Choose <code class="language-plaintext highlighter-rouge">Accept and Create</code></li>
+</ul>
+
+<p>The filesystem is created.</p>
+
+<h5 id="os-installation">OS Installation</h5>
+
+<ul>
+  <li>
+    <p>Install OS</p>
+  </li>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Begin Installing Files</code></p>
+  </li>
+</ul>
+
+<p>It will take a couple of minutes for the operating system files to be written to disk.</p>
+
+<h5 id="boot-block-installation">Boot Block Installation</h5>
+
+<ul>
+  <li>Install Bootblock(s)</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Disk Drive   Install Bootblock? Packet Mode?
+ [da0      ]  [X]                [X]
+</code></pre></div></div>
+<ul>
+  <li>
+    <p>Choose Accept and Install Bootblocks</p>
+  </li>
+  <li>
+    <p>Information</p>
+
+    <p><code class="language-plaintext highlighter-rouge">Bootblocks were successfully installed!</code></p>
+  </li>
+  <li>
+    <p>Acknowledge by choosing <code class="language-plaintext highlighter-rouge">OK</code></p>
+  </li>
+</ul>
+
+<h5 id="completing-the-installation">Completing the installation</h5>
+
+<ul>
+  <li>DragonFly BSD is Installed!</li>
+</ul>
+
+<p>The base installation, now it’s time to configure the system.</p>
+
+<ul>
+  <li>Choose <code class="language-plaintext highlighter-rouge">Configure this system</code></li>
+</ul>
+
+<h4 id="configuring-the-newly-installed-system">Configuring the newly installed system</h4>
+
+<hr />
+
+<h4 id="timezone-configuration">Timezone configuration</h4>
+
+<ul>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Select Timezone</code></p>
+  </li>
+  <li>
+    <p>Local or UTC (Greenwich Mean Time) clock</p>
+
+    <ul>
+      <li>Choose <code class="language-plaintext highlighter-rouge">YES</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>Select Timezone</p>
+  </li>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">America</code></p>
+  </li>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Chicago</code></p>
+  </li>
+  <li>
+    <p>Information</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Time Zone has been set to
+/mnt/usr/share/zoneinfo/America/Chicago.
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Acknowledge by choosing <code class="language-plaintext highlighter-rouge">OK</code></p>
+  </li>
+</ul>
+
+<h5 id="date-and-time-configuration">Date and Time configuration</h5>
+
+<ul>
+  <li>
+    <p>Set date and time</p>
+  </li>
+  <li>
+    <p>Set Time/Date as you like</p>
+  </li>
+  <li>
+    <p>Confirm your choices by choosing <code class="language-plaintext highlighter-rouge">OK</code></p>
+  </li>
+  <li>
+    <p>Information</p>
+
+    <p><code class="language-plaintext highlighter-rouge">The time and date have been set.</code></p>
+  </li>
+  <li>
+    <p>Acknowledge by choosing <code class="language-plaintext highlighter-rouge">OK</code></p>
+  </li>
+</ul>
+
+<h5 id="keyboard-map-configuration">Keyboard map configuration</h5>
+
+<ul>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Set keyboard map</code></p>
+  </li>
+  <li>
+    <p>Select Keyboard Map</p>
+
+    <ul>
+      <li>Choose <code class="language-plaintext highlighter-rouge">us.pc-ctrl-kbd</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="root-password-configuration">Root password configuration</h5>
+
+<ul>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Set root password</code></p>
+  </li>
+  <li>
+    <p>Set Root Password</p>
+
+    <ul>
+      <li>
+        <p>Enter root password</p>
+      </li>
+      <li>
+        <p>Enter root password again</p>
+      </li>
+      <li>
+        <p>Choose <code class="language-plaintext highlighter-rouge">Accept and Set Password</code></p>
+      </li>
+      <li>
+        <p>Information</p>
+
+        <p><code class="language-plaintext highlighter-rouge">The root password has been set.</code></p>
+      </li>
+      <li>
+        <p>Acknowledge by choosing <code class="language-plaintext highlighter-rouge">OK</code></p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="additional-user-configuration">Additional user configuration</h5>
+
+<ul>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Add a user</code></p>
+  </li>
+  <li>
+    <p>Add user</p>
+  </li>
+  <li>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Username wsenn
+Real Name Will Senn
+Password **
+Password again **
+Shell /bin/sh
+Home Directory /home/wsenn
+User ID (leave blank)
+Login Group (leave blank)
+Other Group Membership [wheel,video]
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Accept and Add</code></p>
+  </li>
+  <li>
+    <p>Information</p>
+
+    <p><code class="language-plaintext highlighter-rouge">The user 'wsenn' was added.</code></p>
+
+    <ul>
+      <li>Acknowledge by choosing <code class="language-plaintext highlighter-rouge">OK</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="network-configuration">Network configuration</h5>
+
+<ul>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Configure network interfaces</code></p>
+  </li>
+  <li>
+    <p>Assign IP Address</p>
+
+    <ul>
+      <li>
+        <p>choose <code class="language-plaintext highlighter-rouge">em0</code></p>
+      </li>
+      <li>
+        <p>Use DHCP</p>
+
+        <ul>
+          <li>
+            <p>Choose <code class="language-plaintext highlighter-rouge">Use DHCP</code></p>
+
+            <p>It takes a few seconds to initialize the nic.</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Information</p>
+
+        <p><code class="language-plaintext highlighter-rouge">Lots of em0 info is displayed</code></p>
+      </li>
+      <li>
+        <p>Acknowledge by choosing <code class="language-plaintext highlighter-rouge">OK</code></p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="hostname-and-domain-configuration">Hostname and domain configuration</h5>
+
+<ul>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Configure hostname and domain</code></p>
+  </li>
+  <li>
+    <p>Enter your hostname</p>
+  </li>
+  <li>
+    <p>Enter your domain</p>
+  </li>
+  <li>
+    <p>Confirm your selections by choosing <code class="language-plaintext highlighter-rouge">OK</code></p>
+  </li>
+</ul>
+
+<h5 id="console-font-configuration-optional">Console font configuration (optional)</h5>
+
+<p>Probably don’t need to change it but if you do…</p>
+
+<p>Choose cp437 fonts</p>
+
+<h5 id="screen-map-configuration">Screen map configuration</h5>
+
+<p>Probably don’t need to change it but if you do…</p>
+
+<p>Choose the iso-8859-1 to cp437 screen map</p>
+
+<h5 id="wrapping-up-configuration">Wrapping up configuration</h5>
+
+<ul>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Return to Welcome Screen</code></p>
+  </li>
+  <li>
+    <p>Choose <code class="language-plaintext highlighter-rouge">Reboot This Computer</code></p>
+  </li>
+  <li>
+    <p>Reboot</p>
+
+    <ul>
+      <li>Choose <code class="language-plaintext highlighter-rouge">Reboot</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>Remove the USB Stick and reboot</p>
+  </li>
+</ul>
+
+<p>I had to power cycle the computer at this point.</p>
+
+<h3 id="running-dragonfly-bsd">Running DragonFly BSD</h3>
+
+<hr />
+
+<p>The computer will reboot and display the Dragonfly BSD Boot manager.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>F1 DF/FBSD
+Default: F1
+</code></pre></div></div>
+
+<p>After about 10 seconds, the computer will boot the default entry (DragonFly BSD).</p>
+
+<p>The Dragonfly BSD Boot menu will appear and a countdown timer will count down before booting the default entry - <code class="language-plaintext highlighter-rouge">1. DragonFly BSD (kernel)</code>.</p>
+
+<h4 id="login-as-regular-user">Login as regular user</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>login: wsenn
+password:
+</code></pre></div></div>
+
+<h4 id="get-the-ip">Get the ip</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ifconfig
+...
+192.168.254.12
+...
+</code></pre></div></div>
+
+<h4 id="temporarily-change-ssh-to-allow-password-based-logins">Temporarily change ssh to allow password based logins</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>su -
+
+vi /etc/ssh/sshd_config
+PasswordAuthentication yes
+service sshd restart
+</code></pre></div></div>
+
+<h4 id="copy-over-your-user-key-if-you-plan-to-log-in-remotely">Copy over your user key (if you plan to log in remotely)</h4>
+
+<p>on remote host</p>
+
+<p><code class="language-plaintext highlighter-rouge">ssh-copy-id loki</code></p>
+
+<h4 id="change-ssh-back-to-only-allow-key-based-logins">Change ssh back to only allow key based logins</h4>
+
+<p>on loki</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>su -
+
+vi /etc/ssh/sshd_config
+PasswordAuthentication no
+service sshd restart
+</code></pre></div></div>
+
+<h4 id="log-in-over-ssh">Log in over ssh</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh loki
+</code></pre></div></div>
+
+<h4 id="do-updates-and-upgrade">Do updates and upgrade</h4>
+
+<p>Note: 6.4.0 ships with an old version of pkg and the upgrade fails as a result and blows away the pkg configuration. The simple solution is to copy the sample configuration over and rerun the upgrade as described below.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pkg update
+pkg upgrade
+</code></pre></div></div>
+
+<p>This results in the following error:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Updating Avalon repository catalogue...
+Avalon repository is up to date.
+All repositories are up to date.
+New version of pkg detected; it needs to be installed first.
+The following 1 package(s) will be affected (of 0 checked):
+
+Installed packages to be UPGRADED:
+	pkg: 1.14.4 -&gt; 1.18.4 [Avalon]
+
+Number of packages to be upgraded: 1
+
+3 MiB to be downloaded.
+
+Proceed with this action? [y/N]: Y
+[1/1] Fetching pkg-1.18.4.pkg: 100%    3 MiB 790.6kB/s    00:04    
+Checking integrity... done (0 conflicting)
+[1/1] Upgrading pkg from 1.14.4 to 1.18.4...
+[1/1] Extracting pkg-1.18.4: 100%
+pkg: Failed to execute lua script: [string "-- args: etc/pkg.conf.sample..."]:12: attempt to call a nil value (field 'stat')
+pkg: lua script failed
+No active remote repositories configured.
+</code></pre></div></div>
+
+<h5 id="restore-the-borked-configuration">Restore the borked configuration</h5>
+
+<p><code class="language-plaintext highlighter-rouge">cp /usr/local/etc/pkg/repos/df-latest.conf.sample /usr/local/etc/pkg/repos/df-latest.conf</code></p>
+
+<h5 id="rerun-the-upgrade-step">Rerun the upgrade step</h5>
+
+<p><code class="language-plaintext highlighter-rouge">pkg upgrade</code></p>
+
+<p>This time, things ought to be good.</p>
+
+<h4 id="install-some-useful-baseline-packages">Install some useful baseline packages</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pkg install sudo vim bash sysrc
+visudo
+uncomment
+%wheel ALL=(ALL:ALL) NOPASSWD: ALL
+
+exit
+</code></pre></div></div>
+
+<h4 id="change-the-user-shell-to-bash">Change the user shell to bash</h4>
+
+<p>as user</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chsh
+/usr/local/bin/bash
+</code></pre></div></div>
+
+<h4 id="install-a-windowing-environment">Install a Windowing Environment</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -s
+pkg install xorg xf86-input-evdev windowmaker leafpad nautilus chromium slim slim-themes
+
+echo "exec wmaker" &gt; .xinitrc
+
+sysrc slim_enable="YES"
+sysrc dbus_enable="YES"
+sysrc snd_hda_load="YES"
+
+sysrc -f /boot/loader.conf autoboot_delay="1"
+
+sudo shutdown -r now
+</code></pre></div></div>
+<p>should restart with slim</p>
+
+<h4 id="login-fire-up-chrome-and-youtube-stuff-oughta-just-work">Login, fire up Chrome and youtube, stuff oughta just work</h4>
+
+<ul>
+  <li>Right-click on the desktop, open a terminal, then</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">chrome</code></p>
+
+<p>logging out of windowmaker takes 10 seconds then beep</p>
+
+<h3 id="post-installation-rigamarole">Post installation rigamarole</h3>
+
+<hr />
+
+<p>I have an ASUS ATI Radeon HD 650 Silence video card. I did the following to learn more about it.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kldload radeon
+kldstat
+Id Refs Address            Size     Name
+ 1   26 0xffffffff80200000 1ada9a8  kernel
+ 2    1 0xffffffff81cdb000 7c550    ehci.ko
+ 3    1 0xffffffff81d58000 8a1f0    xhci.ko
+ 4    1 0xffffffff82600000 16000    ums.ko
+ 5    1 0xffffffff82616000 19a7000  radeon.ko
+ 6    1 0xffffffff83fbd000 baa000   drm.ko
+ 7    1 0xffffffff84b67000 1f000    iicbus.ko
+ 8    1 0xffffffff84b86000 a000     radeonkmsfw_CAICOS_pfp.ko
+ 9    1 0xffffffff84b90000 b000     radeonkmsfw_CAICOS_me.ko
+10    1 0xffffffff84b9b000 a000     radeonkmsfw_BTC_rlc.ko
+11    1 0xffffffff84ba5000 f000     radeonkmsfw_CAICOS_mc.ko
+12    1 0xffffffff84bb4000 f000     radeonkmsfw_CAICOS_smc.ko
+13    1 0xffffffff84bc3000 3b000    radeonkmsfw_SUMO_uvd.ko
+</code></pre></div></div>
+
+<p>I have onboard sound. Here’s the exploration.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kldload snd_hda
+cat /dev/random &gt; /dev/dsp
+</code></pre></div></div>
+
+<p>Static sound ensues :).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /dev/sndstat
+Installed devices:
+pcm0: &lt;Analog Devices AD1984 (Analog)&gt; (play/rec) default
+pcm1: &lt;Analog Devices AD1984 (Analog)&gt; (play/rec)
+pcm2: &lt;ATI R6xx (HDMI)&gt; (play)
+
+dmesg|grep pcm
+pcm0: &lt;Analog Devices AD1984 (Analog)&gt; at nid 18 and 20 on hdaa0
+pcm1: &lt;Analog Devices AD1984 (Analog)&gt; at nid 17 and 21 on hdaa0
+pcm2: &lt;ATI R6xx (HDMI)&gt; at nid 3 on hdaa1
+</code></pre></div></div>
+
+<p>I mucked up loader.conf and booting became an issue. Here’s the fix.</p>
+
+<ul>
+  <li>insert usb and boot to it</li>
+  <li>select r for ramdisk</li>
+  <li>in the booted system, <code class="language-plaintext highlighter-rouge">mount /dev/da0s1a</code></li>
+  <li>find and edit <code class="language-plaintext highlighter-rouge">loader.conf</code> in /mnt</li>
+  <li>reboot</li>
+</ul>
+
+<p>I originally had a janky mouse, the fix was to install <code class="language-plaintext highlighter-rouge">xf86-input-evdev</code></p>
+
+<p>To enable X11 over ssh
+sudo vi /etc/ssh/sshd_config
+X11Forwarding yes</p>
+
+<p><em>post last updated 2023-01-19 13:12:00 -0600</em></p>
+
+  </div><a class="u-url" href="/operating-systems/bsd/dragonfly-bsd/2023/01/16/dragonfly.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">decuser</li>
+          <li><a class="u-email" href="mailto:will.senn@gmail.com">will.senn@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>decuser&#39;s technical explorations and adventures in retro-computing, unix, and programming.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/decuser" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://www.youtube.com/@decuser" target="_blank" title="youtube">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#youtube"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
